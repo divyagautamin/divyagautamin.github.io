@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Divya Gautam | Independent Researcher & Author</title>
+    <link rel="icon" type="image/png" href="./favicon.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -39,7 +40,7 @@
             will-change: transform;
         }
         .cursor-dot { width: 6px; height: 6px; background-color: var(--gold-bright); }
-        .cursor-outline { width: 40px; height: 40px; border: 1px solid var(--gold-muted); transition: width 0.2s, height 0.2s, background-color 0.2s; }
+        .cursor-outline { width: 40px; height: 40px; border: 1px solid var(--gold-bright); box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s; }
 
         .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--gold-bright); width: 0%; z-index: 10000; }
 
@@ -73,7 +74,7 @@
         .split-layout { display: flex; align-items: center; gap: 50px; justify-content: space-between; }
         .split-image { flex: 1; text-align: center; }
         .portrait-img { max-width: 100%; height: auto; border-radius: 5px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid var(--glass-border); }
-        .book-img { max-width: 100%; height: auto; border: none; box-shadow: none; background: transparent; animation: float 6s ease-in-out infinite; }
+        .book-img { max-width: 100%; height: auto; border: none; box-shadow: none; background: transparent; animation: float 3.5s ease-in-out infinite; }
         .split-text { flex: 1; }
         .split-text p { font-size: 1.1rem; line-height: 1.8; color: var(--text-dim); margin-bottom: 20px; }
 
@@ -91,20 +92,24 @@
         footer { text-align: center; padding: 60px 10%; border-top: 1px solid var(--glass-border); background: #020202; }
         /* SOLUTION: Perfect Social Media Gap */
         .social-icons { display: flex; justify-content: center; gap: 25px; margin-bottom: 25px; }
-        .social-icons a { color: var(--text-dim); font-size: 1.5rem; transition: color 0.3s; }
+        .social-icons a { color: var(--text-dim); font-size: 1.5rem; transition: color 0.3s; display: inline-flex; justify-content: center; width: 40px; }
         .social-icons a:hover { color: var(--gold-bright); }
         .footer-text { font-size: 0.85rem; color: var(--text-dim); }
 
         .gsap-reveal { opacity: 0; transform: translateY(60px); }
 
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0px); } }
+        @keyframes float { 
+            0% { transform: translateY(0px) rotate(0deg) scale(1); filter: drop-shadow(0 10px 20px rgba(0,0,0,0.7)); } 
+            50% { transform: translateY(-25px) rotate(3deg) scale(1.03); filter: drop-shadow(0 25px 35px rgba(212,175,55,0.3)); } 
+            100% { transform: translateY(0px) rotate(0deg) scale(1); filter: drop-shadow(0 10px 20px rgba(0,0,0,0.7)); } 
+        }
 
         /* SOLUTION: MOBILE RESPONSIVE FIXES */
         @media (max-width: 768px) {
             .hamburger { display: block; }
-            .nav-links { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: rgba(5,5,5,0.95); padding: 20px 0; border-bottom: 1px solid var(--glass-border); }
+            .nav-links { display: none; flex-direction: column; align-items: flex-end; position: absolute; top: 100%; left: 0; width: 100%; background: rgba(5,5,5,0.98); padding: 15px 5%; border-bottom: 1px solid var(--glass-border); }
             .nav-links.active { display: flex; }
-            .nav-links a { margin: 15px 0; }
+            .nav-links a { margin: 8px 0; }
             /* This fixes the gap and squeezing issue in mobile */
             .split-layout { flex-direction: column !important; gap: 40px; text-align: center; }
             .split-image, .split-text { width: 100%; }
@@ -227,10 +232,10 @@
 
         // Hide Cursor dot on mobile devices
         if(window.innerWidth > 768) {
-            let xTo = gsap.quickTo(".cursor-dot", "x", {duration: 0.1, ease: "power3"}),
-                yTo = gsap.quickTo(".cursor-dot", "y", {duration: 0.1, ease: "power3"}),
-                xOutlineTo = gsap.quickTo(".cursor-outline", "x", {duration: 0.25, ease: "power3"}),
-                yOutlineTo = gsap.quickTo(".cursor-outline", "y", {duration: 0.25, ease: "power3"});
+            let xTo = gsap.quickTo(".cursor-dot", "x", {duration: 0, ease: "none"}),
+                yTo = gsap.quickTo(".cursor-dot", "y", {duration: 0, ease: "none"}),
+                xOutlineTo = gsap.quickTo(".cursor-outline", "x", {duration: 0.8, ease: "power3.out"}),
+                yOutlineTo = gsap.quickTo(".cursor-outline", "y", {duration: 0.8, ease: "power3.out"});
 
             window.addEventListener("mousemove", e => {
                 xTo(e.clientX); yTo(e.clientY);
@@ -239,13 +244,13 @@
 
             const magnetics = document.querySelectorAll('.magnetic');
             magnetics.forEach((elem) => {
-                elem.addEventListener('mouseenter', () => gsap.to(".cursor-outline", { width: 60, height: 60, backgroundColor: 'rgba(212, 175, 55, 0.1)' }));
-                elem.addEventListener('mouseleave', () => { gsap.to(".cursor-outline", { width: 40, height: 40, backgroundColor: 'transparent' }); gsap.to(elem, { x: 0, y: 0, duration: 0.5 }); });
+                elem.addEventListener('mouseenter', () => gsap.to(".cursor-outline", { width: 70, height: 70, backgroundColor: 'rgba(212, 175, 55, 0.15)', borderColor: 'transparent', duration: 0.3 }));
+                elem.addEventListener('mouseleave', () => { gsap.to(".cursor-outline", { width: 40, height: 40, backgroundColor: 'transparent', borderColor: 'var(--gold-bright)', duration: 0.3 }); gsap.to(elem, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.3)" }); });
                 elem.addEventListener('mousemove', (e) => {
                     const rect = elem.getBoundingClientRect();
                     const x = e.clientX - rect.left - rect.width / 2;
                     const y = e.clientY - rect.top - rect.height / 2;
-                    gsap.to(elem, { x: x * 0.3, y: y * 0.3, duration: 0.5 });
+                    gsap.to(elem, { x: x * 0.45, y: y * 0.45, duration: 0.4, ease: "power2.out" });
                 });
             });
         } else {
@@ -275,22 +280,18 @@
             scrollTrigger: { trigger: ".timeline-container", start: "top center", end: "bottom center", scrub: 0.5 }
         });
 
-        // SOLUTION: BILATERAL REVEAL ANIMATIONS (play none none reverse)
         const revealElements = document.querySelectorAll('.gsap-reveal');
         revealElements.forEach((el) => {
             gsap.fromTo(el, 
-                { opacity: 0, y: 60 },
+                { opacity: 0, y: 50 },
                 {
-                    opacity: 1, y: 0, duration: 1, ease: "power3.out",
+                    opacity: 1, y: 0, duration: 0.8, ease: "power2.out",
                     scrollTrigger: {
                         trigger: el,
-                        start: "top 85%",
-                        /* 'play none none reverse' means: 
-                           Play when entering down. 
-                           Do nothing when passing above.
-                           Do nothing when coming back from above.
-                           Reverse (hide) when scrolling back up past it. */
-                        toggleActions: "play none none reverse"
+                        start: "top 80%",
+                        end: "bottom 20%",
+                        // 'play reverse play reverse' triggers animation gracefully from both directions
+                        toggleActions: "play reverse play reverse"
                     }
                 }
             );
