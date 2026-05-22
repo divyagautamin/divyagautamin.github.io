@@ -286,7 +286,12 @@
 
     <script>
         // Smooth Scroll Initialization (Lenis)
-        const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), inertia: true });
+        const lenis = new Lenis({
+    duration: 0.7,
+    smoothWheel: true,
+    wheelMultiplier: 1,
+    touchMultiplier: 1
+});
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
@@ -383,7 +388,7 @@
         });
 
         // Reading Progress Bar
-        gsap.to("#progressBar", { width: "100%", ease: "none", scrollTrigger: { scrub: 0.3 } });
+        gsap.to("#progressBar", { width: "100%", ease: "none", scrollTrigger: { scrub: 0.1 } });
 
         // Timeline Scroll Animation
         gsap.to("#timeProgress", {
