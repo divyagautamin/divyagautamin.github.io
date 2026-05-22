@@ -67,7 +67,7 @@
         .hamburger { display: none; font-size: 1.8rem; color: var(--gold-bright); cursor: pointer; }
         
         .nav-links { display: flex; align-items: center; gap: 30px; }
-        .nav-links a { color: var(--text-pure); text-decoration: none; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; transition: color 0.3s; }
+        .nav-links a { color: var(--text-pure); text-decoration: none; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s; padding: 15px 20px; border-radius: 5px; }
         .nav-links a:hover { color: var(--gold-bright); }
         .btn-connect { padding: 8px 20px; border: 1px solid var(--gold-muted); border-radius: 4px; color: var(--gold-bright) !important; transition: all 0.3s; }
         .btn-connect:hover { background: var(--gold-muted); color: var(--bg-obsidian) !important; }
@@ -146,8 +146,8 @@
         .social-icons a { 
             color: var(--gold-muted); /* CURE: Changed from dim text to Muted Gold */
             font-size: 1.6rem; transition: all 0.3s ease; 
-            display: inline-flex; justify-content: center; width: 45px; 
-            padding: 10px; border-radius: 5px;
+            display: inline-flex; justify-content: center; align-items: center; width: 60px; height: 60px; 
+            padding: 20px; border-radius: 10px;
             text-decoration: none !important; border-bottom: none !important;
         }
         .social-icons a:hover { 
@@ -207,7 +207,7 @@
         <div class="video-overlay"></div>
         <div class="hero-name-container">
             <h1 class="hero-name">Divya Gautam</h1>
-            <p class="hero-manifesto">Decoding the Architecture of Language & Policy</p>
+            <p class="hero-manifesto">Rigorous Skepticism. Independent Synthesis. Intellectual Authority.</p>
         </div>
     </section>
 
@@ -343,8 +343,8 @@
                     const elemY = rect.top + rect.height / 2;
                     
                     // CURSOR SNAP CURE: Cursor outline is heavily drawn to the center, icons remain 100% static
-                    targetX = elemX + (mouse.x - elemX) * 0.12; 
-                    targetY = elemY + (mouse.y - elemY) * 0.12;
+                    targetX = elemX + (mouse.x - elemX) * 0.05; 
+                    targetY = elemY + (mouse.y - elemY) * 0.05;
                 }
 
                 pos.x += (targetX - pos.x) * smoothness;
@@ -377,12 +377,22 @@
             const magnetics = document.querySelectorAll('.magnetic');
             magnetics.forEach((elem) => {
                 elem.addEventListener('mouseenter', () => {
-                    activeMagnetic = elem; // Engages gravity snap
-                    gsap.to(cursorOutline, { width: 75, height: 75, scaleX: 1, scaleY: 1, rotate: 0, backgroundColor: 'rgba(212, 175, 55, 0.15)', borderColor: 'transparent', boxShadow: '0 0 25px rgba(212, 175, 55, 0.5)', duration: 0.25 });
+                    activeMagnetic = elem; 
+                    // THE SOLAR FLARE GLOW: Massive size (90x90) and double intense golden box-shadow
+                    gsap.to(cursorOutline, { width: 90, height: 90, scaleX: 1, scaleY: 1, rotate: 0, backgroundColor: 'rgba(212, 175, 55, 0.25)', borderColor: 'transparent', boxShadow: '0 0 40px rgba(212, 175, 55, 0.9), 0 0 80px rgba(212, 175, 55, 0.5)', duration: 0.25 });
                 });
                 elem.addEventListener('mouseleave', () => {
-                    activeMagnetic = null; // Releases gravity snap
+                    activeMagnetic = null; 
                     gsap.to(cursorOutline, { width: 35, height: 35, backgroundColor: 'transparent', borderColor: 'var(--gold-bright)', boxShadow: '0 0 15px rgba(212, 175, 55, 0.4)', duration: 0.25 });
+                    gsap.to(elem, { x: 0, y: 0, duration: 0.8, ease: "elastic.out(1, 0.3)" });
+                });
+                elem.addEventListener('mousemove', (e) => {
+                    const rect = elem.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    
+                    // STRONG GRAVITY: Increased element pull from 0.15 to 0.28 for stronger magnetic feel
+                    gsap.to(elem, { x: x * 0.28, y: y * 0.28, duration: 0.3, ease: "power2.out" });
                 });
             });
         } else {
