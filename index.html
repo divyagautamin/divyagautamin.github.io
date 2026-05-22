@@ -337,18 +337,22 @@
                 let targetAngle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
                 if (velocity > 10) { currentAngle = targetAngle; }
 
-                if (velocity > 15) {
-                    gsap.to(cursorOutline, {
-                        scaleX: 1 + (velocity * 0.005), 
-                        scaleY: 1 - (velocity * 0.003),
-                        rotate: currentAngle,
-                        duration: 0.1, 
-                        overwrite: "auto"
-                    });
-                } else {
-                    gsap.to(cursorOutline, { scaleX: 1, scaleY: 1, rotate: 0, duration: 0.2, overwrite: "auto" });
-                }
-            });
+                // THE WATER DROP PHYSICS (Triggers on slightest movement)
+                    if (velocity > 1) { 
+                        gsap.to(cursorOutline, {
+                            scaleX: 1 + (velocity * 0.025), // More intense liquid stretch
+                            scaleY: 1 - (velocity * 0.010),
+                            rotate: angle,
+                            duration: 0.1,
+                            overwrite: "auto"
+                        });
+                    }
+
+                    // 0.1 Second snap-back to perfect circle when stopped
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        gsap.to(cursorOutline, { scaleX: 1, scaleY: 1, rotate: 0, duration: 0.1, overwrite: "auto" });
+                    }, 20); // Faster trigger to return to shape
 
             // THE ULTRA-MAGNETIC POWER LOGIC
             const magnetics = document.querySelectorAll('.magnetic');
@@ -362,10 +366,11 @@
                 });
                 elem.addEventListener('mousemove', (e) => {
                     const rect = elem.getBoundingClientRect();
-                    // THE STRONG MAGNET PATCH: Increased attraction factor from 0.45 to 0.7
                     const x = e.clientX - rect.left - rect.width / 2;
                     const y = e.clientY - rect.top - rect.height / 2;
-                    gsap.to(elem, { x: x * 0.7, y: y * 0.7, duration: 0.3, ease: "power2.out" });
+                    
+                    // THE ANCHOR: Elements barely move (0.15 multiplier), maintaining a sovereign, stable look
+                    gsap.to(elem, { x: x * 0.15, y: y * 0.15, duration: 0.3, ease: "power2.out" });
                 });
             });
         } else {
