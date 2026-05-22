@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Divya Gautam | Independent Researcher & Author</title>
-    <link rel="icon" type="image/png" href="./favicon.png">
     
+    <link rel="icon" type="image/png" href="./favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        /* --- THE OBSIDIAN & GOLD THEME --- */
         :root {
             --bg-obsidian: #050505;
-            --bg-surface: rgba(15, 15, 15, 0.8);
             --gold-bright: #d4af37;
             --gold-muted: #aa8c2c;
             --text-pure: #ffffff;
@@ -27,30 +27,48 @@
             color: var(--text-pure);
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
-            cursor: none; 
+            cursor: none; /* Sovereign control for custom cursor */
         }
 
-        .cursor-dot, .cursor-outline {
+        /* --- THE LIQUID & MAGNETIC CURSOR (Version 5.0) --- */
+        #cursor {
             position: fixed;
-            top: 0; left: 0;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            z-index: 9999;
             pointer-events: none;
+            z-index: 10000; /* Highest priority */
             will-change: transform;
         }
-        .cursor-outline { 
-            width: 35px; height: 35px; 
-            border: 1.5px solid var(--gold-bright); 
-            background-color: rgba(212, 175, 55, 0.03);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); 
+
+        /* The Core Gold dot - follows mouse perfectly */
+        #cursor-dot {
+            position: absolute;
+            width: 7px; height: 7px;
+            background-color: var(--gold-bright);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* The Stretching & Glowing Orb - has physics logic */
+        #cursor-outline {
+            position: absolute;
+            width: 38px; height: 38px;
+            border: 1.5px solid var(--gold-muted);
+            border-radius: 50%;
+            background-color: transparent;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            /* Important: Transition only for scaling, not moving */
+            transition: width 0.3s cubic-bezier(0.23, 1, 0.32, 1), 
+                        height 0.3s cubic-bezier(0.23, 1, 0.32, 1), 
+                        background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
             transform-origin: center center;
-            transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), height 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s, border-color 0.3s;
-            will-change: transform;
         }
 
-        .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--gold-bright); width: 0%; z-index: 10000; }
+        /* Reading Progress Bar */
+        .progress-bar {
+            position: fixed; top: 0; left: 0; height: 2px; background: var(--gold-bright); width: 0%; z-index: 10000;
+        }
 
+        /* --- LEVEL 1: THE GLASS NAVIGATION --- */
         nav {
             position: fixed; top: 0; width: 100%; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
             background: rgba(5, 5, 5, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -64,102 +82,102 @@
         .btn-connect:hover { background: var(--gold-muted); color: var(--bg-obsidian) !important; }
         .hamburger { display: none; font-size: 1.8rem; color: var(--gold-bright); cursor: pointer; }
 
+        /* --- LEVEL 2: THE CINEMATIC HERO --- */
         #hero { position: relative; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; overflow: hidden; }
         .bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
         .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(5,5,5,0.3) 0%, rgba(5,5,5,1) 100%); z-index: -1; }
         
         .hero-name-container { display: flex; flex-direction: column; align-items: center; }
         .hero-name {
-            font-family: 'Playfair Display', serif; font-size: clamp(3rem, 8vw, 7rem); font-weight: 700; letter-spacing: 5px; text-transform: uppercase;
+            font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 9vw, 8rem); font-weight: 700; letter-spacing: 5px; text-transform: uppercase;
             background: linear-gradient(45deg, #ffffff, #d4af37, #aa8c2c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px;
         }
         .hero-manifesto { font-size: 1.1rem; letter-spacing: 3px; color: var(--gold-muted); text-transform: uppercase; }
 
-        section:not(#hero) { padding: 120px 10%; min-height: 80vh; }
-        h2.section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3rem); color: var(--gold-bright); margin-bottom: 50px; font-style: italic; }
+        /* Shared Section Layouts */
+        section:not(#hero) { padding: 140px 10%; min-height: 90vh; }
+        h2.section-title { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 4rem); color: var(--gold-bright); margin-bottom: 60px; font-style: italic; }
 
-        .split-layout { display: flex; align-items: center; gap: 50px; justify-content: space-between; }
+        .split-layout { display: flex; align-items: center; gap: 60px; justify-content: space-between; }
         .split-image { flex: 1; text-align: center; }
-        /* Photo Aura & Zero-Lag Optimization */
+        
+        /* THE ULTIMATE ZERO-LAG ASSETS */
         .portrait-img { 
             max-width: 100%; height: auto; border-radius: 5px; border: 1px solid var(--glass-border); 
-            animation: portrait-glow 4s infinite alternate ease-in-out;
-            will-change: transform, filter; /* Forces GPU usage to stop hanging */
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.1), 0 20px 50px rgba(0,0,0,0.8);
+            will-change: transform, filter; /* GPU Promotion */
         }
-        /* Book Extra Glow & Float Optimization */
         .book-img { 
             max-width: 100%; height: auto; border: none; box-shadow: none; background: transparent; 
             animation: float-book 3.5s ease-in-out infinite; 
-            will-change: transform, filter;
+            will-change: transform, filter; /* GPU Promotion for zero lag */
         }
 
-        @keyframes portrait-glow {
-            0% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.15), 0 20px 50px rgba(0,0,0,0.8); filter: brightness(1); }
-            100% { box-shadow: 0 0 35px rgba(212, 175, 55, 0.4), 0 20px 50px rgba(0,0,0,0.8); filter: brightness(1.05); }
-        }
-        @keyframes float-book { 
-            0% { transform: translateY(0px) rotate(0deg) scale(1); filter: drop-shadow(0 10px 20px rgba(0,0,0,0.7)); } 
-            50% { transform: translateY(-20px) rotate(2deg) scale(1.02); filter: drop-shadow(0 20px 45px rgba(212, 175, 55, 0.55)); } 
-            100% { transform: translateY(0px) rotate(0deg) scale(1); filter: drop-shadow(0 10px 20px rgba(0,0,0,0.7)); } 
-        }
         .split-text { flex: 1; }
-        .split-text p { font-size: 1.1rem; line-height: 1.8; color: var(--text-dim); margin-bottom: 20px; }
+        .split-text p { font-size: 1.15rem; line-height: 1.9; color: var(--text-dim); margin-bottom: 25px; }
 
-        .timeline-container { position: relative; max-width: 800px; margin: 0 auto; padding-left: 30px; border-left: 2px solid var(--glass-border); }
-        .timeline-progress { position: absolute; top: 0; left: -2px; width: 2px; background: var(--gold-bright); height: 0%; }
-        .timeline-item { position: relative; margin-bottom: 50px; padding-left: 20px; }
-        .timeline-dot { position: absolute; left: -37px; top: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--gold-bright); box-shadow: 0 0 10px var(--gold-muted); }
-        .timeline-year { font-family: 'Playfair Display', serif; color: var(--gold-bright); font-size: 1.5rem; margin-bottom: 10px; }
+        /* THE CHRONICLE TIMELINE */
+        .timeline-container { position: relative; max-width: 800px; margin: 0 auto; padding-left: 40px; border-left: 2px solid var(--glass-border); }
+        .timeline-progress { position: absolute; top: 0; left: -2px; width: 2px; background: var(--gold-bright); height: 0%; will-change: height; }
+        .timeline-item { position: relative; margin-bottom: 60px; padding-left: 20px; }
+        .timeline-dot { position: absolute; left: -49px; top: 0; width: 16px; height: 16px; border-radius: 50%; background: var(--bg-obsidian); border: 3px solid var(--gold-muted); box-shadow: 0 0 10px var(--gold-muted); }
+        .timeline-year { font-family: 'Playfair Display', serif; color: var(--gold-bright); font-size: 1.6rem; margin-bottom: 15px; }
 
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .grid-card { background: var(--bg-surface); padding: 40px; border: 1px solid var(--glass-border); border-radius: 5px; transition: transform 0.3s; }
-        .grid-card:hover { transform: translateY(-10px); }
-        .grid-card h3 { color: var(--text-pure); margin-bottom: 15px; font-family: 'Playfair Display', serif;}
+        /* THE ACADEMIC REPOSITORY GRID */
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+        .grid-card { background: rgba(15, 15, 15, 0.5); padding: 50px; border: 1px solid var(--glass-border); border-radius: 6px; backdrop-filter: blur(10px); transition: transform 0.4s ease; will-change: transform; }
+        .grid-card:hover { transform: translateY(-10px); border-color: rgba(212, 175, 55, 0.4); }
+        .grid-card h3 { color: var(--text-pure); margin-bottom: 20px; font-family: 'Playfair Display', serif; font-size: 1.5rem; }
         
-        footer { text-align: center; padding: 60px 10%; border-top: 1px solid var(--glass-border); background: #020202; }
-        /* SOLUTION: Perfect Social Media Gap */
-        .social-icons { display: flex; justify-content: center; gap: 25px; margin-bottom: 25px; }
+        /* FOOTER & SOCIAL ICONS */
+        footer { text-align: center; padding: 80px 10%; border-top: 1px solid var(--glass-border); background: #020202; }
+        .social-icons { display: flex; justify-content: center; gap: 30px; margin-bottom: 30px; }
         .social-icons a { 
-            color: var(--gold-muted); font-size: 1.5rem; transition: all 0.3s ease; 
-            display: inline-flex; justify-content: center; align-items: center; width: 45px; height: 45px; 
-            text-decoration: none !important; border-bottom: none !important; /* Removes default lines */
-            box-shadow: none !important;
+            color: var(--gold-muted); font-size: 1.6rem; transition: all 0.3s ease; 
+            display: inline-flex; justify-content: center; align-items: center; width: 45px; height: 45px;
+            text-decoration: none !important; border-bottom: none !important; /* Removes all default borders */
         }
         .social-icons a:hover { 
             color: var(--gold-bright); 
-            transform: translateY(-4px) scale(1.1); 
-            text-shadow: 0 0 15px rgba(212, 175, 55, 0.7);
-            border-bottom: none !important;
+            transform: translateY(-5px) scale(1.15); 
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.8); 
         }
-        .footer-text { font-size: 0.85rem; color: var(--text-dim); }
+        .footer-text { font-size: 0.9rem; color: var(--text-dim); letter-spacing: 1px; }
 
-        .gsap-reveal { opacity: 0; transform: translateY(60px); }
+        /* Global GSAP Classes */
+        .gsap-reveal { opacity: 0; transform: translateY(60px); will-change: transform, opacity; }
 
-        @keyframes float { 
+        /* The Float Animation for the Book */
+        @keyframes float-book { 
             0% { transform: translateY(0px) rotate(0deg) scale(1); filter: drop-shadow(0 10px 20px rgba(0,0,0,0.7)); } 
-            50% { transform: translateY(-25px) rotate(3deg) scale(1.03); filter: drop-shadow(0 25px 35px rgba(212,175,55,0.3)); } 
+            50% { transform: translateY(-25px) rotate(2.5deg) scale(1.02); filter: drop-shadow(0 25px 45px rgba(212,175,55,0.6)); } 
             100% { transform: translateY(0px) rotate(0deg) scale(1); filter: drop-shadow(0 10px 20px rgba(0,0,0,0.7)); } 
         }
 
-        /* SOLUTION: MOBILE RESPONSIVE FIXES */
+        /* --- MOBILE RESPONSIVEFIXES --- */
         @media (max-width: 768px) {
             .hamburger { display: block; }
-            .nav-links { display: none; flex-direction: column; align-items: flex-end; position: absolute; top: 100%; left: 0; width: 100%; background: rgba(5,5,5,0.98); padding: 15px 5%; border-bottom: 1px solid var(--glass-border); }
+            .nav-links { display: none; flex-direction: column; align-items: flex-end; position: absolute; top: 100%; left: 0; width: 100%; background: rgba(5,5,5,0.98); padding: 25px 5%; border-bottom: 1px solid var(--glass-border); }
             .nav-links.active { display: flex; }
-            .nav-links a { margin: 8px 0; }
-            /* This fixes the gap and squeezing issue in mobile */
+            .nav-links a { margin: 15px 0; font-size: 1rem; }
             .split-layout { flex-direction: column !important; gap: 40px; text-align: center; }
             .split-image, .split-text { width: 100%; }
-            .portrait-img, .book-img { max-width: 80%; margin: 0 auto; }
-            section:not(#hero) { padding: 80px 5%; }
+            .portrait-img, .book-img { max-width: 90%; margin: 0 auto; }
+            section:not(#hero) { padding: 100px 5%; }
+            #cursor { display: none; } /* Mobile doesn't need custom cursor */
         }
     </style>
 </head>
 <body>
 
+    <link rel="icon" type="image/png" href="./favicon.png">
+
     <div class="progress-bar" id="progressBar"></div>
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
+
+    <div id="cursor">
+        <div id="cursor-dot"></div>
+        <div id="cursor-outline"></div>
+    </div>
 
     <nav>
         <div class="nav-logo">
@@ -201,6 +219,7 @@
         <h2 class="section-title gsap-reveal">The Chronicle</h2>
         <div class="timeline-container">
             <div class="timeline-progress" id="timeProgress"></div>
+            
             <div class="timeline-item gsap-reveal">
                 <div class="timeline-dot"></div>
                 <div class="timeline-year">2026</div>
@@ -221,7 +240,7 @@
                 <img src="./book.png" alt="VOCAB DECODE Cover" class="book-img" onerror="this.style.display='none'">
             </div>
             <div class="split-text gsap-reveal">
-                <h3 style="font-size: 2rem; color: var(--text-pure); margin-bottom: 15px;">VOCAB DECODE</h3>
+                <h3 style="font-size: 2.2rem; color: var(--text-pure); margin-bottom: 20px; font-family: 'Playfair Display', serif;">VOCAB DECODE</h3>
                 <p>What if vocabulary is not memorized, but logically decoded?</p>
                 <p>A comprehensive masterwork designed to dismantle the etymological foundations of the English language. Essential for analytical mastery and elite proficiency.</p>
             </div>
@@ -233,13 +252,13 @@
         <div class="grid-container">
             <div class="grid-card gsap-reveal">
                 <h3>Working Paper I</h3>
-                <p style="color: var(--gold-muted); margin-bottom: 15px;">In Progress • 2026</p>
-                <p style="color: var(--text-dim); font-size: 0.9rem;">Structural mapping of etymological roots in cognitive linguistics.</p>
+                <p style="color: var(--gold-muted); margin-bottom: 20px;">In Progress • 2026</p>
+                <p style="color: var(--text-dim); font-size: 1rem;">Structural mapping of etymological roots in cognitive linguistics.</p>
             </div>
             <div class="grid-card gsap-reveal">
                 <h3>DG Insight Press</h3>
-                <p style="color: var(--gold-muted); margin-bottom: 15px;">Institutional Initiative</p>
-                <p style="color: var(--text-dim); font-size: 0.9rem;">Fostering transparency and intellectual depth in academic literature.</p>
+                <p style="color: var(--gold-muted); margin-bottom: 20px;">Institutional Initiative</p>
+                <p style="color: var(--text-dim); font-size: 1rem;">Fostering transparency and intellectual depth in academic literature.</p>
             </div>
         </div>
     </section>
@@ -261,104 +280,124 @@
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
 
     <script>
-        const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+        // Smooth Scroll Initialization (Lenis)
+        const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), inertia: true });
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
         gsap.registerPlugin(ScrollTrigger);
 
-       if(window.innerWidth > 768) {
-            // Hyper-optimized positioning mechanics
-            let xTo = gsap.quickTo(".cursor-dot", "x", {duration: 0, ease: "none"}),
-                yTo = gsap.quickTo(".cursor-dot", "y", {duration: 0, ease: "none"}),
-                xOutlineTo = gsap.quickTo(".cursor-outline", "x", {duration: 0.12, ease: "power2.out"}),
-                yOutlineTo = gsap.quickTo(".cursor-outline", "y", {duration: 0.12, ease: "power2.out"});
+        // --- THE QUANTUM LIQUID CURSOR ENGINE (Version 5.0) ---
+        if(window.innerWidth > 768) {
+            // Position gyors: perfectly instantaneous
+            const cursorDot = document.getElementById("cursor-dot");
+            const cursorOutline = document.getElementById("cursor-outline");
+            
+            let pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+            let mouse = { x: pos.x, y: pos.y };
+            let speed = 0.35; // velvet lag for outline
 
-            let lastX = 0, lastY = 0;
+            // Mathematical physics for velocity and stretching
+            let lastX = mouse.x, lastY = mouse.y;
+            let currentAngle = 0;
 
             window.addEventListener("mousemove", e => {
-                xTo(e.clientX); yTo(e.clientY);
-                xOutlineTo(e.clientX); yOutlineTo(e.clientY);
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+                // Move the central dot instantly
+                gsap.set(cursorDot, { x: mouse.x, y: mouse.y });
+            });
 
-                // Calculating pure mathematical velocity
-                let deltaX = e.clientX - lastX;
-                let deltaY = e.clientY - lastY;
-                lastX = e.clientX; lastY = e.clientY;
+            // GSAP Ticker for smooth frame-by-frame loop
+            gsap.ticker.add((time, deltaTime) => {
+                // Determine raw mouse velocity
+                let deltaX = mouse.x - lastX;
+                let deltaY = mouse.y - lastY;
+                lastX = mouse.x; lastY = mouse.y;
+
+                // Physics: Smoothly interpolate the outline's position toward the mouse
+                pos.x += (mouse.x - pos.x) * speed;
+                pos.y += (mouse.y - pos.y) * speed;
+                gsap.set(cursorOutline, { x: pos.x, y: pos.y });
+
+                // Calculating dynamic velocity and motion angle
+                let velocity = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY), 150); // capped for stability
+                let targetAngle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
                 
-                let speed = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY), 100);
-                let angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
-                
-                if (speed > 8) {
-                    // Fluid oval stretching during rapid motion
-                    gsap.to(".cursor-outline", {
-                        scaleX: 1 + (speed * 0.005),
-                        scaleY: 1 - (speed * 0.003),
-                        rotate: angle,
-                        duration: 0.1,
+                // Smoothen the rotation transition
+                if (velocity > 10) { currentAngle = targetAngle; }
+
+                if (velocity > 15) {
+                    // THE DYNAMIC STRETCH COMMAND:
+                    // scaleX increases (Horizontal/Horizontal movement), scaleY decreases (Oval shape)
+                    gsap.to(cursorOutline, {
+                        scaleX: 1 + (velocity * 0.005), 
+                        scaleY: 1 - (velocity * 0.003),
+                        rotate: currentAngle,
+                        duration: 0.1, 
                         overwrite: "auto"
                     });
                 } else {
-                    // Velvet snap back to circle when stationery
-                    gsap.to(".cursor-outline", { scaleX: 1, scaleY: 1, rotate: 0, duration: 0.15, overwrite: "auto" });
+                    // Instantaneous snap-back to circle when velocity drops
+                    gsap.to(cursorOutline, { scaleX: 1, scaleY: 1, rotate: 0, duration: 0.2, overwrite: "auto" });
                 }
             });
 
+            // ULTRA-MAGNETIC POWER LOGIC for interactive elements
             const magnetics = document.querySelectorAll('.magnetic');
             magnetics.forEach((elem) => {
                 elem.addEventListener('mouseenter', () => {
-                    gsap.to(".cursor-outline", { width: 60, height: 60, backgroundColor: 'rgba(212, 175, 55, 0.15)', borderColor: 'transparent', duration: 0.2 });
+                    // Outline expands, glows, and snaps instantly to the button's bounds
+                    gsap.to(cursorOutline, { width: 75, height: 75, backgroundColor: 'rgba(212, 175, 55, 0.15)', borderColor: 'transparent', boxShadow: '0 0 25px rgba(212, 175, 55, 0.5)', duration: 0.25 });
                 });
                 elem.addEventListener('mouseleave', () => {
-                    gsap.to(".cursor-outline", { width: 35, height: 35, backgroundColor: 'rgba(212, 175, 55, 0.03)', borderColor: 'var(--gold-bright)', duration: 0.2 });
-                    gsap.to(elem, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.4)" });
+                    // Outline reverts with a flexible 'snap-back' elasticity
+                    gsap.to(cursorOutline, { width: 38, height: 38, backgroundColor: 'transparent', borderColor: 'var(--gold-muted)', boxShadow: '0 0 15px rgba(212, 175, 55, 0.2)', duration: 0.25 });
+                    // Highly advanced ELASTIC snap for the button itself
+                    gsap.to(elem, { x: 0, y: 0, duration: 0.8, ease: "elastic.out(1, 0.3)" });
                 });
                 elem.addEventListener('mousemove', (e) => {
                     const rect = elem.getBoundingClientRect();
+                    // Powerful custom magnetic attraction pull toward the center of the element
                     const x = e.clientX - rect.left - rect.width / 2;
                     const y = e.clientY - rect.top - rect.height / 2;
-                    gsap.to(elem, { x: x * 0.35, y: y * 0.35, duration: 0.3, ease: "power2.out" });
+                    gsap.to(elem, { x: x * 0.4, y: y * 0.4, duration: 0.3, ease: "power2.out" });
                 });
             });
         } else {
-            document.querySelector('.cursor-dot').style.display = 'none';
-            document.querySelector('.cursor-outline').style.display = 'none';
+            // Mobiles don't have this advanced cursor system
+            document.getElementById("cursor").style.display = 'none';
         }
 
-        // SOLUTION: HERO NAME ENTRY & RELIABLE RETURN
+        // LEVEL 2-3: HERO NAME ENTRY & Sovereign Exit/Return
         gsap.fromTo(".hero-name-container", 
-            { opacity: 0, y: 50, scale: 0.95 },
-            { opacity: 1, y: 0, scale: 1, duration: 2, ease: "power4.out", delay: 0.2 }
+            { opacity: 0, y: 70, scale: 0.95 },
+            { opacity: 1, y: 0, scale: 1, duration: 2, ease: "power4.out", delay: 0.3 }
         );
 
-        // This ensures the name fades out when scrolling down, and fades back in when scrolling back up to the top.
         ScrollTrigger.create({
-            trigger: "#hero",
-            start: "top top",
-            end: "bottom top",
-            onLeave: () => gsap.to(".hero-name-container", {opacity: 0, y: -50, duration: 0.5}),
+            trigger: "#hero", start: "top top", end: "bottom top",
+            onLeave: () => gsap.to(".hero-name-container", {opacity: 0, y: -80, duration: 0.5}),
             onEnterBack: () => gsap.to(".hero-name-container", {opacity: 1, y: 0, duration: 0.5})
         });
 
+        // Reading Progress Bar
         gsap.to("#progressBar", { width: "100%", ease: "none", scrollTrigger: { scrub: 0.3 } });
 
+        // Timeline Scroll Animation
         gsap.to("#timeProgress", {
             height: "100%", ease: "none",
             scrollTrigger: { trigger: ".timeline-container", start: "top center", end: "bottom center", scrub: 0.5 }
         });
 
+        // Global Reveal Animations: Bilateral 'play none none reverse'
         const revealElements = document.querySelectorAll('.gsap-reveal');
         revealElements.forEach((el) => {
             gsap.fromTo(el, 
-                { opacity: 0, y: 50 },
+                { opacity: 0, y: 60 },
                 {
-                    opacity: 1, y: 0, duration: 0.8, ease: "power2.out",
-                    scrollTrigger: {
-                        trigger: el,
-                        start: "top 80%",
-                        end: "bottom 20%",
-                        // 'play reverse play reverse' triggers animation gracefully from both directions
-                        toggleActions: "play reverse play reverse"
-                    }
+                    opacity: 1, y: 0, duration: 1, ease: "power3.out",
+                    scrollTrigger: { trigger: el, start: "top 85%", end: "bottom 20%", toggleActions: "play none none reverse" }
                 }
             );
         });
