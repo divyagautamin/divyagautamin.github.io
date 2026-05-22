@@ -61,7 +61,7 @@
         nav {
             position: fixed; top: 0; width: 100%; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
             /* CURE: Increased background opacity for better fallback, slightly reduced blur for GPU relief */
-            background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
             border-bottom: 1px solid var(--glass-border); z-index: 1000;
         }
         .hamburger { display: none; font-size: 1.8rem; color: var(--gold-bright); cursor: pointer; }
@@ -199,7 +199,7 @@
     </nav>
 
     <section id="hero">
-        <video class="bg-video" src="./background.mp4" autoplay loop muted playsinline></video>
+        <video class="bg-video" src="./background.mp4" autoplay loop muted playsinline preload="metadata"></video>
         <div class="video-overlay"></div>
         <div class="hero-name-container">
             <h1 class="hero-name">Divya Gautam</h1>
@@ -301,7 +301,7 @@
             
             // --- THE SMOOTHNESS SETTING (Version 6.2 Velvet Patch) ---
             // CURE: Decreased slightly to feel more silky and less sticky
-            let smoothness = 0.11; 
+            let smoothness = 0.65; 
 
             let lastX = mouse.x, lastY = mouse.y;
             let currentAngle = 0;
