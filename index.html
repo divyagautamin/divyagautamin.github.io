@@ -336,10 +336,15 @@
                 }
 
                 // Snap-back remains immediate (0.1s)
-                clearTimeout(timeout);
-                timeout = setTimeout(() => {
-                    gsap.to(cursorOutline, { scaleX: 1, scaleY: 1, rotate: 0, duration: 0.1, overwrite: "auto" });
-                }, 20); 
+               if (velocity <= 1) {
+    gsap.to(cursorOutline, {
+        scaleX: 1,
+        scaleY: 1,
+        rotate: 0,
+        duration: 0.1,
+        overwrite: true
+    });
+} 
             });
 
             const magnetics = document.querySelectorAll('.magnetic');
