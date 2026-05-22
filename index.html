@@ -357,14 +357,16 @@
                     gsap.to(elem, { x: 0, y: 0, duration: 0.8, ease: "elastic.out(1, 0.3)" });
                 });
                 elem.addEventListener('mousemove', (e) => {
-                    const rect = elem.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-                    
-                    // The Anchor pull remains firmly anchored (0.15)
-                    gsap.to(elem, { x: x * 0.15, y: y * 0.15, duration: 0.3, ease: "power2.out" });
-                });
-            });
+    const rect = elem.getBoundingClientRect();
+
+    const x = (e.clientX - rect.left - rect.width / 2) * 0.15;
+    const y = (e.clientY - rect.top - rect.height / 2) * 0.15;
+
+    gsap.set(elem, {
+        x: x,
+        y: y
+    });
+});
         } else {
             document.getElementById("cursor").style.display = 'none';
         }
