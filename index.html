@@ -45,7 +45,8 @@
             background-color: rgba(212, 175, 55, 0.03);
             box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); 
             transform-origin: center center;
-            will-change: transform, width, height;
+            transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), height 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s, border-color 0.3s;
+            will-change: transform;
         }
 
         .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--gold-bright); width: 0%; z-index: 10000; }
@@ -121,11 +122,14 @@
         .social-icons a { 
             color: var(--gold-muted); font-size: 1.5rem; transition: all 0.3s ease; 
             display: inline-flex; justify-content: center; align-items: center; width: 45px; height: 45px; 
+            text-decoration: none !important; border-bottom: none !important; /* Removes default lines */
+            box-shadow: none !important;
         }
         .social-icons a:hover { 
             color: var(--gold-bright); 
             transform: translateY(-4px) scale(1.1); 
-            text-shadow: 0 0 15px rgba(212, 175, 55, 0.7); 
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.7);
+            border-bottom: none !important;
         }
         .footer-text { font-size: 0.85rem; color: var(--text-dim); }
 
@@ -263,59 +267,56 @@
 
         gsap.registerPlugin(ScrollTrigger);
 
-        if(window.innerWidth > 768) {
+       if(window.innerWidth > 768) {
+            // Hyper-optimized positioning mechanics
             let xTo = gsap.quickTo(".cursor-dot", "x", {duration: 0, ease: "none"}),
                 yTo = gsap.quickTo(".cursor-dot", "y", {duration: 0, ease: "none"}),
-                xOutlineTo = gsap.quickTo(".cursor-outline", "x", {duration: 0.2, ease: "power2.out"}),
-                yOutlineTo = gsap.quickTo(".cursor-outline", "y", {duration: 0.2, ease: "power2.out"});
+                xOutlineTo = gsap.quickTo(".cursor-outline", "x", {duration: 0.12, ease: "power2.out"}),
+                yOutlineTo = gsap.quickTo(".cursor-outline", "y", {duration: 0.12, ease: "power2.out"});
 
-            // Variables to track velocity for the dynamic stretching effect
             let lastX = 0, lastY = 0;
 
             window.addEventListener("mousemove", e => {
                 xTo(e.clientX); yTo(e.clientY);
                 xOutlineTo(e.clientX); yOutlineTo(e.clientY);
 
-                // Calculate mouse speed velocity
+                // Calculating pure mathematical velocity
                 let deltaX = e.clientX - lastX;
                 let deltaY = e.clientY - lastY;
                 lastX = e.clientX; lastY = e.clientY;
-                let speed = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY), 150);
-
-                // Calculate stretching angle based on motion direction
+                
+                let speed = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY), 100);
                 let angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
                 
-                if (speed > 10) {
-                    // Stretches smoothly when mouse is accelerating
+                if (speed > 8) {
+                    // Fluid oval stretching during rapid motion
                     gsap.to(".cursor-outline", {
-                        scaleX: 1 + (speed * 0.004),
-                        scaleY: 1 - (speed * 0.002),
+                        scaleX: 1 + (speed * 0.005),
+                        scaleY: 1 - (speed * 0.003),
                         rotate: angle,
-                        duration: 0.15,
-                        ease: "power1.out"
+                        duration: 0.1,
+                        overwrite: "auto"
                     });
                 } else {
-                    // Instantly snaps back to perfect circle when stopped
-                    gsap.to(".cursor-outline", { scaleX: 1, scaleY: 1, rotate: 0, duration: 0.2 });
+                    // Velvet snap back to circle when stationery
+                    gsap.to(".cursor-outline", { scaleX: 1, scaleY: 1, rotate: 0, duration: 0.15, overwrite: "auto" });
                 }
             });
 
             const magnetics = document.querySelectorAll('.magnetic');
             magnetics.forEach((elem) => {
                 elem.addEventListener('mouseenter', () => {
-                    gsap.to(".cursor-outline", { width: 65, height: 65, backgroundColor: 'rgba(212, 175, 55, 0.18)', borderColor: 'transparent', duration: 0.25 });
+                    gsap.to(".cursor-outline", { width: 60, height: 60, backgroundColor: 'rgba(212, 175, 55, 0.15)', borderColor: 'transparent', duration: 0.2 });
                 });
                 elem.addEventListener('mouseleave', () => {
-                    gsap.to(".cursor-outline", { width: 35, height: 35, backgroundColor: 'rgba(212, 175, 55, 0.03)', borderColor: 'var(--gold-bright)', duration: 0.25 });
-                    // Highly advanced elastic spring back effect for links
-                    gsap.to(elem, { x: 0, y: 0, duration: 0.8, ease: "elastic.out(1, 0.3)" });
+                    gsap.to(".cursor-outline", { width: 35, height: 35, backgroundColor: 'rgba(212, 175, 55, 0.03)', borderColor: 'var(--gold-bright)', duration: 0.2 });
+                    gsap.to(elem, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.4)" });
                 });
                 elem.addEventListener('mousemove', (e) => {
                     const rect = elem.getBoundingClientRect();
                     const x = e.clientX - rect.left - rect.width / 2;
                     const y = e.clientY - rect.top - rect.height / 2;
-                    // Powerful custom magnetic attraction pull
-                    gsap.to(elem, { x: x * 0.4, y: y * 0.4, duration: 0.3, ease: "power2.out" });
+                    gsap.to(elem, { x: x * 0.35, y: y * 0.35, duration: 0.3, ease: "power2.out" });
                 });
             });
         } else {
