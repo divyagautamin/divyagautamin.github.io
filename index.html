@@ -104,16 +104,25 @@
         /* THE ULTIMATE ZERO-LAG ASSETS */
         .portrait-img { 
             max-width: 100%; height: auto; border-radius: 5px; border: 1px solid var(--glass-border); 
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.1), 0 20px 50px rgba(0,0,0,0.8);
-            will-change: transform, filter; /* GPU Promotion */
+            /* THE GOLDEN AURA PATCH */
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.15), 0 20px 50px rgba(0,0,0,0.8);
+            animation: pulse-aura 4s infinite alternate ease-in-out;
+            will-change: transform, box-shadow; /* GPU Promotion */
         }
         .book-img { 
             max-width: 100%; height: auto; border: none; box-shadow: none; background: transparent; 
-            animation: float-book 3.5s ease-in-out infinite; 
-            will-change: transform; /* Removed 'filter' which was choking the GPU and causing the lag */
-            transform: translateZ(0); /* Hardware acceleration enforcement */
+            /* THE STATIC BOOK PATCH (Lag Fix) */
+            /* Removed movement animation, added static high 3D glow */
+            transform: translateY(-5px) rotate(2.5deg) scale(1.02); /* Locked into its elagant animated pose */
+            filter: drop-shadow(0 25px 45px rgba(212,175,55,0.6)); /* Intense Static Glow */
+            will-change: transform, filter; /* GPU Promotion for zero lag */
         }
 
+        /* Aura Animation for Portrait */
+        @keyframes pulse-aura {
+            0% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.15), 0 20px 50px rgba(0,0,0,0.8); }
+            100% { box-shadow: 0 0 35px rgba(212, 175, 55, 0.4), 0 20px 50px rgba(0,0,0,0.8); }
+        }
         .split-text { flex: 1; }
         .split-text p { font-size: 1.15rem; line-height: 1.9; color: var(--text-dim); margin-bottom: 25px; }
 
@@ -134,9 +143,11 @@
         footer { text-align: center; padding: 80px 10%; border-top: 1px solid var(--glass-border); background: #020202; }
         .social-icons { display: flex; justify-content: center; gap: 30px; margin-bottom: 30px; }
         .social-icons a { 
-            color: var(--gold-muted); font-size: 1.6rem; transition: all 0.3s ease; 
-            display: inline-flex; justify-content: center; align-items: center; width: 45px; height: 45px;
-            text-decoration: none !important; border-bottom: none !important; /* Removes all default borders */
+            color: var(--text-dim); font-size: 1.6rem; transition: color 0.3s; 
+            display: inline-flex; justify-content: center; width: 45px; 
+            /* THE POWER PULSE PATCH */
+            padding: 10px; /* Invisible magnetic field increase */
+            border-radius: 5px;
         }
         .social-icons a:hover { 
             color: var(--gold-bright); 
@@ -158,7 +169,7 @@
         /* --- MOBILE RESPONSIVEFIXES --- */
         @media (max-width: 768px) {
             .hamburger { display: block; }
-            .nav-links { display: none; flex-direction: column; align-items: flex-end; position: absolute; top: 100%; left: 0; width: 100%; background: rgba(5,5,5,0.98); padding: 25px 5%; border-bottom: 1px solid var(--glass-border); }
+            .nav-links { display: none; flex-direction: column; align-items: flex-start; position: absolute; top: 100%; left: 0; width: 100%; background: rgba(5,5,5,0.98); padding: 25px 10%; border-bottom: 1px solid var(--glass-border); }
             .nav-links.active { display: flex; }
             .nav-links a { margin: 15px 0; font-size: 1rem; }
             .split-layout { flex-direction: column !important; gap: 40px; text-align: center; }
@@ -180,16 +191,18 @@
     </div>
 
     <nav>
-        <div class="nav-logo">
-            <img src="./logo.png" alt="DG Insight Press Logo" onerror="this.style.display='none'">
-        </div>
         <div class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('active')">&#9776;</div>
+        
         <div class="nav-links">
             <a href="#hero" class="magnetic" onclick="document.querySelector('.nav-links').classList.remove('active')">Home</a>
             <a href="#profile" class="magnetic" onclick="document.querySelector('.nav-links').classList.remove('active')">Profile</a>
             <a href="#publications" class="magnetic" onclick="document.querySelector('.nav-links').classList.remove('active')">Publications</a>
             <a href="#research" class="magnetic" onclick="document.querySelector('.nav-links').classList.remove('active')">Research</a>
             <a href="#footer" class="magnetic btn-connect" onclick="document.querySelector('.nav-links').classList.remove('active')">Connect</a>
+        </div>
+
+        <div class="nav-logo">
+            <img src="./logo.png" alt="DG Insight Press Logo" onerror="this.style.display='none'">
         </div>
     </nav>
 
@@ -289,75 +302,75 @@
 
         // --- THE QUANTUM LIQUID CURSOR ENGINE (Version 5.0) ---
         // --- THE QUANTUM LIQUID CURSOR ENGINE (Version 6.0) ---
+        // --- THE QUANTUM LIQUID CURSOR ENGINE (Version 6.0) ---
         if(window.innerWidth > 768) {
+            const cursorDot = document.getElementById("cursor-dot");
             const cursorOutline = document.getElementById("cursor-outline");
             
-            // Buttery smooth tracking with slight, elegant lag (0.08s)
-            let xTo = gsap.quickTo(cursorOutline, "x", {duration: 0.08, ease: "power3.out"});
-            let yTo = gsap.quickTo(cursorOutline, "y", {duration: 0.08, ease: "power3.out"});
+            let pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+            let mouse = { x: pos.x, y: pos.y };
+            
+            // --- SETTING FOR SMOOTHNESS ---
+            // Current value is 0.35. Lower (0.1) is more velvet, Higher (0.8) is snappier/direct.
+            let smoothness = 0.35; 
 
-            let lastX = 0, lastY = 0;
-            let isHovering = false;
-            let timeout;
+            // Mathematical physics for velocity and stretching
+            let lastX = mouse.x, lastY = mouse.y;
+            let currentAngle = 0;
 
             window.addEventListener("mousemove", e => {
-                xTo(e.clientX);
-                yTo(e.clientY);
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+                gsap.set(cursorDot, { x: mouse.x, y: mouse.y });
+            });
 
-                // Velocity and Stretch Calculation
-                if(!isHovering) {
-                    let deltaX = e.clientX - lastX;
-                    let deltaY = e.clientY - lastY;
-                    let velocity = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY), 100);
-                    let angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+            gsap.ticker.add((time, deltaTime) => {
+                let deltaX = mouse.x - lastX;
+                let deltaY = mouse.y - lastY;
+                lastX = mouse.x; lastY = mouse.y;
 
-                    lastX = e.clientX;
-                    lastY = e.clientY;
+                pos.x += (mouse.x - pos.x) * smoothness;
+                pos.y += (mouse.y - pos.y) * smoothness;
+                gsap.set(cursorOutline, { x: pos.x, y: pos.y });
 
-                    // Hyper-sensitive stretch (Triggers easily, stretches more)
-                    if (velocity > 3) { 
-                        gsap.to(cursorOutline, {
-                            scaleX: 1 + (velocity * 0.015), // Highly increased horizontal/directional stretch
-                            scaleY: 1 - (velocity * 0.005),
-                            rotate: angle,
-                            duration: 0.1,
-                            overwrite: "auto"
-                        });
-                    }
+                let velocity = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY), 150);
+                let targetAngle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+                if (velocity > 10) { currentAngle = targetAngle; }
 
-                    // Millisecond snap-back logic when mouse stops
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => {
-                        gsap.to(cursorOutline, { scaleX: 1, scaleY: 1, rotate: 0, duration: 0.15, overwrite: "auto" });
-                    }, 40);
+                if (velocity > 15) {
+                    gsap.to(cursorOutline, {
+                        scaleX: 1 + (velocity * 0.005), 
+                        scaleY: 1 - (velocity * 0.003),
+                        rotate: currentAngle,
+                        duration: 0.1, 
+                        overwrite: "auto"
+                    });
+                } else {
+                    gsap.to(cursorOutline, { scaleX: 1, scaleY: 1, rotate: 0, duration: 0.2, overwrite: "auto" });
                 }
             });
 
-            // HYPER-MAGNETIC & SUPER-GLOW LOGIC
+            // THE ULTRA-MAGNETIC POWER LOGIC
             const magnetics = document.querySelectorAll('.magnetic');
             magnetics.forEach((elem) => {
                 elem.addEventListener('mouseenter', () => {
-                    isHovering = true;
-                    // Massive glow and size increase on hover
-                    gsap.to(cursorOutline, { scaleX: 1, scaleY: 1, rotate: 0, width: 85, height: 85, backgroundColor: 'rgba(212, 175, 55, 0.25)', borderColor: 'transparent', boxShadow: '0 0 35px rgba(212, 175, 55, 0.7)', duration: 0.2 });
+                    gsap.to(cursorOutline, { width: 75, height: 75, backgroundColor: 'rgba(212, 175, 55, 0.15)', borderColor: 'transparent', boxShadow: '0 0 25px rgba(212, 175, 55, 0.5)', duration: 0.25 });
                 });
                 elem.addEventListener('mouseleave', () => {
-                    isHovering = false;
-                    gsap.to(cursorOutline, { width: 35, height: 35, backgroundColor: 'transparent', borderColor: 'var(--gold-bright)', boxShadow: '0 0 15px rgba(212, 175, 55, 0.4)', duration: 0.2 });
-                    gsap.to(elem, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.3)" });
+                    gsap.to(cursorOutline, { width: 38, height: 38, backgroundColor: 'transparent', borderColor: 'var(--gold-muted)', boxShadow: '0 0 15px rgba(212, 175, 55, 0.2)', duration: 0.25 });
+                    gsap.to(elem, { x: 0, y: 0, duration: 0.8, ease: "elastic.out(1, 0.3)" });
                 });
                 elem.addEventListener('mousemove', (e) => {
                     const rect = elem.getBoundingClientRect();
+                    // THE STRONG MAGNET PATCH: Increased attraction factor from 0.45 to 0.7
                     const x = e.clientX - rect.left - rect.width / 2;
                     const y = e.clientY - rect.top - rect.height / 2;
-                    // Magnetic pull increased drastically (from 0.4 to 0.7)
                     gsap.to(elem, { x: x * 0.7, y: y * 0.7, duration: 0.3, ease: "power2.out" });
                 });
             });
         } else {
             document.getElementById("cursor").style.display = 'none';
         }
-
         // LEVEL 2-3: HERO NAME ENTRY & Sovereign Exit/Return
         gsap.fromTo(".hero-name-container", 
             { opacity: 0, y: 70, scale: 0.95 },
