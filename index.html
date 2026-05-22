@@ -39,8 +39,14 @@
             pointer-events: none;
             will-change: transform;
         }
-        .cursor-dot { width: 6px; height: 6px; background-color: var(--gold-bright); }
-        .cursor-outline { width: 40px; height: 40px; border: 1px solid var(--gold-bright); box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s; }
+        .cursor-outline { 
+            width: 35px; height: 35px; 
+            border: 1.5px solid var(--gold-bright); 
+            background-color: rgba(212, 175, 55, 0.03);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); 
+            transform-origin: center center;
+            will-change: transform, width, height;
+        }
 
         .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--gold-bright); width: 0%; z-index: 10000; }
 
@@ -73,8 +79,28 @@
 
         .split-layout { display: flex; align-items: center; gap: 50px; justify-content: space-between; }
         .split-image { flex: 1; text-align: center; }
-        .portrait-img { max-width: 100%; height: auto; border-radius: 5px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid var(--glass-border); }
-        .book-img { max-width: 100%; height: auto; border: none; box-shadow: none; background: transparent; animation: float 3.5s ease-in-out infinite; }
+        /* Photo Aura & Zero-Lag Optimization */
+        .portrait-img { 
+            max-width: 100%; height: auto; border-radius: 5px; border: 1px solid var(--glass-border); 
+            animation: portrait-glow 4s infinite alternate ease-in-out;
+            will-change: transform, filter; /* Forces GPU usage to stop hanging */
+        }
+        /* Book Extra Glow & Float Optimization */
+        .book-img { 
+            max-width: 100%; height: auto; border: none; box-shadow: none; background: transparent; 
+            animation: float-book 3.5s ease-in-out infinite; 
+            will-change: transform, filter;
+        }
+
+        @keyframes portrait-glow {
+            0% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.15), 0 20px 50px rgba(0,0,0,0.8); filter: brightness(1); }
+            100% { box-shadow: 0 0 35px rgba(212, 175, 55, 0.4), 0 20px 50px rgba(0,0,0,0.8); filter: brightness(1.05); }
+        }
+        @keyframes float-book { 
+            0% { transform: translateY(0px) rotate(0deg) scale(1); filter: drop-shadow(0 10px 20px rgba(0,0,0,0.7)); } 
+            50% { transform: translateY(-20px) rotate(2deg) scale(1.02); filter: drop-shadow(0 20px 45px rgba(212, 175, 55, 0.55)); } 
+            100% { transform: translateY(0px) rotate(0deg) scale(1); filter: drop-shadow(0 10px 20px rgba(0,0,0,0.7)); } 
+        }
         .split-text { flex: 1; }
         .split-text p { font-size: 1.1rem; line-height: 1.8; color: var(--text-dim); margin-bottom: 20px; }
 
@@ -92,8 +118,15 @@
         footer { text-align: center; padding: 60px 10%; border-top: 1px solid var(--glass-border); background: #020202; }
         /* SOLUTION: Perfect Social Media Gap */
         .social-icons { display: flex; justify-content: center; gap: 25px; margin-bottom: 25px; }
-        .social-icons a { color: var(--text-dim); font-size: 1.5rem; transition: color 0.3s; display: inline-flex; justify-content: center; width: 40px; }
-        .social-icons a:hover { color: var(--gold-bright); }
+        .social-icons a { 
+            color: var(--gold-muted); font-size: 1.5rem; transition: all 0.3s ease; 
+            display: inline-flex; justify-content: center; align-items: center; width: 45px; height: 45px; 
+        }
+        .social-icons a:hover { 
+            color: var(--gold-bright); 
+            transform: translateY(-4px) scale(1.1); 
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.7); 
+        }
         .footer-text { font-size: 0.85rem; color: var(--text-dim); }
 
         .gsap-reveal { opacity: 0; transform: translateY(60px); }
@@ -209,12 +242,12 @@
 
     <footer id="footer">
         <div class="social-icons">
-            <a href="#" class="magnetic"><i class="fa-brands fa-linkedin-in"></i></a>
-            <a href="#" class="magnetic"><i class="fa-brands fa-x-twitter"></i></a>
             <a href="#" class="magnetic"><i class="fa-brands fa-facebook-f"></i></a>
             <a href="#" class="magnetic"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="magnetic"><i class="fa-brands fa-x-twitter"></i></a>
             <a href="#" class="magnetic"><i class="fa-brands fa-github"></i></a>
             <a href="#" class="magnetic"><i class="fa-brands fa-orcid"></i></a>
+            <a href="#" class="magnetic"><i class="fa-brands fa-linkedin-in"></i></a>
         </div>
         <p class="footer-text">© 2026 Divya Gautam. All Rights Reserved. | Dedicated to Independent Synthesis & Public Policy.</p>
     </footer>
@@ -230,27 +263,59 @@
 
         gsap.registerPlugin(ScrollTrigger);
 
-        // Hide Cursor dot on mobile devices
         if(window.innerWidth > 768) {
             let xTo = gsap.quickTo(".cursor-dot", "x", {duration: 0, ease: "none"}),
                 yTo = gsap.quickTo(".cursor-dot", "y", {duration: 0, ease: "none"}),
-                xOutlineTo = gsap.quickTo(".cursor-outline", "x", {duration: 0.8, ease: "power3.out"}),
-                yOutlineTo = gsap.quickTo(".cursor-outline", "y", {duration: 0.8, ease: "power3.out"});
+                xOutlineTo = gsap.quickTo(".cursor-outline", "x", {duration: 0.2, ease: "power2.out"}),
+                yOutlineTo = gsap.quickTo(".cursor-outline", "y", {duration: 0.2, ease: "power2.out"});
+
+            // Variables to track velocity for the dynamic stretching effect
+            let lastX = 0, lastY = 0;
 
             window.addEventListener("mousemove", e => {
                 xTo(e.clientX); yTo(e.clientY);
                 xOutlineTo(e.clientX); yOutlineTo(e.clientY);
+
+                // Calculate mouse speed velocity
+                let deltaX = e.clientX - lastX;
+                let deltaY = e.clientY - lastY;
+                lastX = e.clientX; lastY = e.clientY;
+                let speed = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY), 150);
+
+                // Calculate stretching angle based on motion direction
+                let angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+                
+                if (speed > 10) {
+                    // Stretches smoothly when mouse is accelerating
+                    gsap.to(".cursor-outline", {
+                        scaleX: 1 + (speed * 0.004),
+                        scaleY: 1 - (speed * 0.002),
+                        rotate: angle,
+                        duration: 0.15,
+                        ease: "power1.out"
+                    });
+                } else {
+                    // Instantly snaps back to perfect circle when stopped
+                    gsap.to(".cursor-outline", { scaleX: 1, scaleY: 1, rotate: 0, duration: 0.2 });
+                }
             });
 
             const magnetics = document.querySelectorAll('.magnetic');
             magnetics.forEach((elem) => {
-                elem.addEventListener('mouseenter', () => gsap.to(".cursor-outline", { width: 70, height: 70, backgroundColor: 'rgba(212, 175, 55, 0.15)', borderColor: 'transparent', duration: 0.3 }));
-                elem.addEventListener('mouseleave', () => { gsap.to(".cursor-outline", { width: 40, height: 40, backgroundColor: 'transparent', borderColor: 'var(--gold-bright)', duration: 0.3 }); gsap.to(elem, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.3)" }); });
+                elem.addEventListener('mouseenter', () => {
+                    gsap.to(".cursor-outline", { width: 65, height: 65, backgroundColor: 'rgba(212, 175, 55, 0.18)', borderColor: 'transparent', duration: 0.25 });
+                });
+                elem.addEventListener('mouseleave', () => {
+                    gsap.to(".cursor-outline", { width: 35, height: 35, backgroundColor: 'rgba(212, 175, 55, 0.03)', borderColor: 'var(--gold-bright)', duration: 0.25 });
+                    // Highly advanced elastic spring back effect for links
+                    gsap.to(elem, { x: 0, y: 0, duration: 0.8, ease: "elastic.out(1, 0.3)" });
+                });
                 elem.addEventListener('mousemove', (e) => {
                     const rect = elem.getBoundingClientRect();
                     const x = e.clientX - rect.left - rect.width / 2;
                     const y = e.clientY - rect.top - rect.height / 2;
-                    gsap.to(elem, { x: x * 0.45, y: y * 0.45, duration: 0.4, ease: "power2.out" });
+                    // Powerful custom magnetic attraction pull
+                    gsap.to(elem, { x: x * 0.4, y: y * 0.4, duration: 0.3, ease: "power2.out" });
                 });
             });
         } else {
