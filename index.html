@@ -27,31 +27,21 @@
             color: var(--text-pure);
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
-            cursor: none; /* Sovereign control for custom cursor */
+            cursor: none; 
         }
 
-        /* --- THE LIQUID & MAGNETIC CURSOR (Version 5.0) --- */
+        /* --- THE LIQUID CURSOR (Version 6.0 - Dotless) --- */
         #cursor {
             position: fixed;
             pointer-events: none;
-            z-index: 10000; /* Highest priority */
+            z-index: 10000;
             will-change: transform;
         }
 
-        /* The Core Gold dot - follows mouse perfectly */
-        #cursor-dot {
-            position: absolute;
-            width: 7px; height: 7px;
-            background-color: var(--gold-bright);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-       /* The Single Hyper-Smooth Orb */
         #cursor-outline {
             position: absolute;
             width: 35px; height: 35px;
-            border: 2px solid var(--gold-bright); /* Slightly thicker for visibility */
+            border: 2px solid var(--gold-bright);
             border-radius: 50%;
             background-color: transparent;
             transform: translate(-50%, -50%);
@@ -63,24 +53,25 @@
             pointer-events: none;
         }
 
-        /* Reading Progress Bar */
         .progress-bar {
             position: fixed; top: 0; left: 0; height: 2px; background: var(--gold-bright); width: 0%; z-index: 10000;
         }
 
-        /* --- LEVEL 1: THE GLASS NAVIGATION --- */
+        /* --- LEVEL 1: THE GLASS NAVIGATION (Swapped Hierarchy) --- */
         nav {
             position: fixed; top: 0; width: 100%; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
             background: rgba(5, 5, 5, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--glass-border); z-index: 1000;
         }
-        .nav-logo img { height: 40px; }
+        .hamburger { display: none; font-size: 1.8rem; color: var(--gold-bright); cursor: pointer; }
+        
         .nav-links { display: flex; align-items: center; gap: 30px; }
         .nav-links a { color: var(--text-pure); text-decoration: none; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; transition: color 0.3s; }
         .nav-links a:hover { color: var(--gold-bright); }
         .btn-connect { padding: 8px 20px; border: 1px solid var(--gold-muted); border-radius: 4px; color: var(--gold-bright) !important; transition: all 0.3s; }
         .btn-connect:hover { background: var(--gold-muted); color: var(--bg-obsidian) !important; }
-        .hamburger { display: none; font-size: 1.8rem; color: var(--gold-bright); cursor: pointer; }
+
+        .nav-logo img { height: 40px; }
 
         /* --- LEVEL 2: THE CINEMATIC HERO --- */
         #hero { position: relative; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; overflow: hidden; }
@@ -104,25 +95,23 @@
         /* THE ULTIMATE ZERO-LAG ASSETS */
         .portrait-img { 
             max-width: 100%; height: auto; border-radius: 5px; border: 1px solid var(--glass-border); 
-            /* THE GOLDEN AURA PATCH */
             box-shadow: 0 0 15px rgba(212, 175, 55, 0.15), 0 20px 50px rgba(0,0,0,0.8);
             animation: pulse-aura 4s infinite alternate ease-in-out;
-            will-change: transform, box-shadow; /* GPU Promotion */
+            will-change: transform, box-shadow; 
         }
         .book-img { 
             max-width: 100%; height: auto; border: none; background: transparent; 
             transform: translateY(-5px) rotate(2.5deg) scale(1.02); 
-            /* THE CURE: Replaced heavy 'filter' with mathematically weightless 'box-shadow' */
             box-shadow: -15px 25px 50px rgba(212, 175, 55, 0.4);
-            border-radius: 6px; /* Mimics the soft edges of a physical book */
+            border-radius: 6px;
             will-change: transform; 
         }
 
-        /* Aura Animation for Portrait */
         @keyframes pulse-aura {
             0% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.15), 0 20px 50px rgba(0,0,0,0.8); }
             100% { box-shadow: 0 0 35px rgba(212, 175, 55, 0.4), 0 20px 50px rgba(0,0,0,0.8); }
         }
+
         .split-text { flex: 1; }
         .split-text p { font-size: 1.15rem; line-height: 1.9; color: var(--text-dim); margin-bottom: 25px; }
 
@@ -145,9 +134,8 @@
         .social-icons a { 
             color: var(--text-dim); font-size: 1.6rem; transition: color 0.3s; 
             display: inline-flex; justify-content: center; width: 45px; 
-            /* THE POWER PULSE PATCH */
-            padding: 10px; /* Invisible magnetic field increase */
-            border-radius: 5px;
+            padding: 10px; border-radius: 5px;
+            text-decoration: none !important; border-bottom: none !important;
         }
         .social-icons a:hover { 
             color: var(--gold-bright); 
@@ -159,30 +147,24 @@
         /* Global GSAP Classes */
         .gsap-reveal { opacity: 0; transform: translateY(60px); will-change: transform, opacity; }
 
-        /* The Float Animation for the Book */
-        @keyframes float-book { 
-            0% { transform: translateY(0px) rotate(0deg) scale(1); filter: drop-shadow(0 10px 20px rgba(0,0,0,0.7)); } 
-            50% { transform: translateY(-25px) rotate(2.5deg) scale(1.02); filter: drop-shadow(0 25px 45px rgba(212,175,55,0.6)); } 
-            100% { transform: translateY(0px) rotate(0deg) scale(1); filter: drop-shadow(0 10px 20px rgba(0,0,0,0.7)); } 
-        }
-
-        /* --- MOBILE RESPONSIVEFIXES --- */
+        /* --- MOBILE RESPONSIVE FIXES --- */
         @media (max-width: 768px) {
             .hamburger { display: block; }
-            .nav-links { display: none; flex-direction: column; align-items: flex-start; position: absolute; top: 100%; left: 0; width: 100%; background: rgba(5,5,5,0.98); padding: 25px 10%; border-bottom: 1px solid var(--glass-border); }
+            .nav-links { 
+                display: none; flex-direction: column; align-items: flex-start; /* Left Aligned */
+                position: absolute; top: 100%; left: 0; width: 100%; background: rgba(5,5,5,0.98); padding: 25px 10%; border-bottom: 1px solid var(--glass-border); 
+            }
             .nav-links.active { display: flex; }
             .nav-links a { margin: 15px 0; font-size: 1rem; }
             .split-layout { flex-direction: column !important; gap: 40px; text-align: center; }
             .split-image, .split-text { width: 100%; }
             .portrait-img, .book-img { max-width: 90%; margin: 0 auto; }
             section:not(#hero) { padding: 100px 5%; }
-            #cursor { display: none; } /* Mobile doesn't need custom cursor */
+            #cursor { display: none; } 
         }
     </style>
 </head>
 <body>
-
-    <link rel="icon" type="image/png" href="./favicon.png">
 
     <div class="progress-bar" id="progressBar"></div>
 
@@ -300,28 +282,21 @@
 
         gsap.registerPlugin(ScrollTrigger);
 
-        // --- THE QUANTUM LIQUID CURSOR ENGINE (Version 5.0) ---
-        // --- THE QUANTUM LIQUID CURSOR ENGINE (Version 6.0) ---
-        // --- THE QUANTUM LIQUID CURSOR ENGINE (Version 6.0) ---
+        // --- THE QUANTUM LIQUID CURSOR ENGINE (Version 6.1 - Final & Flawless) ---
         if(window.innerWidth > 768) {
-            const cursorDot = document.getElementById("cursor-dot");
             const cursorOutline = document.getElementById("cursor-outline");
             
             let pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
             let mouse = { x: pos.x, y: pos.y };
             
-            // --- SETTING FOR SMOOTHNESS ---
-            // Current value is 0.35. Lower (0.1) is more velvet, Higher (0.8) is snappier/direct.
             let smoothness = 0.35; 
-
-            // Mathematical physics for velocity and stretching
             let lastX = mouse.x, lastY = mouse.y;
             let currentAngle = 0;
+            let timeout;
 
             window.addEventListener("mousemove", e => {
                 mouse.x = e.clientX;
                 mouse.y = e.clientY;
-                gsap.set(cursorDot, { x: mouse.x, y: mouse.y });
             });
 
             gsap.ticker.add((time, deltaTime) => {
@@ -337,31 +312,32 @@
                 let targetAngle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
                 if (velocity > 10) { currentAngle = targetAngle; }
 
-                // THE WATER DROP PHYSICS (Triggers on slightest movement)
-                    if (velocity > 1) { 
-                        gsap.to(cursorOutline, {
-                            scaleX: 1 + (velocity * 0.025), // More intense liquid stretch
-                            scaleY: 1 - (velocity * 0.010),
-                            rotate: angle,
-                            duration: 0.1,
-                            overwrite: "auto"
-                        });
-                    }
+                // The Sensitive Water Drop Logic
+                if (velocity > 1) { 
+                    gsap.to(cursorOutline, {
+                        scaleX: 1 + (velocity * 0.025), 
+                        scaleY: 1 - (velocity * 0.010),
+                        rotate: currentAngle,
+                        duration: 0.1,
+                        overwrite: "auto"
+                    });
+                }
 
-                    // 0.1 Second snap-back to perfect circle when stopped
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => {
-                        gsap.to(cursorOutline, { scaleX: 1, scaleY: 1, rotate: 0, duration: 0.1, overwrite: "auto" });
-                    }, 20); // Faster trigger to return to shape
+                // Instant Snap-back
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    gsap.to(cursorOutline, { scaleX: 1, scaleY: 1, rotate: 0, duration: 0.1, overwrite: "auto" });
+                }, 20); 
+            });
 
-            // THE ULTRA-MAGNETIC POWER LOGIC
+            // The Stable Anchor & Hyper-Magnetic Glow
             const magnetics = document.querySelectorAll('.magnetic');
             magnetics.forEach((elem) => {
                 elem.addEventListener('mouseenter', () => {
                     gsap.to(cursorOutline, { width: 75, height: 75, backgroundColor: 'rgba(212, 175, 55, 0.15)', borderColor: 'transparent', boxShadow: '0 0 25px rgba(212, 175, 55, 0.5)', duration: 0.25 });
                 });
                 elem.addEventListener('mouseleave', () => {
-                    gsap.to(cursorOutline, { width: 38, height: 38, backgroundColor: 'transparent', borderColor: 'var(--gold-muted)', boxShadow: '0 0 15px rgba(212, 175, 55, 0.2)', duration: 0.25 });
+                    gsap.to(cursorOutline, { width: 35, height: 35, backgroundColor: 'transparent', borderColor: 'var(--gold-bright)', boxShadow: '0 0 15px rgba(212, 175, 55, 0.4)', duration: 0.25 });
                     gsap.to(elem, { x: 0, y: 0, duration: 0.8, ease: "elastic.out(1, 0.3)" });
                 });
                 elem.addEventListener('mousemove', (e) => {
@@ -369,13 +345,14 @@
                     const x = e.clientX - rect.left - rect.width / 2;
                     const y = e.clientY - rect.top - rect.height / 2;
                     
-                    // THE ANCHOR: Elements barely move (0.15 multiplier), maintaining a sovereign, stable look
+                    // Button anchors firmly (0.15 movement), creating a sovereign feel
                     gsap.to(elem, { x: x * 0.15, y: y * 0.15, duration: 0.3, ease: "power2.out" });
                 });
             });
         } else {
             document.getElementById("cursor").style.display = 'none';
         }
+
         // LEVEL 2-3: HERO NAME ENTRY & Sovereign Exit/Return
         gsap.fromTo(".hero-name-container", 
             { opacity: 0, y: 70, scale: 0.95 },
