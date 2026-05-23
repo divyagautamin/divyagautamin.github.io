@@ -161,18 +161,78 @@
         .gsap-reveal { opacity: 0; transform: translateY(60px); will-change: transform, opacity; }
 
         /* --- MOBILE RESPONSIVE FIXES --- */
+        /* ========================================================= */
+        /* --- THE SOVEREIGN RESPONSIVE FRAMEWORK (v8.0) --- */
+        /* ========================================================= */
+
+        /* GLOBAL ADJUSTMENTS FOR MEDIUM SCREENS (Tablets/Smaller Desktops) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            nav { padding: 15px 5%; }
+            .nav-links { gap: 20px; }
+            .nav-links a { font-size: 0.8rem; padding: 10px 15px; }
+            section:not(#hero) { padding: 100px 7%; }
+            .hero-name { font-size: 5rem; letter-spacing: 3px; }
+            .split-layout { gap: 40px; }
+        }
+
+        /* COMPREHENSIVE FIXES FOR ALL MOBILE SCREENS (Portrait & Desktop Mode) */
         @media (max-width: 768px) {
-            .hamburger { display: block; }
+            /* 1. Global Performance & Spacing Cures */
+            section:not(#hero) { padding: 60px 5%; min-height: auto; } /* Removed huge gaps */
+            * { cursor: none !important; } /* Final cursor hide enforcement for mobile */
+            body { cursor: none; }
+
+            /* 2. Fix Gaps in Desktop Mode */
+            .hero-name-container { width: 90%; }
+            .hero-name { font-size: 3rem; letter-spacing: 2px; }
+            .hero-manifesto { font-size: 0.9rem; letter-spacing: 1.5px; }
+
+            /* 3. Global Reveal Fix */
+            .gsap-reveal { transform: translateY(30px); }
+
+            /* 4. Elite Mobile Menu (Compacted & Professional) */
+            nav { padding: 12px 6%; background: rgba(5, 5, 5, 0.98); border-bottom: 1px solid var(--glass-border); }
             .nav-links { 
-                display: none; flex-direction: column; align-items: flex-start; position: absolute; top: 100%; left: 0; width: 100%; background: rgba(5,5,5,0.98); padding: 25px 10%; border-bottom: 1px solid var(--glass-border); 
+                display: none; flex-direction: column; align-items: flex-start;
+                position: absolute; top: 100%; left: 0; width: 100%; 
+                background: rgba(5, 5, 5, 0.98); padding: 15px 8%; 
+                border-bottom: 1px solid var(--glass-border); gap: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
             }
             .nav-links.active { display: flex; }
-            .nav-links a { margin: 15px 0; font-size: 1rem; }
-            .split-layout { flex-direction: column !important; gap: 40px; text-align: center; }
-            .split-image, .split-text { width: 100%; }
-            .portrait-img, .book-img { max-width: 90%; margin: 0 auto; }
-            section:not(#hero) { padding: 100px 5%; }
-            #cursor { display: none; } 
+            /* CURE: Removed massive double padding/margins to cure the messy spread-out look */
+            .nav-links a { margin: 0; font-size: 0.95rem; width: 100%; padding: 12px 15px; border-radius: 4px; }
+            .btn-connect { margin-top: 8px; text-align: center; }
+            .hamburger { display: block; order: 1; }
+            .nav-logo { order: 2; }
+
+            /* 5. Cure Squashing on Split Layouts (Profile & Publications) */
+            .split-layout { flex-direction: column !important; gap: 30px; text-align: center; }
+            .split-image, .split-text { width: 100%; flex: none; }
+            .split-layout > div { width: 100%; } /* Enforcement */
+            
+            /* Fix publications stacking (Book image first, then text) */
+            #publications .split-layout { flex-direction: column-reverse !important; } 
+
+            .portrait-img, .book-img { max-width: 85%; margin: 0 auto; height: auto; display: block; }
+            .split-text p { font-size: 1.05rem; line-height: 1.7; margin-bottom: 15px; }
+            .split-text h3 { font-size: 1.8rem; }
+            
+            /* Spacing adjustments inside sections */
+            h2.section-title { margin-bottom: 30px; font-size: 2.2rem; }
+            section#profile h2.section-title { margin-bottom: 40px; }
+
+            /* 6. Chronicle Timeline Mobilization */
+            .timeline-container { padding-left: 25px; border-left: 2px solid var(--glass-border); max-width: 100%; margin: 0; }
+            .timeline-dot { left: -34px; width: 14px; height: 14px; }
+            .timeline-year { font-size: 1.4rem; }
+
+            /* 7. Footer Social Icons Cut-off Cure */
+            footer { padding: 50px 5%; }
+            .social-icons { gap: 15px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 100%; margin-bottom: 20px;}
+            /* Important: Allow icons to shrink slightly if needed and remove fixed width */
+            .social-icons a { width: auto; height: auto; min-width: 50px; min-height: 50px; padding: 12px; font-size: 1.4rem; flex: none;}
+            .social-icons a:hover { transform: translateY(-5px) scale(1.1); }
+            .footer-text { font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -311,7 +371,9 @@
 
         // --- THE QUANTUM LIQUID CURSOR ENGINE (Version 6.2 - Crash Fixed & Ultra-Smooth) ---
         // --- THE QUANTUM LIQUID CURSOR ENGINE (Version 7.0 - Hyper-Magnetic Cursor Patch) ---
-        if(window.innerWidth > 768) {
+        // THE QUANTUM LIQUID CURSOR ENGINE (Version 8.0 - Mob-Desktop Fix)
+        // CURE: Check for width AND touch capability. Mobile-Desktop hides cursor.
+        if(window.innerWidth > 768 && !('ontouchstart' in window || navigator.maxTouchPoints > 0)) {
             const cursorOutline = document.getElementById("cursor-outline");
             
             let pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
@@ -375,17 +437,21 @@
             });
 
             const magnetics = document.querySelectorAll('.magnetic');
+           const magnetics = document.querySelectorAll('.magnetic');
             magnetics.forEach((elem) => {
                 elem.addEventListener('mouseenter', () => {
                     activeMagnetic = elem; 
-                    // THE SOLAR FLARE GLOW: Massive size (90x90) and double intense golden box-shadow
-                    gsap.to(cursorOutline, { width: 90, height: 90, scaleX: 1, scaleY: 1, rotate: 0, backgroundColor: 'rgba(212, 175, 55, 0.25)', borderColor: 'transparent', boxShadow: '0 0 40px rgba(212, 175, 55, 0.9), 0 0 80px rgba(212, 175, 55, 0.5)', duration: 0.25 });
+                    // CURE: Reduced size to 80x80 for balanced elegance
+                    gsap.to(cursorOutline, { width: 80, height: 80, scaleX: 1, scaleY: 1, rotate: 0, backgroundColor: 'rgba(212, 175, 55, 0.25)', borderColor: 'transparent', boxShadow: '0 0 40px rgba(212, 175, 55, 0.9), 0 0 80px rgba(212, 175, 55, 0.5)', duration: 0.25 });
                 });
                 elem.addEventListener('mouseleave', () => {
                     activeMagnetic = null; 
                     gsap.to(cursorOutline, { width: 35, height: 35, backgroundColor: 'transparent', borderColor: 'var(--gold-bright)', boxShadow: '0 0 15px rgba(212, 175, 55, 0.4)', duration: 0.25 });
-                    gsap.to(elem, { x: 0, y: 0, duration: 0.8, ease: "elastic.out(1, 0.3)" });
+                    // CURE: Elements no longer need to "snap back" because they NEVER move.
                 });
+                // CURE: The mousemove listener that shifted the icons/menus has been completely annihilated. 
+                // Result: Icons are 100% static. Only the cursor magnetically snaps to them.
+            });
                 elem.addEventListener('mousemove', (e) => {
                     const rect = elem.getBoundingClientRect();
                     const x = e.clientX - rect.left - rect.width / 2;
