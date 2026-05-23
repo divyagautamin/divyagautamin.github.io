@@ -90,7 +90,8 @@
         .hero-manifesto { font-size: 1.1rem; letter-spacing: 3px; color: var(--gold-muted); text-transform: uppercase; }
 
         /* Shared Section Layouts */
-        section:not(#hero) { padding: 140px 10%; min-height: 90vh; }
+        /* CURE: Removed forced 90vh height and reduced massive padding to eliminate gaps */
+        section:not(#hero) { padding: 100px 10%; min-height: auto; }
         h2.section-title { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 4rem); color: var(--gold-bright); margin-bottom: 60px; font-style: italic; }
 
         .split-layout { display: flex; align-items: center; gap: 60px; justify-content: space-between; }
@@ -208,9 +209,12 @@
             .timeline-dot { left: -34px; width: 14px; height: 14px; }
             .timeline-year { font-size: 1.4rem; }
 
-            footer { padding: 50px 5%; }
-            .social-icons { gap: 15px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 100%; margin-bottom: 20px;}
-            .social-icons a { width: auto; height: auto; min-width: 50px; min-height: 50px; padding: 12px; font-size: 1.4rem; flex: none;}
+           /* 7. Footer Social Icons Mobile Precision Cure */
+            footer { padding: 40px 5%; }
+            /* CURE: Forced 'nowrap' to strictly keep them on one line, reduced gap to 8px */
+            .social-icons { gap: 8px; flex-wrap: nowrap; justify-content: center; width: 100%; max-width: 100%; margin-bottom: 20px;}
+            /* CURE: Perfect mathematical sizing (42x42px) to fit all 6 icons even on the smallest mobile screens */
+            .social-icons a { width: 42px; height: 42px; min-width: 42px; min-height: 42px; padding: 0; font-size: 1.25rem; flex: none; display: flex; justify-content: center; align-items: center;}
             .social-icons a:hover { transform: translateY(-5px) scale(1.1); }
             .footer-text { font-size: 0.8rem; }
         }
@@ -384,15 +388,14 @@
                 pos.y += (targetY - pos.y) * smoothness;
                 gsap.set(cursorOutline, { x: pos.x, y: pos.y });
 
-                let velocity = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY), 150);
-                let targetAngle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
-                if (velocity > 10) { currentAngle = targetAngle; }
-
-                if (!activeMagnetic && velocity > 1) { 
+                // STRICTLY HORIZONTAL PHYSICS (X-Axis Only)
+                let velocityX = Math.min(Math.abs(deltaX), 150); // केवल बाएँ-दाएँ की गति मापेगा
+                
+                if (!activeMagnetic && velocityX > 1) { 
                     gsap.to(cursorOutline, {
-                        scaleX: 1 + (velocity * 0.025), 
-                        scaleY: 1 - (velocity * 0.010),
-                        rotate: currentAngle,
+                        scaleX: 1 + (velocityX * 0.025), // केवल X-अक्ष पर स्ट्रेच होगा
+                        scaleY: 1 - (velocityX * 0.010), // हल्का सा चपटा होगा (सुंदरता के लिए)
+                        rotate: 0, // CURE: रोटेशन 0 पर लॉक कर दिया गया है। ऊपर-नीचे तिरछा नहीं घूमेगा।
                         duration: 0.1,
                         overwrite: "auto"
                     });
