@@ -1,457 +1,1880 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Divya Gautam | Independent Researcher & Author</title>
-    
-    <link rel="icon" type="image/png" href="./favicon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Divya Gautam — Independent Researcher & Author</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <style>
-        /* --- THE OBSIDIAN & GOLD THEME --- */
-        :root {
-            --bg-obsidian: #050505;
-            --gold-bright: #d4af37;
-            --gold-muted: #aa8c2c;
-            --text-pure: #ffffff;
-            --text-dim: #888888;
-            --glass-border: rgba(212, 175, 55, 0.15);
-        }
+<style>
+/* ═══════════════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-       * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
-        
-        body {
-            background-color: var(--bg-obsidian);
-            color: var(--text-pure);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            cursor: none; 
-        }
+:root {
+  --black: #050505;
+  --white: #ffffff;
+  --gray: #8a8a8a;
+  --gray-light: #b0b0b0;
+  --gold: #d4af37;
+  --gold-muted: #aa8c2c;
+  --gold-dim: rgba(212,175,55,0.15);
+  --gold-glow: rgba(212,175,55,0.6);
+  --surface: rgba(255,255,255,0.03);
+  --border: rgba(212,175,55,0.12);
+  --ff-head: 'Playfair Display', serif;
+  --ff-body: 'Inter', sans-serif;
+  --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
 
-        /* --- THE LIQUID CURSOR (Version 6.0 - Dotless) --- */
-        #cursor {
-            position: fixed;
-            pointer-events: none;
-            z-index: 10000;
-            will-change: transform;
-        }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 
-        #cursor-outline {
-            position: absolute;
-            width: 35px; height: 35px;
-            border: 2px solid var(--gold-bright);
-            border-radius: 50%;
-            background-color: transparent;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
-            transition: width 0.3s cubic-bezier(0.23, 1, 0.32, 1), 
-                        height 0.3s cubic-bezier(0.23, 1, 0.32, 1), 
-                        background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
-            transform-origin: center center;
-            pointer-events: none;
-        }
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--ff-body);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+  cursor: none;
+}
 
-        .progress-bar {
-            position: fixed; top: 0; left: 0; height: 2px; background: var(--gold-bright); width: 0%; z-index: 10000;
-        }
+body * { cursor: none !important; }
 
-       /* THE GLASS NAVIGATION (Optimized for Zero-Lag) */
-        nav {
-            position: fixed; top: 0; width: 100%; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
-            background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-            border-bottom: 1px solid var(--glass-border); z-index: 1000;
-        }
-        .hamburger { display: none; font-size: 1.8rem; color: var(--gold-bright); cursor: pointer; }
-        
-        .nav-links { display: flex; align-items: center; gap: 30px; }
-        .nav-links a { color: var(--text-pure); text-decoration: none; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s; padding: 15px 20px; border-radius: 5px; }
-        .nav-links a:hover { color: var(--gold-bright); }
-        .btn-connect { padding: 8px 20px; border: 1px solid var(--gold-muted); border-radius: 4px; color: var(--gold-bright) !important; transition: all 0.3s; }
-        .btn-connect:hover { background: var(--gold-muted); color: var(--bg-obsidian) !important; }
+@media (pointer: coarse) {
+  body, body * { cursor: auto !important; }
+}
 
-        .nav-logo img { height: 40px; }
+/* ═══════════════════════════════════════════════════
+   READING PROGRESS BAR
+═══════════════════════════════════════════════════ */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold-muted), var(--gold), #f0d060);
+  z-index: 9999;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px var(--gold-glow);
+}
 
-        /* --- LEVEL 2: THE CINEMATIC HERO --- */
-        #hero { position: relative; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; overflow: hidden; }
-        .bg-video { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; 
-            will-change: transform; 
-            transform: translateZ(0); 
-        }
-        .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(5,5,5,0.3) 0%, rgba(5,5,5,1) 100%); z-index: -1; }
-        
-        .hero-name-container { display: flex; flex-direction: column; align-items: center; }
-        .hero-name {
-            font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 9vw, 8rem); font-weight: 700; letter-spacing: 5px; text-transform: uppercase;
-            background: linear-gradient(45deg, #ffffff, #d4af37, #aa8c2c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px;
-        }
-        .hero-manifesto { font-size: 1.1rem; letter-spacing: 3px; color: var(--gold-muted); text-transform: uppercase; }
+/* ═══════════════════════════════════════════════════
+   CUSTOM CURSOR
+═══════════════════════════════════════════════════ */
+#cursor {
+  position: fixed;
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  will-change: transform, width, height, border-radius;
+}
 
-        /* Shared Section Layouts */
-        /* CURE: Removed forced 90vh height and reduced massive padding to eliminate gaps */
-        section:not(#hero) { padding: 100px 10%; min-height: auto; }
-        h2.section-title { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 4rem); color: var(--gold-bright); margin-bottom: 60px; font-style: italic; }
+#cursor-dot {
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
 
-        .split-layout { display: flex; align-items: center; gap: 60px; justify-content: space-between; }
-        .split-image { flex: 1; text-align: center; }
-        
-        /* THE ULTIMATE ZERO-LAG ASSETS */
-        .portrait-img { 
-            max-width: 100%; height: auto; border-radius: 5px; border: 1px solid var(--glass-border); 
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.15), 0 20px 50px rgba(0,0,0,0.8);
-            animation: pulse-aura 4s infinite alternate ease-in-out;
-            will-change: transform, box-shadow; 
-        }
-        .book-img { 
-            max-width: 100%; height: auto; 
-            border: none; background: transparent; 
-            transform: translateY(-5px) rotate(2.5deg) scale(1.02); 
-            box-shadow: 0 0 40px rgba(212, 175, 55, 0.3), 0 10px 30px rgba(0,0,0,0.5);
-            border-radius: 6px; 
-            will-change: transform, filter; 
-            transition: box-shadow 0.3s ease;
-        }
-        .book-img:hover {
-            box-shadow: 0 0 60px rgba(212, 175, 55, 0.5), 0 10px 30px rgba(0,0,0,0.6);
-        }
+#cursor.magnetic {
+  width: 80px !important;
+  height: 80px !important;
+  border-radius: 50% !important;
+  border-color: var(--gold);
+  box-shadow: 0 0 40px rgba(212,175,55,0.9), 0 0 80px rgba(212,175,55,0.3);
+  background: rgba(212,175,55,0.05);
+}
 
-        .split-text { flex: 1; }
-        .split-text p { font-size: 1.15rem; line-height: 1.9; color: var(--text-dim); margin-bottom: 25px; }
+@media (pointer: coarse) {
+  #cursor, #cursor-dot { display: none !important; }
+}
 
-        /* THE CHRONICLE TIMELINE */
-        .timeline-container { position: relative; max-width: 800px; margin: 0 auto; padding-left: 40px; border-left: 2px solid var(--glass-border); }
-        .timeline-progress { position: absolute; top: 0; left: -2px; width: 2px; background: var(--gold-bright); height: 0%; will-change: height; }
-        .timeline-item { position: relative; margin-bottom: 60px; padding-left: 20px; }
-        .timeline-dot { position: absolute; left: -49px; top: 0; width: 16px; height: 16px; border-radius: 50%; background: var(--bg-obsidian); border: 3px solid var(--gold-muted); box-shadow: 0 0 10px var(--gold-muted); }
-        .timeline-year { font-family: 'Playfair Display', serif; color: var(--gold-bright); font-size: 1.6rem; margin-bottom: 15px; }
+/* ═══════════════════════════════════════════════════
+   CANVAS BACKGROUND
+═══════════════════════════════════════════════════ */
+#bg-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.45;
+}
 
-        /* THE ACADEMIC REPOSITORY GRID */
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
-        .grid-card { background: rgba(15, 15, 15, 0.5); padding: 50px; border: 1px solid var(--glass-border); border-radius: 6px; backdrop-filter: blur(10px); transition: transform 0.4s ease; will-change: transform; }
-        .grid-card:hover { transform: translateY(-10px); border-color: rgba(212, 175, 55, 0.4); }
-        .grid-card h3 { color: var(--text-pure); margin-bottom: 20px; font-family: 'Playfair Display', serif; font-size: 1.5rem; }
-        
-        /* FOOTER & SOCIAL ICONS */
-        footer { text-align: center; padding: 80px 10%; border-top: 1px solid var(--glass-border); background: #020202; }
-        .social-icons { display: flex; justify-content: center; gap: 30px; margin-bottom: 25px; }
-        .social-icons a { 
-            color: var(--gold-muted); 
-            font-size: 1.6rem; transition: all 0.3s ease; 
-            display: inline-flex; justify-content: center; align-items: center; width: 60px; height: 60px; 
-            padding: 20px; border-radius: 10px;
-            text-decoration: none !important; border-bottom: none !important;
-        }
-        .social-icons a:hover { 
-            color: var(--gold-bright); 
-            transform: translateY(-5px) scale(1.15); 
-            text-shadow: 0 0 20px rgba(212, 175, 55, 0.8); 
-        }
-        .footer-text { font-size: 0.9rem; color: var(--text-dim); letter-spacing: 1px; }
+/* ═══════════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 0 5vw;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(5,5,5,0.7);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.3s;
+}
 
-        /* Global GSAP Classes */
-        .gsap-reveal { opacity: 0; transform: translateY(60px); will-change: transform, opacity; }
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
 
-        /* ========================================================= */
-        /* --- THE SOVEREIGN RESPONSIVE FRAMEWORK (v8.0) --- */
-        /* ========================================================= */
+.nav-logo img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px var(--gold-glow));
+}
 
-        /* GLOBAL ADJUSTMENTS FOR MEDIUM SCREENS (Tablets/Smaller Desktops) */
-        @media (min-width: 769px) and (max-width: 1024px) {
-            nav { padding: 15px 5%; }
-            .nav-links { gap: 20px; }
-            .nav-links a { font-size: 0.8rem; padding: 10px 15px; }
-            section:not(#hero) { padding: 100px 7%; }
-            .hero-name { font-size: 5rem; letter-spacing: 3px; }
-            .split-layout { gap: 40px; }
-        }
+.nav-logo-fallback {
+  font-family: var(--ff-head);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  line-height: 1;
+}
 
-        /* COMPREHENSIVE FIXES FOR ALL MOBILE SCREENS (Portrait & Desktop Mode) */
-        @media (max-width: 768px) {
-            section:not(#hero) { padding: 60px 5%; min-height: auto; } 
-            * { cursor: none !important; } 
-            body { cursor: none; }
+.nav-logo-fallback span { color: var(--white); }
 
-            .hero-name-container { width: 90%; }
-            .hero-name { font-size: 3rem; letter-spacing: 2px; }
-            .hero-manifesto { font-size: 0.9rem; letter-spacing: 1.5px; }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  list-style: none;
+}
 
-            .gsap-reveal { transform: translateY(30px); }
+.nav-links a {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray-light);
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s;
+  padding: 4px 0;
+}
 
-            nav { padding: 12px 6%; background: rgba(5, 5, 5, 0.98); border-bottom: 1px solid var(--glass-border); }
-            .nav-links { 
-                display: none; flex-direction: column; align-items: flex-start;
-                position: absolute; top: 100%; left: 0; width: 100%; 
-                background: rgba(5, 5, 5, 0.98); padding: 15px 8%; 
-                border-bottom: 1px solid var(--glass-border); gap: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            }
-            .nav-links.active { display: flex; }
-            .nav-links a { margin: 0; font-size: 0.95rem; width: 100%; padding: 12px 15px; border-radius: 4px; }
-            .btn-connect { margin-top: 8px; text-align: center; }
-            .hamburger { display: block; order: 1; }
-            .nav-logo { order: 2; }
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 1px;
+  background: var(--gold);
+  transition: width 0.4s var(--ease-out);
+}
 
-            .split-layout { flex-direction: column !important; gap: 30px; text-align: center; }
-            .split-image, .split-text { width: 100%; flex: none; }
-            .split-layout > div { width: 100%; } 
-            
-            #publications .split-layout { flex-direction: column-reverse !important; } 
+.nav-links a:hover { color: var(--gold); }
+.nav-links a:hover::after { width: 100%; }
 
-            .portrait-img, .book-img { max-width: 85%; margin: 0 auto; height: auto; display: block; }
-            .split-text p { font-size: 1.05rem; line-height: 1.7; margin-bottom: 15px; }
-            .split-text h3 { font-size: 1.8rem; }
-            
-            h2.section-title { margin-bottom: 30px; font-size: 2.2rem; }
-            section#profile h2.section-title { margin-bottom: 40px; }
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 8px;
+  z-index: 1100;
+}
 
-            .timeline-container { padding-left: 25px; border-left: 2px solid var(--glass-border); max-width: 100%; margin: 0; }
-            .timeline-dot { left: -34px; width: 14px; height: 14px; }
-            .timeline-year { font-size: 1.4rem; }
+.nav-hamburger span {
+  display: block;
+  width: 24px;
+  height: 1.5px;
+  background: var(--gold);
+  transition: all 0.35s var(--ease);
+  transform-origin: center;
+}
 
-           /* 7. Footer Social Icons Mobile Precision Cure */
-            footer { padding: 40px 5%; }
-            /* CURE: Forced 'nowrap' to strictly keep them on one line, reduced gap to 8px */
-            .social-icons { gap: 8px; flex-wrap: nowrap; justify-content: center; width: 100%; max-width: 100%; margin-bottom: 20px;}
-            /* CURE: Perfect mathematical sizing (42x42px) to fit all 6 icons even on the smallest mobile screens */
-            .social-icons a { width: 42px; height: 42px; min-width: 42px; min-height: 42px; padding: 0; font-size: 1.25rem; flex: none; display: flex; justify-content: center; align-items: center;}
-            .social-icons a:hover { transform: translateY(-5px) scale(1.1); }
-            .footer-text { font-size: 0.8rem; }
-        }
-    </style>
+.nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+.nav-mobile-menu {
+  display: none;
+  position: fixed;
+  top: 72px; left: 0; right: 0;
+  background: rgba(5,5,5,0.97);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  padding: 1.5rem 5vw;
+  z-index: 999;
+  flex-direction: column;
+  gap: 0;
+  transform: translateY(-8px);
+  opacity: 0;
+  transition: transform 0.35s var(--ease-out), opacity 0.35s;
+  pointer-events: none;
+}
+
+.nav-mobile-menu.open {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.nav-mobile-menu a {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray-light);
+  text-decoration: none;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: color 0.2s, padding-left 0.2s;
+}
+
+.nav-mobile-menu a:last-child { border-bottom: none; }
+.nav-mobile-menu a:hover { color: var(--gold); padding-left: 6px; }
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+  .nav-mobile-menu { display: flex; }
+}
+
+/* ═══════════════════════════════════════════════════
+   SECTIONS BASE
+═══════════════════════════════════════════════════ */
+section {
+  position: relative;
+  z-index: 1;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 5vw;
+}
+
+/* ═══════════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════════ */
+#home {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 5vw 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 2rem;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.hero-name {
+  font-family: var(--ff-head);
+  font-size: clamp(3.2rem, 10vw, 9.5rem);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #ffffff 0%, #d4af37 40%, #f5e07a 60%, #aa8c2c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 2rem;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.hero-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 0 auto 2rem;
+  opacity: 0;
+}
+
+.hero-manifesto {
+  font-family: var(--ff-head);
+  font-style: italic;
+  font-size: clamp(1rem, 2.2vw, 1.35rem);
+  color: var(--gray-light);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  max-width: 640px;
+  margin: 0 auto 3rem;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.hero-manifesto em {
+  color: var(--gold);
+  font-style: normal;
+}
+
+.hero-cta-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-family: var(--ff-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.35s, color 0.35s, box-shadow 0.35s;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-out);
+  z-index: -1;
+}
+
+.btn-primary:hover { color: var(--black); box-shadow: 0 0 30px rgba(212,175,55,0.4); }
+.btn-primary:hover::before { transform: scaleX(1); }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gray);
+  text-decoration: none;
+  transition: color 0.3s;
+  padding: 14px 0;
+}
+
+.btn-ghost:hover { color: var(--white); }
+
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeInUp 1s 2.5s forwards;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(180deg, var(--gold), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+.scroll-text {
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gray);
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 1; transform: scaleY(1); }
+  50% { opacity: 0.4; transform: scaleY(0.6); }
+}
+
+@keyframes fadeInUp {
+  to { opacity: 1; }
+}
+
+/* ═══════════════════════════════════════════════════
+   SECTION HEADERS
+═══════════════════════════════════════════════════ */
+.section-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-family: var(--ff-head);
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  margin-bottom: 1.5rem;
+}
+
+.section-line {
+  width: 48px;
+  height: 2px;
+  background: var(--gold);
+  margin-bottom: 2.5rem;
+  box-shadow: 0 0 12px var(--gold-glow);
+}
+
+/* ═══════════════════════════════════════════════════
+   GENESIS / ABOUT
+═══════════════════════════════════════════════════ */
+#genesis {
+  padding: clamp(80px, 12vw, 140px) 5vw;
+  overflow: hidden;
+}
+
+.genesis-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 6vw, 90px);
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.genesis-image-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.genesis-image-frame {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+}
+
+.genesis-image-frame::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  transform: rotate(-2deg);
+}
+
+.genesis-image-frame::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  background: radial-gradient(ellipse at center, rgba(212,175,55,0.15) 0%, transparent 70%);
+  animation: auraFloat 4s ease-in-out infinite;
+  pointer-events: none;
+  border-radius: 4px;
+}
+
+@keyframes auraFloat {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.04); opacity: 1; }
+}
+
+.genesis-image-frame img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(15%) contrast(1.05);
+  border-radius: 2px;
+}
+
+.genesis-image-placeholder {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: linear-gradient(135deg, #0e0e0e 0%, #141410 50%, #0a0a08 100%);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 1px solid var(--border);
+}
+
+.genesis-image-placeholder i {
+  font-size: 2.5rem;
+  color: var(--gold-muted);
+  opacity: 0.5;
+}
+
+.genesis-image-placeholder span {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+.genesis-content { max-width: 560px; }
+
+.genesis-quote {
+  font-family: var(--ff-head);
+  font-style: italic;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: var(--gold);
+  line-height: 1.3;
+  margin-bottom: 2rem;
+}
+
+.genesis-body {
+  font-size: 0.95rem;
+  color: var(--gray-light);
+  line-height: 1.9;
+  margin-bottom: 2.5rem;
+}
+
+.genesis-body strong { color: var(--white); font-weight: 600; }
+
+.genesis-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 2.5rem;
+}
+
+.tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid rgba(212,175,55,0.3);
+  padding: 6px 14px;
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.tag:hover {
+  background: var(--gold-dim);
+  border-color: var(--gold);
+}
+
+.genesis-credentials {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.credential-item {
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--gold);
+  transition: background 0.3s;
+}
+
+.credential-item:hover { background: rgba(212,175,55,0.05); }
+
+.credential-number {
+  font-family: var(--ff-head);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.credential-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+@media (max-width: 768px) {
+  .genesis-grid {
+    grid-template-columns: 1fr;
+  }
+  .genesis-image-wrap { order: -1; }
+  .genesis-image-frame { max-width: 280px; }
+  .genesis-credentials { grid-template-columns: 1fr 1fr; }
+}
+
+/* ═══════════════════════════════════════════════════
+   MASTERWORK / PUBLICATIONS
+═══════════════════════════════════════════════════ */
+#masterwork {
+  padding: clamp(80px, 12vw, 140px) 5vw;
+  background: linear-gradient(180deg, transparent 0%, rgba(212,175,55,0.02) 50%, transparent 100%);
+  overflow: hidden;
+}
+
+.masterwork-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.masterwork-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 6vw, 90px);
+  align-items: center;
+  margin-top: 3rem;
+}
+
+/* 3D BOOK */
+.book-stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+  padding: 40px;
+}
+
+.book-wrapper {
+  transform-style: preserve-3d;
+  transform: rotateY(-10deg) rotateX(3deg);
+  transition: transform 0.6s var(--ease-out);
+  will-change: transform;
+}
+
+.book-wrapper:hover {
+  transform: rotateY(0deg) rotateX(0deg) scale(1.03);
+}
+
+.book-cover {
+  width: 260px;
+  aspect-ratio: 2/3;
+  position: relative;
+  transform-style: preserve-3d;
+  box-shadow:
+    -20px 20px 60px rgba(0,0,0,0.8),
+    0 0 80px rgba(212,175,55,0.15);
+  border-radius: 2px 6px 6px 2px;
+}
+
+.book-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 2px 6px 6px 2px;
+}
+
+.book-cover-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0f0e0a 0%, #1a1710 40%, #0e0d09 100%);
+  border-radius: 2px 6px 6px 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+  text-align: center;
+  border: 1px solid rgba(212,175,55,0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.book-cover-placeholder::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold-muted), var(--gold));
+}
+
+.book-placeholder-title {
+  font-family: var(--ff-head);
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.book-placeholder-sub {
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 20px;
+}
+
+.book-placeholder-author {
+  font-family: var(--ff-head);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--gray-light);
+}
+
+.book-spine {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 20px;
+  background: linear-gradient(180deg, #1a1710 0%, #0e0d09 100%);
+  border-right: 1px solid rgba(212,175,55,0.15);
+  transform: rotateY(-90deg) translateZ(0px) translateX(-10px);
+  transform-origin: left;
+}
+
+.book-info { max-width: 500px; }
+
+.book-title {
+  font-family: var(--ff-head);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: var(--gold);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.book-subtitle {
+  font-size: 0.8rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 1.5rem;
+}
+
+.book-desc {
+  font-size: 0.95rem;
+  color: var(--gray-light);
+  line-height: 1.85;
+  margin-bottom: 2.5rem;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 2.5rem;
+}
+
+.stat-item {
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  text-align: center;
+  transition: background 0.3s, border-color 0.3s, transform 0.3s;
+}
+
+.stat-item:hover {
+  background: rgba(212,175,55,0.05);
+  border-color: rgba(212,175,55,0.3);
+  transform: translateY(-2px);
+}
+
+.stat-num {
+  font-family: var(--ff-head);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+@media (max-width: 768px) {
+  .masterwork-grid { grid-template-columns: 1fr; }
+  .book-cover { width: 200px; }
+}
+
+/* ═══════════════════════════════════════════════════
+   ACADEMIC REPOSITORY
+═══════════════════════════════════════════════════ */
+#repository {
+  padding: clamp(80px, 12vw, 140px) 5vw;
+  overflow: hidden;
+}
+
+.repository-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.papers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 20px;
+  margin-top: 3rem;
+}
+
+.paper-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 32px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.4s var(--ease-out), box-shadow 0.4s, border-color 0.4s;
+  will-change: transform;
+}
+
+.paper-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  transform: scaleX(0);
+  transition: transform 0.4s var(--ease-out);
+}
+
+.paper-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(212,175,55,0.08);
+  border-color: rgba(212,175,55,0.25);
+}
+
+.paper-card:hover::before { transform: scaleX(1); }
+
+.paper-card.featured {
+  border-color: rgba(212,175,55,0.2);
+  background: linear-gradient(135deg, rgba(212,175,55,0.04) 0%, rgba(5,5,5,0.8) 100%);
+}
+
+.paper-series {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold-muted);
+  margin-bottom: 12px;
+}
+
+.paper-title {
+  font-family: var(--ff-head);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.paper-abstract {
+  font-size: 0.85rem;
+  color: var(--gray);
+  line-height: 1.75;
+  margin-bottom: 20px;
+}
+
+.paper-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--gray);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 16px;
+}
+
+.paper-meta .field {
+  color: var(--gold-muted);
+  font-weight: 600;
+}
+
+.paper-number {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  font-family: var(--ff-head);
+  font-size: 4rem;
+  font-weight: 800;
+  color: rgba(212,175,55,0.04);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.press-card {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, rgba(212,175,55,0.05) 0%, rgba(5,5,5,0.9) 100%);
+  border: 1px solid rgba(212,175,55,0.2);
+  padding: 36px 32px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  transition: transform 0.4s var(--ease-out), box-shadow 0.4s;
+}
+
+.press-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(212,175,55,0.1);
+}
+
+.press-icon {
+  width: 64px;
+  height: 64px;
+  border: 1px solid rgba(212,175,55,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.press-icon i {
+  font-size: 1.5rem;
+  color: var(--gold);
+}
+
+.press-content { flex: 1; }
+
+.press-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.press-title {
+  font-family: var(--ff-head);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.press-desc {
+  font-size: 0.85rem;
+  color: var(--gray);
+  line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+  .press-card { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .papers-grid { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════════════
+   NEWSLETTER
+═══════════════════════════════════════════════════ */
+#connect {
+  padding: clamp(80px, 12vw, 140px) 5vw;
+  background: linear-gradient(180deg, transparent, rgba(212,175,55,0.025) 50%, transparent);
+  overflow: hidden;
+}
+
+.connect-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.connect-inner .section-line { margin: 0 auto 2.5rem; }
+
+.connect-body {
+  font-size: 1rem;
+  color: var(--gray-light);
+  line-height: 1.85;
+  margin-bottom: 3rem;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0;
+}
+
+.email-form {
+  display: flex;
+  gap: 0;
+  max-width: 520px;
+  margin: 0 auto 1.5rem;
+  border: 1px solid var(--border);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.email-form:focus-within {
+  border-color: rgba(212,175,55,0.5);
+  box-shadow: 0 0 30px rgba(212,175,55,0.1);
+}
+
+.email-form input {
+  flex: 1;
+  background: rgba(255,255,255,0.02);
+  border: none;
+  outline: none;
+  padding: 16px 20px;
+  color: var(--white);
+  font-family: var(--ff-body);
+  font-size: 0.9rem;
+  min-width: 0;
+}
+
+.email-form input::placeholder { color: var(--gray); }
+
+.email-form button {
+  padding: 16px 28px;
+  background: var(--gold);
+  border: none;
+  color: var(--black);
+  font-family: var(--ff-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background 0.3s;
+  flex-shrink: 0;
+}
+
+.email-form button:hover { background: #f0d060; }
+
+.connect-disclaimer {
+  font-size: 0.72rem;
+  color: var(--gray);
+  letter-spacing: 0.05em;
+}
+
+.connect-disclaimer a {
+  color: var(--gold-muted);
+  text-decoration: none;
+}
+
+@media (max-width: 480px) {
+  .email-form { flex-direction: column; }
+  .email-form input { padding: 14px 16px; }
+  .email-form button { padding: 14px; text-align: center; }
+}
+
+/* ═══════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════ */
+footer {
+  padding: 50px 5vw 40px;
+  border-top: 1px solid var(--border);
+  position: relative;
+  z-index: 1;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+.footer-logo {
+  font-family: var(--ff-head);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+}
+
+.footer-logo span { color: var(--white); }
+
+.footer-socials {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.social-icon {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: color 0.3s, border-color 0.3s, box-shadow 0.3s, background 0.3s;
+  flex-shrink: 0;
+}
+
+.social-icon:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+  box-shadow: 0 0 20px rgba(212,175,55,0.3);
+  background: var(--gold-dim);
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer-links a {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover { color: var(--gold); }
+
+.footer-copy {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.18);
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════════════════
+   DIVIDERS / SEPARATORS
+═══════════════════════════════════════════════════ */
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 0 5vw;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.ornament-divider::before,
+.ornament-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border));
+}
+
+.ornament-divider::after {
+  background: linear-gradient(90deg, var(--border), transparent);
+}
+
+.ornament-diamond {
+  width: 6px;
+  height: 6px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+  box-shadow: 0 0 10px var(--gold-glow);
+}
+
+/* ═══════════════════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+/* ═══════════════════════════════════════════════════
+   NOISE OVERLAY
+═══════════════════════════════════════════════════ */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* ═══════════════════════════════════════════════════
+   UTILITY
+═══════════════════════════════════════════════════ */
+.gold { color: var(--gold); }
+.text-center { text-align: center; }
+.mt-2 { margin-top: 2rem; }
+</style>
 </head>
 <body>
 
-    <div class="progress-bar" id="progressBar"></div>
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
 
-    <div id="cursor">
-        <div id="cursor-outline"></div>
+<!-- Cursor -->
+<div id="cursor"></div>
+<div id="cursor-dot"></div>
+
+<!-- Background -->
+<canvas id="bg-canvas"></canvas>
+<div class="noise-overlay"></div>
+
+<!-- ═══════════════════════════════
+     NAVIGATION
+═══════════════════════════════ -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">
+    <img src="./logo.png" alt="DG" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+    <div class="nav-logo-fallback" style="display:none">D<span>G</span></div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#home" class="magnetic-target">Home</a></li>
+    <li><a href="#genesis" class="magnetic-target">Genesis</a></li>
+    <li><a href="#masterwork" class="magnetic-target">Masterwork</a></li>
+    <li><a href="#repository" class="magnetic-target">Repository</a></li>
+    <li><a href="#connect" class="magnetic-target">Connect</a></li>
+  </ul>
+
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="nav-mobile-menu" id="mobile-menu">
+  <a href="#home" onclick="closeMobileMenu()">Home</a>
+  <a href="#genesis" onclick="closeMobileMenu()">Genesis</a>
+  <a href="#masterwork" onclick="closeMobileMenu()">Masterwork</a>
+  <a href="#repository" onclick="closeMobileMenu()">Repository</a>
+  <a href="#connect" onclick="closeMobileMenu()">Connect</a>
+</div>
+
+<!-- ═══════════════════════════════
+     HERO
+═══════════════════════════════ -->
+<section id="home">
+  <div style="position:relative;z-index:1;max-width:900px;margin:0 auto;text-align:center;">
+    <p class="hero-eyebrow" id="hero-eyebrow">Independent Researcher · Author · Policy Thinker</p>
+    <h1 class="hero-name" id="hero-name">DIVYA<br>GAUTAM</h1>
+    <div class="hero-divider" id="hero-divider"></div>
+    <p class="hero-manifesto" id="hero-manifesto">
+      <em>Rigorous Skepticism.</em> Independent Synthesis.<br><em>Intellectual Authority.</em>
+    </p>
+    <div class="hero-cta-row" id="hero-cta">
+      <a href="#masterwork" class="btn-primary magnetic-target">
+        <i class="fas fa-book-open"></i> Explore the Masterwork
+      </a>
+      <a href="#genesis" class="btn-ghost magnetic-target">
+        The Intellectual Pursuit <i class="fas fa-arrow-right" style="font-size:.65rem"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-scroll-indicator">
+    <span class="scroll-text">Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     GENESIS
+═══════════════════════════════ -->
+<div class="ornament-divider"><div class="ornament-diamond"></div></div>
+
+<section id="genesis">
+  <div class="genesis-grid">
+    <div class="genesis-image-wrap reveal">
+      <div class="genesis-image-frame">
+        <img src="./author.jpg" alt="Divya Gautam"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <div class="genesis-image-placeholder" style="display:none">
+          <i class="fas fa-user"></i>
+          <span>author.jpg</span>
+        </div>
+      </div>
     </div>
 
-    <nav>
-        <div class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('active')">&#9776;</div>
-        
-        <div class="nav-links">
-            <a href="#hero" class="magnetic" onclick="document.querySelector('.nav-links').classList.remove('active')">Home</a>
-            <a href="#profile" class="magnetic" onclick="document.querySelector('.nav-links').classList.remove('active')">Profile</a>
-            <a href="#publications" class="magnetic" onclick="document.querySelector('.nav-links').classList.remove('active')">Publications</a>
-            <a href="#research" class="magnetic" onclick="document.querySelector('.nav-links').classList.remove('active')">Research</a>
-            <a href="#footer" class="magnetic btn-connect" onclick="document.querySelector('.nav-links').classList.remove('active')">Connect</a>
-        </div>
+    <div class="genesis-content">
+      <p class="section-label reveal">Genesis</p>
+      <h2 class="section-title reveal reveal-delay-1">The Intellectual<br><em style="font-style:italic;color:var(--gold)">Pursuit</em></h2>
+      <div class="section-line reveal reveal-delay-2"></div>
 
-        <div class="nav-logo">
-            <img src="./logo.png" alt="DG Insight Press Logo" onerror="this.style.display='none'">
-        </div>
-    </nav>
+      <blockquote class="genesis-quote reveal reveal-delay-2">
+        "Autonomy of Thought is the Foundation of Authority."
+      </blockquote>
 
-    <section id="hero">
-        <video class="bg-video" src="./background.mp4" autoplay loop muted playsinline preload="metadata"></video>
-        <div class="video-overlay"></div>
-        <div class="hero-name-container">
-            <h1 class="hero-name">Divya Gautam</h1>
-            <p class="hero-manifesto">Rigorous Skepticism. Independent Synthesis. Intellectual Authority.</p>
-        </div>
-    </section>
+      <p class="genesis-body reveal reveal-delay-3">
+        An <strong>Independent Researcher</strong> and <strong>Cognitive Synthesist</strong> redefining the paradigms of semantic learning and strategic analytical thought. Formulating his 550-page linguistic masterwork, <strong>VOCAB DECODE</strong>, by the age of 17, Divya has bypassed traditional institutional constraints to establish an autonomous locus of intellectual authority. His research operates at the vital convergence of <strong>Structural Syntax</strong>, <strong>Cognitive Linguistics</strong>, and <strong>Public Policy</strong>.
+      </p>
 
-    <section id="profile">
-        <h2 class="section-title gsap-reveal">The Intellectual Pursuit</h2>
-        <div class="split-layout">
-            <div class="split-image gsap-reveal">
-                <img src="./author.jpg" alt="Divya Gautam Portrait" class="portrait-img" onerror="this.style.display='none'">
-            </div>
-            <div class="split-text gsap-reveal">
-                <p>An analytical endeavor bridging the structural complexities of language with the pragmatic frameworks of public administration.</p>
-                <p>Driven by rigorous skepticism and an unwavering commitment to objective synthesis, aiming to decode societal and educational paradigms.</p>
-                <a href="#full-profile" class="magnetic btn-connect" style="display: inline-block; margin-top: 15px;">Explore Full Profile</a>
-            </div>
-        </div>
-    </section>
+      <div class="genesis-tags reveal reveal-delay-3">
+        <span class="tag">Cognitive Linguistics</span>
+        <span class="tag">Structural Syntax</span>
+        <span class="tag">Public Policy</span>
+        <span class="tag">Semantic Theory</span>
+        <span class="tag">Independent Research</span>
+      </div>
 
-    <section id="timeline">
-        <h2 class="section-title gsap-reveal">The Chronicle</h2>
-        <div class="timeline-container">
-            <div class="timeline-progress" id="timeProgress"></div>
-            
-            <div class="timeline-item gsap-reveal">
-                <div class="timeline-dot"></div>
-                <div class="timeline-year">2026</div>
-                <p style="color: var(--text-dim)">Established 'DG Insight Press' and formulated the linguistic masterwork 'VOCAB DECODE'.</p>
-            </div>
-            <div class="timeline-item gsap-reveal">
-                <div class="timeline-dot"></div>
-                <div class="timeline-year">Future Endeavors</div>
-                <p style="color: var(--text-dim)">Advancing research methodologies and preparing for apex administrative responsibilities.</p>
-            </div>
+      <div class="genesis-credentials reveal reveal-delay-4">
+        <div class="credential-item">
+          <div class="credential-number">550+</div>
+          <div class="credential-label">Page Magnum Opus</div>
         </div>
-    </section>
+        <div class="credential-item">
+          <div class="credential-number">17</div>
+          <div class="credential-label">Age at Completion</div>
+        </div>
+        <div class="credential-item">
+          <div class="credential-number">12+</div>
+          <div class="credential-label">Research Disciplines</div>
+        </div>
+        <div class="credential-item">
+          <div class="credential-number">4</div>
+          <div class="credential-label">Working Papers</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <section id="publications">
-        <h2 class="section-title gsap-reveal">Publications</h2>
-        <div class="split-layout" style="flex-direction: row-reverse;">
-            <div class="split-image gsap-reveal">
-                <img src="./book.png" alt="VOCAB DECODE Cover" class="book-img" onerror="this.style.display='none'">
-            </div>
-            <div class="split-text gsap-reveal">
-                <h3 style="font-size: 2.2rem; color: var(--text-pure); margin-bottom: 20px; font-family: 'Playfair Display', serif;">VOCAB DECODE</h3>
-                <p>What if vocabulary is not memorized, but logically decoded?</p>
-                <p>A comprehensive masterwork designed to dismantle the etymological foundations of the English language. Essential for analytical mastery and elite proficiency.</p>
-                <a href="#book-details" class="magnetic btn-connect" style="display: inline-block; margin-top: 15px;">View Chapter Architecture</a>
-            </div>
-        </div>
-    </section>
+<!-- ═══════════════════════════════
+     MASTERWORK
+═══════════════════════════════ -->
+<div class="ornament-divider"><div class="ornament-diamond"></div></div>
 
-    <section id="research">
-        <h2 class="section-title gsap-reveal">Academic Repository</h2>
-        <div class="grid-container">
-            <div class="grid-card gsap-reveal">
-                <h3>Working Paper I</h3>
-                <p style="color: var(--gold-muted); margin-bottom: 20px;">In Progress • 2026</p>
-                <p style="color: var(--text-dim); font-size: 1rem;">Structural mapping of etymological roots in cognitive linguistics.</p>
-            </div>
-            <div class="grid-card gsap-reveal">
-                <h3>DG Insight Press</h3>
-                <p style="color: var(--gold-muted); margin-bottom: 20px;">Institutional Initiative</p>
-                <p style="color: var(--text-dim); font-size: 1rem;">Fostering transparency and intellectual depth in academic literature.</p>
-            </div>
-        </div>
-    </section>
+<section id="masterwork">
+  <div class="masterwork-inner">
+    <div class="text-center">
+      <p class="section-label reveal">Publications</p>
+      <h2 class="section-title reveal reveal-delay-1">The <em style="font-style:italic;color:var(--gold)">Masterwork</em></h2>
+      <div class="section-line reveal reveal-delay-2" style="margin:0 auto 0;"></div>
+    </div>
 
-    <footer id="footer">
-        <div class="social-icons">
-            <a href="#" class="magnetic"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="#" class="magnetic"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" class="magnetic"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="#" class="magnetic"><i class="fa-brands fa-github"></i></a>
-            <a href="#" class="magnetic"><i class="fa-brands fa-orcid"></i></a>
-            <a href="#" class="magnetic"><i class="fa-brands fa-linkedin-in"></i></a>
+    <div class="masterwork-grid">
+      <div class="book-stage reveal">
+        <div class="book-wrapper" id="book-3d">
+          <div class="book-cover">
+            <img src="./book.png" alt="VOCAB DECODE"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+            <div class="book-cover-placeholder" style="display:none">
+              <div class="book-placeholder-title">VOCAB<br>DECODE</div>
+              <div class="book-placeholder-sub">A Linguistic Masterwork</div>
+              <div class="book-placeholder-author">Divya Gautam</div>
+            </div>
+            <div class="book-spine"></div>
+          </div>
         </div>
-        
-        <p class="footer-text" style="margin-bottom: 12px;">
-            <a href="#privacy" style="color: var(--gold-muted); text-decoration: none; margin: 0 15px; transition: color 0.3s;" onmouseover="this.style.color='var(--gold-bright)'" onmouseout="this.style.color='var(--gold-muted)'">Privacy Policy</a> | 
-            <a href="#terms" style="color: var(--gold-muted); text-decoration: none; margin: 0 15px; transition: color 0.3s;" onmouseover="this.style.color='var(--gold-bright)'" onmouseout="this.style.color='var(--gold-muted)'">Terms of Intellectual Use</a>
+      </div>
+
+      <div class="book-info">
+        <p class="section-label reveal">Monograph · 2024</p>
+        <h3 class="book-title reveal reveal-delay-1">VOCAB DECODE</h3>
+        <p class="book-subtitle reveal reveal-delay-1">A Comprehensive Linguistic Architecture</p>
+        <p class="book-desc reveal reveal-delay-2">
+          A transformative 550-page linguistic opus that dismantles conventional vocabulary pedagogy and rebuilds it from first principles. VOCAB DECODE introduces proprietary frameworks for semantic acquisition rooted in etymology, cognitive pattern recognition, and structural linguistic theory — creating a permanent intellectual toolkit for elite communicators.
         </p>
-        
-        <p class="footer-text">© 2026 Divya Gautam. All Rights Reserved. | Dedicated to Independent Synthesis & Public Policy.</p>
-    </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+        <div class="stat-grid reveal reveal-delay-3">
+          <div class="stat-item">
+            <div class="stat-num">500+</div>
+            <div class="stat-label">Vocabulary Frameworks</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">550</div>
+            <div class="stat-label">Pages of Scholarship</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">12+</div>
+            <div class="stat-label">Research Disciplines</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">01</div>
+            <div class="stat-label">Defining Work</div>
+          </div>
+        </div>
 
-    <script>
-        const lenis = new Lenis({
-            duration: 0.7,
-            smoothWheel: true,
-            wheelMultiplier: 1,
-            touchMultiplier: 1
+        <a href="#" class="btn-primary magnetic-target reveal reveal-delay-4">
+          <i class="fas fa-layer-group"></i> View Chapter Architecture
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     REPOSITORY
+═══════════════════════════════ -->
+<div class="ornament-divider"><div class="ornament-diamond"></div></div>
+
+<section id="repository">
+  <div class="repository-inner">
+    <p class="section-label reveal">Academic Repository</p>
+    <h2 class="section-title reveal reveal-delay-1">Working<br><em style="font-style:italic;color:var(--gold)">Papers</em></h2>
+    <div class="section-line reveal reveal-delay-2"></div>
+
+    <div class="papers-grid">
+
+      <div class="paper-card reveal">
+        <div class="paper-series">Series I · Cognitive Linguistics</div>
+        <h4 class="paper-title">Morphemic Density and Lexical Retention: A Cognitive Load Framework</h4>
+        <p class="paper-abstract">Examining the relationship between morphological complexity and long-term retention rates in advanced second-language acquisition, with implications for pedagogical design at the tertiary level.</p>
+        <div class="paper-meta">
+          <span class="field">Cognitive Linguistics</span>
+          <span>·</span>
+          <span>2024</span>
+        </div>
+        <div class="paper-number">I</div>
+      </div>
+
+      <div class="paper-card reveal reveal-delay-1">
+        <div class="paper-series">Series II · Structural Syntax</div>
+        <h4 class="paper-title">Syntactic Priming Across Register Boundaries in Academic Discourse</h4>
+        <p class="paper-abstract">A structural analysis of syntactic priming effects when language users transition between formal and informal registers, proposing a unified model for register-adaptive cognitive processing.</p>
+        <div class="paper-meta">
+          <span class="field">Structural Syntax</span>
+          <span>·</span>
+          <span>2024</span>
+        </div>
+        <div class="paper-number">II</div>
+      </div>
+
+      <div class="paper-card reveal reveal-delay-2">
+        <div class="paper-series">Series III · Policy Drafting</div>
+        <h4 class="paper-title">Linguistic Precision in Legislative Architecture: Policy Ambiguity as Systemic Risk</h4>
+        <p class="paper-abstract">Investigating how lexical imprecision in policy documents creates downstream interpretive failures, with a proposed rubric for clarity scoring in governmental and institutional language.</p>
+        <div class="paper-meta">
+          <span class="field">Public Policy</span>
+          <span>·</span>
+          <span>2024</span>
+        </div>
+        <div class="paper-number">III</div>
+      </div>
+
+      <div class="paper-card reveal reveal-delay-3">
+        <div class="paper-series">Series IV · Semantic Theory</div>
+        <h4 class="paper-title">Semantic Drift and the Politics of Meaning in Institutional Vocabulary</h4>
+        <p class="paper-abstract">A longitudinal study of how institutional vocabularies undergo semantic drift over time, exploring the political and epistemic consequences of unchecked terminological evolution in governance.</p>
+        <div class="paper-meta">
+          <span class="field">Semantic Theory</span>
+          <span>·</span>
+          <span>2024</span>
+        </div>
+        <div class="paper-number">IV</div>
+      </div>
+
+      <div class="paper-card press-card featured reveal reveal-delay-4">
+        <div class="press-icon">
+          <i class="fas fa-landmark"></i>
+        </div>
+        <div class="press-content">
+          <div class="press-label">Institutional Initiative</div>
+          <div class="press-title">DG Insight Press</div>
+          <p class="press-desc">An independent scholarly imprint dedicated to the rigorous dissemination of research at the intersection of cognitive science, linguistics, and public administration. Committed to intellectual sovereignty and long-form analytical discourse.</p>
+        </div>
+        <a href="#" class="btn-primary magnetic-target" style="flex-shrink:0;align-self:center">
+          <i class="fas fa-external-link-alt"></i> Visit Press
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     NEWSLETTER / CONNECT
+═══════════════════════════════ -->
+<div class="ornament-divider"><div class="ornament-diamond"></div></div>
+
+<section id="connect">
+  <div class="connect-inner">
+    <p class="section-label reveal">Discourse</p>
+    <h2 class="section-title reveal reveal-delay-1" style="text-align:center">Stay in the<br><em style="font-style:italic;color:var(--gold)">Conversation</em></h2>
+    <div class="section-line" style="margin:0 auto 2.5rem;"></div>
+
+    <p class="connect-body reveal reveal-delay-2">
+      Join a curated circle of scholars, independent thinkers, and policy practitioners. Receive dispatch updates on new working papers, pre-publication chapters, and intellectual commentary from the frontiers of cognitive linguistics and public thought.
+    </p>
+
+    <div class="email-form reveal reveal-delay-3">
+      <input type="email" placeholder="Your scholarly correspondence address" id="email-input">
+      <button type="button" onclick="handleSubscribe()">Join the Discourse</button>
+    </div>
+
+    <p class="connect-disclaimer reveal reveal-delay-4">
+      No noise. No commerce. Pure intellect. —
+      <a href="#">Privacy Policy</a>
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     FOOTER
+═══════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">DIVYA <span>GAUTAM</span></div>
+
+    <div class="footer-socials">
+      <a href="#" class="social-icon magnetic-target" title="Twitter / X"><i class="fab fa-x-twitter"></i></a>
+      <a href="#" class="social-icon magnetic-target" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      <a href="#" class="social-icon magnetic-target" title="Academia.edu"><i class="fas fa-graduation-cap"></i></a>
+      <a href="#" class="social-icon magnetic-target" title="ResearchGate"><i class="fab fa-researchgate"></i></a>
+      <a href="#" class="social-icon magnetic-target" title="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="social-icon magnetic-target" title="YouTube"><i class="fab fa-youtube"></i></a>
+    </div>
+
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <span style="color:var(--border)">·</span>
+      <a href="#">Terms of Intellectual Use</a>
+      <span style="color:var(--border)">·</span>
+      <a href="#connect">Contact</a>
+    </div>
+
+    <p class="footer-copy">© 2024 Divya Gautam. All intellectual rights reserved.</p>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════════════ -->
+<script>
+// ─── TOUCH DETECTION ──────────────────────────────
+const isTouch = navigator.maxTouchPoints > 0;
+
+// ─── CANVAS BACKGROUND ────────────────────────────
+(function initCanvas() {
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles, gridPoints;
+  let animFrame;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    initScene();
+  }
+
+  function initScene() {
+    // Particles
+    particles = Array.from({length: 60}, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.5 + 0.3,
+      vx: (Math.random() - 0.5) * 0.2,
+      vy: (Math.random() - 0.5) * 0.2,
+      a: Math.random() * 0.6 + 0.1,
+    }));
+
+    // Grid
+    const cols = Math.ceil(W / 90) + 2;
+    const rows = Math.ceil(H / 90) + 2;
+    gridPoints = [];
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        gridPoints.push({
+          bx: c * 90 - 45,
+          by: r * 90 - 45,
+          ox: 0, oy: 0,
+          tx: 0, ty: 0,
+          phase: Math.random() * Math.PI * 2,
         });
-        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-        requestAnimationFrame(raf);
+      }
+    }
+  }
 
-        gsap.registerPlugin(ScrollTrigger);
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    t += 0.004;
 
-        if(window.innerWidth > 768 && !('ontouchstart' in window || navigator.maxTouchPoints > 0)) {
-            const cursorOutline = document.getElementById("cursor-outline");
-            
-            let pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-            let mouse = { x: pos.x, y: pos.y };
-            
-            let smoothness = 0.28; 
-            let lastX = mouse.x, lastY = mouse.y;
-            let currentAngle = 0;
-            let timeout;
-            let activeMagnetic = null; 
+    // Update & draw grid
+    const cols = Math.ceil(W / 90) + 2;
+    ctx.strokeStyle = 'rgba(212,175,55,0.06)';
+    ctx.lineWidth = 0.5;
 
-            window.addEventListener("mousemove", e => {
-                mouse.x = e.clientX;
-                mouse.y = e.clientY;
-            });
+    gridPoints.forEach(p => {
+      p.ox = Math.sin(t + p.phase) * 8;
+      p.oy = Math.cos(t * 0.7 + p.phase * 1.3) * 6;
+    });
 
-            gsap.ticker.add((time, deltaTime) => {
-                let deltaX = mouse.x - lastX;
-                let deltaY = mouse.y - lastY;
-                lastX = mouse.x; lastY = mouse.y;
-
-                let targetX = mouse.x;
-                let targetY = mouse.y;
-
-                if (activeMagnetic) {
-                    const rect = activeMagnetic.getBoundingClientRect();
-                    const elemX = rect.left + rect.width / 2;
-                    const elemY = rect.top + rect.height / 2;
-                    
-                    targetX = elemX + (mouse.x - elemX) * 0.05; 
-                    targetY = elemY + (mouse.y - elemY) * 0.05;
-                }
-
-                pos.x += (targetX - pos.x) * smoothness;
-                pos.y += (targetY - pos.y) * smoothness;
-                gsap.set(cursorOutline, { x: pos.x, y: pos.y });
-
-                // STRICTLY HORIZONTAL PHYSICS (X-Axis Only)
-                let velocityX = Math.min(Math.abs(deltaX), 150); // केवल बाएँ-दाएँ की गति मापेगा
-                
-                if (!activeMagnetic && velocityX > 1) { 
-                    gsap.to(cursorOutline, {
-                        scaleX: 1 + (velocityX * 0.025), // केवल X-अक्ष पर स्ट्रेच होगा
-                        scaleY: 1 - (velocityX * 0.010), // हल्का सा चपटा होगा (सुंदरता के लिए)
-                        rotate: 0, // CURE: रोटेशन 0 पर लॉक कर दिया गया है। ऊपर-नीचे तिरछा नहीं घूमेगा।
-                        duration: 0.1,
-                        overwrite: "auto"
-                    });
-                }
-
-                if (!activeMagnetic) {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => {
-                        gsap.to(cursorOutline, { scaleX: 1, scaleY: 1, rotate: 0, duration: 0.1, overwrite: "auto" });
-                    }, 20); 
-                }
-            });
-
-            const magnetics = document.querySelectorAll('.magnetic');
-            magnetics.forEach((elem) => {
-                elem.addEventListener('mouseenter', () => {
-                    activeMagnetic = elem; 
-                    gsap.to(cursorOutline, { width: 80, height: 80, scaleX: 1, scaleY: 1, rotate: 0, backgroundColor: 'rgba(212, 175, 55, 0.25)', borderColor: 'transparent', boxShadow: '0 0 40px rgba(212, 175, 55, 0.9), 0 0 80px rgba(212, 175, 55, 0.5)', duration: 0.25 });
-                });
-                elem.addEventListener('mouseleave', () => {
-                    activeMagnetic = null; 
-                    gsap.to(cursorOutline, { width: 35, height: 35, backgroundColor: 'transparent', borderColor: 'var(--gold-bright)', boxShadow: '0 0 15px rgba(212, 175, 55, 0.4)', duration: 0.25 });
-                });
-            });
-        } else {
-            document.getElementById("cursor").style.display = 'none';
+    // Draw grid lines
+    const rows = Math.ceil(H / 90) + 2;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols - 1; c++) {
+        const i = r * cols + c;
+        const j = i + 1;
+        if (i < gridPoints.length && j < gridPoints.length) {
+          const a = gridPoints[i], b = gridPoints[j];
+          ctx.beginPath();
+          ctx.moveTo(a.bx + a.ox, a.by + a.oy);
+          ctx.lineTo(b.bx + b.ox, b.by + b.oy);
+          ctx.stroke();
         }
+      }
+      for (let c = 0; c < cols; c++) {
+        const i = r * cols + c;
+        const j = (r + 1) * cols + c;
+        if (i < gridPoints.length && j < gridPoints.length) {
+          const a = gridPoints[i], b = gridPoints[j];
+          ctx.beginPath();
+          ctx.moveTo(a.bx + a.ox, a.by + a.oy);
+          ctx.lineTo(b.bx + b.ox, b.by + b.oy);
+          ctx.stroke();
+        }
+      }
+    }
 
-        gsap.fromTo(".hero-name-container", 
-            { opacity: 0, y: 70, scale: 0.95 },
-            { opacity: 1, y: 0, scale: 1, duration: 2, ease: "power4.out", delay: 0.3 }
-        );
+    // Draw grid nodes
+    gridPoints.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.bx + p.ox, p.by + p.oy, 1, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(212,175,55,0.18)';
+      ctx.fill();
+    });
 
-        ScrollTrigger.create({
-            trigger: "#hero", start: "top top", end: "bottom top",
-            onLeave: () => gsap.to(".hero-name-container", {opacity: 0, y: -80, duration: 0.5}),
-            onEnterBack: () => gsap.to(".hero-name-container", {opacity: 1, y: 0, duration: 0.5})
-        });
+    // Draw particles
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < -10) p.x = W + 10;
+      if (p.x > W + 10) p.x = -10;
+      if (p.y < -10) p.y = H + 10;
+      if (p.y > H + 10) p.y = -10;
 
-        gsap.to("#progressBar", { width: "100%", ease: "none", scrollTrigger: { scrub: 0.1 } });
+      const pulse = (Math.sin(t * 2 + p.phase || 0) + 1) / 2;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(212,175,55,${p.a * (0.4 + pulse * 0.6)})`;
+      ctx.fill();
+    });
 
-        gsap.to("#timeProgress", {
-            height: "100%", ease: "none",
-            scrollTrigger: { trigger: ".timeline-container", start: "top center", end: "bottom center", scrub: 0.5 }
-        });
+    animFrame = requestAnimationFrame(draw);
+  }
 
-        const revealElements = document.querySelectorAll('.gsap-reveal');
-        revealElements.forEach((el) => {
-            gsap.fromTo(el, 
-                { opacity: 0, y: 60 },
-                {
-                    opacity: 1, y: 0, duration: 1, ease: "power3.out",
-                    scrollTrigger: { trigger: el, start: "top 85%", end: "bottom 20%", toggleActions: "play none none reverse" }
-                }
-            );
-        });
-    </script>
+  window.addEventListener('resize', resize);
+  resize();
+  draw();
+})();
+
+// ─── READING PROGRESS BAR ─────────────────────────
+const progressBar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const total = document.body.scrollHeight - window.innerHeight;
+  progressBar.style.width = (scrolled / total * 100) + '%';
+}, { passive: true });
+
+// ─── CUSTOM CURSOR ────────────────────────────────
+if (!isTouch) {
+  const cursor = document.getElementById('cursor');
+  const dot = document.getElementById('cursor-dot');
+  let mx = -200, my = -200;
+  let cx = -200, cy = -200;
+  let prevX = -200;
+  let velX = 0;
+  let isMagnetic = false;
+  let targetW = 28, targetH = 28;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX;
+    my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top = my + 'px';
+  });
+
+  let lastTime = 0;
+  function updateCursor(ts) {
+    const dt = ts - lastTime;
+    lastTime = ts;
+
+    if (!isMagnetic) {
+      // Smooth follow
+      cx += (mx - cx) * 0.14;
+      cy += (my - cy) * 0.14;
+
+      // Horizontal stretch only
+      velX = (mx - prevX);
+      prevX = mx;
+      const stretch = Math.min(Math.abs(velX) * 1.4, 28);
+      const w = 28 + stretch;
+      const h = Math.max(28 - stretch * 0.35, 14);
+
+      cursor.style.left = cx + 'px';
+      cursor.style.top = cy + 'px';
+      cursor.style.width = w + 'px';
+      cursor.style.height = h + 'px';
+      cursor.style.borderRadius = '9999px';
+      cursor.style.transform = `translate(-50%, -50%)`;
+    }
+    requestAnimationFrame(updateCursor);
+  }
+  requestAnimationFrame(updateCursor);
+
+  // Magnetic targets
+  document.querySelectorAll('.magnetic-target').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      const rect = el.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      isMagnetic = true;
+      cursor.classList.add('magnetic');
+      cursor.style.left = centerX + 'px';
+      cursor.style.top = centerY + 'px';
+      cursor.style.width = '80px';
+      cursor.style.height = '80px';
+      cursor.style.transform = 'translate(-50%, -50%)';
+    });
+    el.addEventListener('mouseleave', () => {
+      isMagnetic = false;
+      cursor.classList.remove('magnetic');
+      cursor.style.boxShadow = '';
+      cursor.style.background = '';
+    });
+  });
+}
+
+// ─── HERO ANIMATIONS ──────────────────────────────
+function animateHero() {
+  const items = [
+    { el: document.getElementById('hero-eyebrow'), delay: 300 },
+    { el: document.getElementById('hero-name'), delay: 500 },
+    { el: document.getElementById('hero-divider'), delay: 800 },
+    { el: document.getElementById('hero-manifesto'), delay: 900 },
+    { el: document.getElementById('hero-cta'), delay: 1100 },
+  ];
+  items.forEach(({ el, delay }) => {
+    if (!el) return;
+    setTimeout(() => {
+      el.style.transition = 'opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1)';
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+    }, delay);
+  });
+}
+window.addEventListener('DOMContentLoaded', animateHero);
+
+// ─── SCROLL REVEAL ────────────────────────────────
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ─── MOBILE NAV ───────────────────────────────────
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
+
+hamburger.addEventListener('click', () => {
+  const open = hamburger.classList.toggle('open');
+  mobileMenu.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+
+function closeMobileMenu() {
+  hamburger.classList.remove('open');
+  mobileMenu.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ─── BOOK 3D TILT ─────────────────────────────────
+if (!isTouch) {
+  const bookStage = document.querySelector('.book-stage');
+  const bookWrapper = document.getElementById('book-3d');
+  if (bookStage && bookWrapper) {
+    bookStage.addEventListener('mousemove', e => {
+      const rect = bookStage.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) / (rect.width / 2);
+      const dy = (e.clientY - cy) / (rect.height / 2);
+      bookWrapper.style.transform = `rotateY(${dx * 15}deg) rotateX(${-dy * 8}deg) scale(1.04)`;
+    });
+    bookStage.addEventListener('mouseleave', () => {
+      bookWrapper.style.transform = 'rotateY(-10deg) rotateX(3deg)';
+    });
+  }
+}
+
+// ─── NAV SCROLL EFFECT ────────────────────────────
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.style.background = window.scrollY > 50
+    ? 'rgba(5,5,5,0.92)'
+    : 'rgba(5,5,5,0.7)';
+}, { passive: true });
+
+// ─── NEWSLETTER ───────────────────────────────────
+function handleSubscribe() {
+  const input = document.getElementById('email-input');
+  const val = input.value.trim();
+  if (!val || !val.includes('@')) {
+    input.style.borderColor = 'rgba(255,80,80,0.5)';
+    setTimeout(() => { input.style.borderColor = ''; }, 2000);
+    return;
+  }
+  const btn = input.nextElementSibling;
+  btn.textContent = '✓ Enrolled';
+  btn.style.background = '#2a6a2a';
+  btn.style.color = '#fff';
+  input.value = '';
+  input.disabled = true;
+  btn.disabled = true;
+}
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      const offset = 72;
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  });
+});
+</script>
 </body>
 </html>
