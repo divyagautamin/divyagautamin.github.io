@@ -882,6 +882,68 @@ footer::before {
 .ft-links a { font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:var(--g); transition:color .3s; }
 .ft-links a:hover { color:var(--gold); }
 .ft-copy { font-size:.62rem; color:rgba(255,255,255,.12); letter-spacing:.1em; text-align:center; }
+/* ── CINEMATIC HERO EXTRAS ──────────────────── */
+
+/* Badge row */
+.h-badge {
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+}
+.h-badge-num {
+  font-family:'Playfair Display',serif;
+  font-size:1.35rem;font-weight:800;line-height:1;
+  background:linear-gradient(135deg,#d4af37,#f0d060);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.h-badge-lbl {
+  font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:#666;
+}
+.h-badge-sep {
+  width:1px;height:28px;
+  background:linear-gradient(180deg,transparent,rgba(212,175,55,.35),transparent);
+}
+
+/* Floating hero particles */
+.h-particle {
+  position:absolute;border-radius:50%;
+  background:radial-gradient(circle,rgba(212,175,55,.55) 0%,transparent 70%);
+  pointer-events:none;will-change:transform;
+  animation:hpFloat var(--dur,8s) ease-in-out var(--del,0s) infinite alternate;
+}
+@keyframes hpFloat {
+  0%   { transform:translate(0,0) scale(1); opacity:.3; }
+  50%  { opacity:.7; }
+  100% { transform:translate(var(--tx,20px),var(--ty,-30px)) scale(var(--sc,1.2)); opacity:.2; }
+}
+
+/* Cinematic vignette on hero */
+#home::after {
+  content:'';
+  position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 45%,transparent 30%,rgba(4,4,4,.55) 100%);
+}
+
+/* Hover shimmer on main CTA */
+#hero-btn-main {
+  position:relative;overflow:hidden;
+}
+#hero-btn-main::after {
+  content:'';
+  position:absolute;top:0;left:-100%;width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+  transform:skewX(-20deg);
+  animation:btnShimmer 3.5s ease-in-out 2s infinite;
+}
+@keyframes btnShimmer {
+  0%  { left:-100%; }
+  40% { left:160%;  }
+  100%{ left:160%;  }
+}
+
+/* Name depth glow on hover */
+.h-name-wrap:hover #hn {
+  text-shadow:0 0 80px rgba(212,175,55,.25);
+}
 </style>
 </head>
 <body>
@@ -936,19 +998,52 @@ footer::before {
   <div class="hero-ambient"></div>
   <div class="hero-orb hero-orb-1"></div>
   <div class="hero-orb hero-orb-2"></div>
+  <!-- CINEMATIC 3D HERO INNER -->
   <div style="position:relative;z-index:2;max-width:1100px;margin:0 auto;width:100%;">
-    <p  class="h-eyebrow sr" id="hey">Independent Researcher · Author · Policy Architect</p>
-    <div class="h-name-wrap">
-      <h1 class="h-name sr" id="hn">DIVYA GAUTAM</h1>
+
+    <!-- Floating particles layer -->
+    <div id="hero-particles" style="position:absolute;inset:-200px;pointer-events:none;z-index:0;overflow:hidden;"></div>
+
+    <!-- Eyebrow with animated line -->
+    <p class="h-eyebrow sr" id="hey" style="position:relative;z-index:1;">
+      Independent Researcher · Author · Policy Architect
+    </p>
+
+    <!-- 3D layered name -->
+    <div class="h-name-wrap" style="position:relative;z-index:1;">
+      <!-- Shadow / depth layer -->
+      <h1 class="h-name" id="hn-shadow" aria-hidden="true" style="
+        position:absolute;left:50%;transform:translateX(-50%);
+        background:linear-gradient(135deg,rgba(212,175,55,.18) 0%,transparent 60%);
+        -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+        filter:blur(18px);transform:translateX(-50%) translateY(8px) scale(1.02);
+        pointer-events:none;user-select:none;width:100%;text-align:center;
+      ">DIVYA GAUTAM</h1>
+      <!-- Real name -->
+      <h1 class="h-name sr" id="hn" style="position:relative;">DIVYA GAUTAM</h1>
     </div>
+
+    <!-- Animated golden rule -->
+    <div id="hero-rule" style="
+      width:0;height:1px;
+      background:linear-gradient(90deg,transparent,#d4af37,transparent);
+      margin:0 auto 2.2rem;opacity:0;
+      box-shadow:0 0 20px rgba(212,175,55,.5);
+    "></div>
+
+    <!-- Subtitle -->
     <div class="h-title-line sr" id="htl">
       <span class="h-title-text">Cognitive Linguist · Semantic Theorist · Institutional Reformer</span>
     </div>
+
+    <!-- Manifesto -->
     <p class="h-manifesto sr" id="hm">
       <em>Rigorous Skepticism.</em>&ensp;Independent Synthesis.&ensp;<em>Intellectual Authority.</em>
     </p>
+
+    <!-- CTA row -->
     <div class="h-cta sr" id="hc">
-      <a href="#masterwork" class="btn btn-lg mag">
+      <a href="#masterwork" class="btn btn-lg mag" id="hero-btn-main">
         <i class="fas fa-book-open"></i>
         <span>The Masterwork</span>
       </a>
@@ -956,7 +1051,36 @@ footer::before {
         Intellectual Pursuit &nbsp;<i class="fas fa-arrow-right" style="font-size:.55rem"></i>
       </a>
     </div>
+
+    <!-- Floating credential badges -->
+    <div id="hero-badges" class="sr" style="
+      display:flex;align-items:center;justify-content:center;
+      gap:20px;flex-wrap:wrap;margin-top:3rem;opacity:0;
+    ">
+      <div class="h-badge">
+        <span class="h-badge-num">550</span>
+        <span class="h-badge-lbl">Page Opus</span>
+      </div>
+      <div class="h-badge-sep"></div>
+      <div class="h-badge">
+        <span class="h-badge-num">500+</span>
+        <span class="h-badge-lbl">Frameworks</span>
+      </div>
+      <div class="h-badge-sep"></div>
+      <div class="h-badge">
+        <span class="h-badge-num">12+</span>
+        <span class="h-badge-lbl">Disciplines</span>
+      </div>
+      <div class="h-badge-sep"></div>
+      <div class="h-badge">
+        <span class="h-badge-num">2026</span>
+        <span class="h-badge-lbl">Publication</span>
+      </div>
+    </div>
+
   </div>
+
+  <!-- Scroll indicator -->
   <div class="h-scroll">
     <span class="h-scroll-label">Scroll</span>
     <div class="h-scroll-line"></div>
@@ -1592,6 +1716,69 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     if(t){e.preventDefault();window.scrollTo({top:t.getBoundingClientRect().top+window.scrollY-70,behavior:'smooth'});}
   });
 });
+/* ── CINEMATIC HERO INIT ─────────────────────── */
+(function heroExtras(){
+
+  // 1. Floating ambient particles
+  const container = document.getElementById('hero-particles');
+  if(container){
+    const configs = [
+      {w:180,h:180,tx:'25px',ty:'-45px',sc:'1.3',dur:'9s',del:'0s',  top:'10%', left:'5%' },
+      {w:120,h:120,tx:'-20px',ty:'-30px',sc:'1.15',dur:'11s',del:'2s', top:'60%', left:'2%' },
+      {w:220,h:220,tx:'-30px',ty:'20px', sc:'1.4', dur:'13s',del:'1s', top:'5%',  left:'75%'},
+      {w:90, h:90, tx:'15px', ty:'-20px',sc:'1.1', dur:'7s', del:'3s', top:'70%', left:'80%'},
+      {w:140,h:140,tx:'30px', ty:'-50px',sc:'1.25',dur:'10s',del:'4s', top:'40%', left:'90%'},
+      {w:80, h:80, tx:'-15px',ty:'25px', sc:'1.05',dur:'8s', del:'1.5s',top:'85%',left:'50%'},
+    ];
+    configs.forEach(c=>{
+      const p=document.createElement('div');
+      p.className='h-particle';
+      p.style.cssText=`
+        width:${c.w}px;height:${c.h}px;
+        top:${c.top};left:${c.left};
+        --tx:${c.tx};--ty:${c.ty};--sc:${c.sc};
+        --dur:${c.dur};--del:${c.del};
+      `;
+      container.appendChild(p);
+    });
+  }
+
+  // 2. Animate the golden rule on hero reveal
+  setTimeout(()=>{
+    const rule = document.getElementById('hero-rule');
+    if(rule){
+      gsap.to(rule,{
+        width:'180px', opacity:1,
+        duration:1.2, ease:'expo.out', delay:0.85
+      });
+    }
+    // Badges fade in
+    const badges = document.getElementById('hero-badges');
+    if(badges){
+      gsap.to(badges,{
+        opacity:1, y:0,
+        duration:1, ease:'expo.out', delay:1.4
+      });
+    }
+  }, 1200); // fires after preloader
+
+  // 3. Hero name 3D parallax depth on mousemove (desktop only)
+  if(!IS_TOUCH){
+    const shadow = document.getElementById('hn-shadow');
+    document.addEventListener('mousemove', e=>{
+      const xf = (e.clientX/window.innerWidth  - .5) * 14;
+      const yf = (e.clientY/window.innerHeight - .5) * 8;
+      if(shadow){
+        gsap.to(shadow,{
+          x: `calc(-50% + ${xf*1.8}px)`,
+          y: 8 + yf,
+          duration:1.8, ease:'power2.out', overwrite:'auto'
+        });
+      }
+    },{passive:true});
+  }
+
+})();
 </script>
 </body>
 </html>
