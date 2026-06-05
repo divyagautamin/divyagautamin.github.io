@@ -157,8 +157,8 @@ ul { list-style:none; }
   height:70px; padding:0 5vw;
   display:flex; align-items:center; justify-content:space-between;
   background:rgba(4,4,4,.5);
-  backdrop-filter:blur(32px) saturate(1.8);
-  -webkit-backdrop-filter:blur(32px) saturate(1.8);
+  backdrop-filter:blur(16px);
+-webkit-backdrop-filter:blur(16px);
   border-bottom:1px solid var(--bord);
   transition:background .5s, border-color .5s;
   will-change:background;
@@ -1275,7 +1275,7 @@ gsap.registerPlugin(ScrollTrigger);
 (function canvas(){
   const cvs = document.getElementById('cvs');
   const ctx = cvs.getContext('2d');
-  const N   = IS_TOUCH ? 40 : 68;
+  const N = IS_TOUCH ? 25 : 38;
   const LK  = 142;
   let W, H, nodes;
   const mouse = {x:-999, y:-999};
@@ -1357,7 +1357,7 @@ window.addEventListener('scroll',()=>{
   });
 
   // outer ring — damped lerp via ticker (no RAF conflict)
-  gsap.ticker.fps(120);
+  gsap.ticker.fps(60);
   gsap.ticker.add(()=>{
     if(isMag) return;
     const damp=.13;
