@@ -17,7 +17,7 @@
    DESIGN TOKENS
 ═══════════════════════════════════════════════════ */
 :root{
-  --bg:         #040404;
+  --bg:         #020202;
   --bg1:        #070707;
   --bg2:        #0a0a0a;
   --w:          #ffffff;
@@ -338,6 +338,8 @@ section { position:relative; z-index:2; }
     radial-gradient(ellipse 80% 55% at 50% 30%, rgba(212,175,55,.07) 0%, transparent 70%),
     radial-gradient(ellipse 40% 40% at 20% 80%, rgba(212,175,55,.04) 0%, transparent 60%),
     radial-gradient(ellipse 40% 40% at 80% 80%, rgba(212,175,55,.04) 0%, transparent 60%);
+  /* Dark room depth layers */
+  box-shadow: inset 0 0 200px rgba(0,0,0,.8), inset 0 0 600px rgba(0,0,0,.4);
 }
 
 .h-eyebrow {
@@ -947,8 +949,8 @@ footer::before {
 /* Floating hero particles */
 .h-particle {
   position:absolute;border-radius:50%;
-  background:radial-gradient(circle,rgba(212,175,55,.55) 0%,transparent 70%);
-  pointer-events:none;will-change:transform;
+  background:radial-gradient(circle,rgba(212,175,55,.35) 0%,transparent 70%);
+  pointer-events:none;
   animation:hpFloat var(--dur,8s) ease-in-out var(--del,0s) infinite alternate;
 }
 @keyframes hpFloat {
@@ -965,6 +967,24 @@ footer::before {
     radial-gradient(ellipse 55% 55% at 50% 40%, transparent 20%, rgba(4,4,4,.7) 100%),
     radial-gradient(ellipse 30% 40% at 15% 50%, rgba(212,175,55,.04) 0%, transparent 70%),
     radial-gradient(ellipse 30% 40% at 85% 50%, rgba(212,175,55,.04) 0%, transparent 70%);
+}
+/* Cinematic dark room atmosphere - desktop only */
+@media (min-width:769px) {
+  #home::before {
+    content:'';
+    position:absolute; inset:0; z-index:0; pointer-events:none;
+    background:
+      /* Ceiling dark fade */
+      linear-gradient(180deg, rgba(0,0,0,.72) 0%, transparent 35%),
+      /* Floor dark fade */
+      linear-gradient(0deg, rgba(0,0,0,.88) 0%, transparent 40%),
+      /* Left wall shadow */
+      linear-gradient(90deg, rgba(0,0,0,.5) 0%, transparent 28%),
+      /* Right wall shadow */
+      linear-gradient(270deg, rgba(0,0,0,.5) 0%, transparent 28%),
+      /* Central warm light source - like a desk lamp from above */
+      radial-gradient(ellipse 45% 35% at 50% 38%, rgba(212,175,55,.06) 0%, transparent 65%);
+  }
 }
 
 /* Hover shimmer on main CTA */
@@ -1407,6 +1427,7 @@ footer::before {
 'use strict';
 /* ── globals ───────────────────────────────────── */
 const IS_TOUCH = navigator.maxTouchPoints > 0;
+const isLowEnd = navigator.hardwareConcurrency <= 4 || !window.requestIdleCallback;
 gsap.registerPlugin(ScrollTrigger);
 
 /* ── 1. PRELOADER ───────────────────────────────── */
@@ -1443,8 +1464,6 @@ gsap.registerPlugin(ScrollTrigger);
 (function canvas(){
   const cvs = document.getElementById('cvs');
   const ctx = cvs.getContext('2d');
-  // Auto-detect performance level
-  const isLowEnd = navigator.hardwareConcurrency <= 4 || !window.requestIdleCallback;
   const N = IS_TOUCH ? 20 : isLowEnd ? 28 : 38;
   const LK  = 142;
   let W, H, nodes;
@@ -1663,7 +1682,7 @@ document.querySelectorAll('.count').forEach(el=>{
         if(cur>=target) clearInterval(iv);
       },dur/steps);
     }
-  },{threshold:.4}).observe(el);
+ },{threshold:.15}).observe(el);
 });
 
 /* ── 10. ACCLAIM MARQUEE (20 reviews) ───────────── */
