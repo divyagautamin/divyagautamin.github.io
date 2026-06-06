@@ -68,7 +68,7 @@ ul { list-style:none; }
 /* ── CANVAS (neural net bg) ─────────────────────── */
 #cvs {
   position:fixed; inset:0; z-index:0;
-  pointer-events:none; opacity:.42;
+  pointer-events:none; opacity:.62;
   will-change:transform;
 }
 
@@ -222,11 +222,41 @@ ul { list-style:none; }
   .n-ham   { display:flex; }
   .mob-menu{ display:flex; }
 }
+   @media (max-width:768px) {
+  .h-name {
+    font-size: clamp(2.8rem, 15vw, 5rem);
+    line-height: .92;
+  }
+  .h-manifesto {
+    font-size: .95rem;
+    padding: 0 1rem;
+  }
+  #hero-badges {
+    gap: 12px;
+    margin-top: 2rem;
+  }
+  .h-badge-num { font-size: 1.1rem; }
+  .h-badge-sep { height: 20px; }
+  .phil-grid   { grid-template-columns: 1fr; }
+  .impact-grid { grid-template-columns: 1fr 1fr; }
+  .gen-frame   { max-width: 260px; }
+}
+@media (max-width:420px) {
+  .h-name { font-size: clamp(2.4rem, 16vw, 3.5rem); }
+  .h-cta  { flex-direction: column; align-items: center; gap: .8rem; }
+  .btn.btn-lg { padding: 13px 24px; font-size: .65rem; }
+}
 
 /* ── SHARED LAYOUT ───────────────────────────────── */
 section { position:relative; z-index:2; }
 .wrap { max-width:1240px; margin:0 auto; padding:0 5vw; }
 .sp { padding:clamp(90px,12vw,160px) 5vw; }
+   /* Alternating section depth */
+#genesis   { background: radial-gradient(ellipse 80% 50% at 20% 50%, rgba(212,175,55,.03) 0%, transparent 60%); }
+#masterwork{ background: radial-gradient(ellipse 70% 50% at 80% 50%, rgba(212,175,55,.025) 0%, transparent 60%); }
+#philosophy{ background: radial-gradient(ellipse 90% 40% at 50% 100%, rgba(212,175,55,.03) 0%, transparent 55%); }
+#acclaim   { background: radial-gradient(ellipse 60% 50% at 50% 0%,  rgba(212,175,55,.04) 0%, transparent 60%); }
+#discourse { background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(212,175,55,.04) 0%, transparent 65%); }
 
 .eyebrow {
   font-size:.6rem; font-weight:600; letter-spacing:.5em;
@@ -338,6 +368,18 @@ section { position:relative; z-index:2; }
   -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
   will-change:transform;
   animation:nameShimmer 6s ease-in-out infinite alternate;
+}
+/* Cinematic name split */
+.h-name-wrap {
+  clip-path: inset(0 0 0 0);
+}
+@keyframes nameReveal {
+  0%   { transform:translateY(110%) skewY(4deg); opacity:0; }
+  60%  { opacity:1; }
+  100% { transform:translateY(0) skewY(0deg); opacity:1; }
+}
+.h-name.cinematic-in {
+  animation: nameReveal 1.1s cubic-bezier(.16,1,.3,1) both;
 }
 @keyframes nameShimmer {
   0%   { background-position:0% 0; }
@@ -920,7 +962,9 @@ footer::before {
   content:'';
   position:absolute;inset:0;pointer-events:none;z-index:1;
   background:
-    radial-gradient(ellipse 70% 60% at 50% 45%,transparent 30%,rgba(4,4,4,.55) 100%);
+    radial-gradient(ellipse 55% 55% at 50% 40%, transparent 20%, rgba(4,4,4,.7) 100%),
+    radial-gradient(ellipse 30% 40% at 15% 50%, rgba(212,175,55,.04) 0%, transparent 70%),
+    radial-gradient(ellipse 30% 40% at 85% 50%, rgba(212,175,55,.04) 0%, transparent 70%);
 }
 
 /* Hover shimmer on main CTA */
@@ -1399,7 +1443,9 @@ gsap.registerPlugin(ScrollTrigger);
 (function canvas(){
   const cvs = document.getElementById('cvs');
   const ctx = cvs.getContext('2d');
-  const N = IS_TOUCH ? 25 : 38;
+  // Auto-detect performance level
+  const isLowEnd = navigator.hardwareConcurrency <= 4 || !window.requestIdleCallback;
+  const N = IS_TOUCH ? 20 : isLowEnd ? 28 : 38;
   const LK  = 142;
   let W, H, nodes;
   const mouse = {x:-999, y:-999};
@@ -1481,7 +1527,7 @@ window.addEventListener('scroll',()=>{
   });
 
   // outer ring — damped lerp via ticker (no RAF conflict)
-  gsap.ticker.fps(60);
+ gsap.ticker.fps(IS_TOUCH || isLowEnd ? 50 : 60);
   gsap.ticker.add(()=>{
     if(isMag) return;
     const damp=.13;
@@ -1537,7 +1583,7 @@ window.addEventListener('scroll',()=>{
 function startSite(){
   const seq=[
     {id:'hey', y:18, delay:.05},
-    {id:'hn',  y:28, delay:.2},
+    {id:'hn',  y:0,  delay:.2},
     {id:'htl', y:14, delay:.44},
     {id:'hm',  y:18, delay:.54},
     {id:'hc',  y:18, delay:.72},
@@ -1547,6 +1593,11 @@ function startSite(){
     if(!el) return;
     gsap.fromTo(el,{opacity:0,y},{opacity:1,y:0,duration:1.2,ease:'expo.out',delay});
   });
+  // Cinematic name class
+  setTimeout(()=>{
+    const hn = document.getElementById('hn');
+    if(hn){ hn.style.opacity='0'; hn.classList.add('cinematic-in'); hn.style.opacity=''; }
+  }, 220);
   setTimeout(initScrollReveal, 300);
 }
 
