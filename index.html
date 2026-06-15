@@ -2333,7 +2333,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     nav.classList.toggle('scrolled', window.scrollY > 140);
   },{passive:true});
 })();
-/* ── ENHANCEMENT 8: GLORIOUS AUDIO ── */
+/* ── ENHANCEMENT 8: CONTINUOUS AMBIENT LOOP ── */
 (function subtleAudio(){
   const btn = document.createElement('button');
   btn.id = 'audio-btn';
@@ -2342,133 +2342,96 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
   btn.innerHTML = `<i class="fas fa-volume-xmark"></i><span class="ab-tooltip">Ambient Sound</span>`;
   document.body.appendChild(btn);
 
-  let on = false, actx = null;
-  let masterGain = null, humNode = null, humGain = null, filterNode = null;
+  let on = false, actx = null, masterGain = null, started = false;
 
-  function getCtx(){
-    if(!actx){
-      actx = new (window.AudioContext||window.webkitAudioContext)();
-      masterGain = actx.createGain();
-      masterGain.gain.value = 0.7;
-      masterGain.connect(actx.destination);
+  function buildAmbience(){
+    if(started) return;
+    started = true;
+    actx = new (window.AudioContext||window.webkitAudioContext)();
+    masterGain = actx.createGain();
+    masterGain.gain.value = 0;
+    masterGain.connect(actx.destination);
+
+    // Layer 1: Deep root drone — 36Hz sine
+    const osc1 = actx.createOscillator();
+    const g1   = actx.createGain();
+    osc1.type = 'sine'; osc1.frequency.value = 36;
+    g1.gain.value = 0.032;
+    osc1.connect(g1); g1.connect(masterGain); osc1.start();
+
+    // Layer 2: Octave — 72Hz with slow LFO breath
+    const osc2 = actx.createOscillator();
+    const g2   = actx.createGain();
+    const lfo2 = actx.createOscillator();
+    const lfg2 = actx.createGain();
+    osc2.type = 'sine'; osc2.frequency.value = 72;
+    lfo2.frequency.value = 0.055; lfg2.gain.value = 0.28;
+    lfo2.connect(lfg2); lfg2.connect(g2.gain);
+    g2.gain.value = 0.016;
+    osc2.connect(g2); g2.connect(masterGain);
+    osc2.start(); lfo2.start();
+
+    // Layer 3: 5th harmonic — 108Hz very soft
+    const osc3 = actx.createOscillator();
+    const g3   = actx.createGain();
+    osc3.type = 'sine'; osc3.frequency.value = 108;
+    g3.gain.value = 0.009;
+    osc3.connect(g3); g3.connect(masterGain); osc3.start();
+
+    // Layer 4: High shimmer — filtered white noise loop
+    const bufLen = actx.sampleRate * 3.5;
+    const buf = actx.createBuffer(1, bufLen, actx.sampleRate);
+    const d = buf.getChannelData(0);
+    for(let i=0; i<bufLen; i++) d[i] = (Math.random()*2-1);
+    const noise = actx.createBufferSource();
+    noise.buffer = buf; noise.loop = true;
+    const noiseFilter = actx.createBiquadFilter();
+    noiseFilter.type = 'bandpass';
+    noiseFilter.frequency.value = 3200;
+    noiseFilter.Q.value = 0.3;
+    const noiseLfo = actx.createOscillator();
+    const noiseLfg = actx.createGain();
+    noiseLfo.frequency.value = 0.03;
+    noiseLfg.gain.value = 600;
+    noiseLfo.connect(noiseLfg); noiseLfg.connect(noiseFilter.frequency);
+    const noiseGain = actx.createGain();
+    noiseGain.gain.value = 0.004;
+    noise.connect(noiseFilter);
+    noiseFilter.connect(noiseGain);
+    noiseGain.connect(masterGain);
+    noise.start(); noiseLfo.start();
+
+    // Layer 5: Reverb-like tail — convolver
+    const convBuf = actx.createBuffer(2, actx.sampleRate*2, actx.sampleRate);
+    for(let c=0; c<2; c++){
+      const cd = convBuf.getChannelData(c);
+      for(let i=0; i<cd.length; i++) cd[i]=(Math.random()*2-1)*Math.pow(1-i/cd.length,2);
     }
-    return actx;
+    const conv = actx.createConvolver();
+    conv.buffer = convBuf;
+    const convGain = actx.createGain();
+    convGain.gain.value = 0.006;
+    g1.connect(conv); conv.connect(convGain); convGain.connect(masterGain);
   }
 
-  // Deep cathedral resonance hum — 3 layered sine oscillators
-  function startHum(){
-    try {
-      const ac = getCtx();
-      const freqs = [36, 72, 108]; // root + octave + fifth
-      const gains = [0.022, 0.012, 0.007];
-      humNode = []; humGain = [];
-      freqs.forEach((f, i) => {
-        const osc = ac.createOscillator();
-        const g   = ac.createGain();
-        const rev = ac.createBiquadFilter();
-        osc.type = 'sine';
-        osc.frequency.value = f;
-        // slow frequency drift — breathing effect
-        const lfo = ac.createOscillator();
-        const lfg = ac.createGain();
-        lfo.frequency.value = 0.07 + i * 0.03;
-        lfg.gain.value = f * 0.004;
-        lfo.connect(lfg); lfg.connect(osc.frequency);
-        lfo.start();
-        rev.type = 'lowpass';
-        rev.frequency.value = 800;
-        rev.Q.value = 0.4;
-        g.gain.value = 0;
-        osc.connect(rev); rev.connect(g); g.connect(masterGain);
-        osc.start();
-        g.gain.linearRampToValueAtTime(gains[i], ac.currentTime + 3.5);
-        humNode.push(osc); humGain.push(g);
-      });
-    } catch(e){}
+  function fadeIn(){
+    if(!actx) return;
+    masterGain.gain.cancelScheduledValues(actx.currentTime);
+    masterGain.gain.setTargetAtTime(1, actx.currentTime, 1.8);
   }
 
-  function stopHum(){
-    if(!humGain || !actx) return;
-    try {
-      humGain.forEach(g => g.gain.linearRampToValueAtTime(0, actx.currentTime + 2.2));
-      setTimeout(()=>{
-        humNode && humNode.forEach(n=>{ try{ n.stop(); }catch(e){} });
-        humNode=null; humGain=null;
-      }, 2400);
-    } catch(e){}
-  }
-
-  // Glorious quill-on-parchment writing sound
-  function playWriting(vol=0.35){
-    if(!on) return;
-    try {
-      const ac = getCtx();
-      const dur = 0.28;
-      const len = ac.sampleRate * dur;
-      const buf = ac.createBuffer(2, len, ac.sampleRate); // stereo
-      [0,1].forEach(ch => {
-        const d = buf.getChannelData(ch);
-        for(let i=0; i<len; i++){
-          const t = i/len;
-          const env = Math.pow(Math.sin(t * Math.PI), 0.6) * (1 - t*0.4);
-          // layered texture: high scratch + low body
-          const scratch = (Math.random()*2-1) * 0.6;
-          const body    = Math.sin(i * 0.18 + Math.random()*0.4) * 0.3;
-          d[i] = (scratch + body) * env * vol + (Math.random()-0.5)*0.015;
-        }
-      });
-      const src = ac.createBufferSource();
-      src.buffer = buf;
-      // Two bandpass filters for warmth + presence
-      const bp1 = ac.createBiquadFilter();
-      bp1.type='bandpass'; bp1.frequency.value=1400; bp1.Q.value=0.6;
-      const bp2 = ac.createBiquadFilter();
-      bp2.type='bandpass'; bp2.frequency.value=3200; bp2.Q.value=1.2;
-      const merge = ac.createGain(); merge.gain.value=0.55;
-      const g = ac.createGain(); g.gain.value=1;
-      // parallel filter mix
-      src.connect(bp1); src.connect(bp2);
-      bp1.connect(merge); bp2.connect(merge);
-      merge.connect(g); g.connect(masterGain);
-      src.start();
-    } catch(e){}
-  }
-
-  // Gold bell chime — pure tone bell-like strike
-  function playChime(){
-    if(!on) return;
-    try {
-      const ac = getCtx();
-      const freqs = [528, 1056, 1584, 2112]; // harmonic series
-      freqs.forEach((f, i) => {
-        const osc = ac.createOscillator();
-        const g   = ac.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = f;
-        g.gain.value = 0;
-        osc.connect(g); g.connect(masterGain);
-        osc.start(ac.currentTime + i * 0.018);
-        const peak = 0.08 / (i+1);
-        g.gain.setTargetAtTime(peak, ac.currentTime + i*0.018, 0.005);
-        g.gain.setTargetAtTime(0, ac.currentTime + i*0.018 + 0.04, 0.18);
-        setTimeout(()=>{ try{ osc.stop(); }catch(e){} }, 2400);
-      });
-    } catch(e){}
+  function fadeOut(){
+    if(!actx) return;
+    masterGain.gain.cancelScheduledValues(actx.currentTime);
+    masterGain.gain.setTargetAtTime(0, actx.currentTime, 1.2);
   }
 
   btn.addEventListener('click', ()=>{
     on = !on;
     btn.classList.toggle('ab-on', on);
     btn.querySelector('i').className = on ? 'fas fa-volume-low' : 'fas fa-volume-xmark';
-    if(on){ startHum(); setTimeout(playChime, 300); }
-    else  { stopHum(); }
-  });
-
-  // Writing sound on section entry
-  document.querySelectorAll('section').forEach(sec=>{
-    new IntersectionObserver(([e])=>{
-      if(e.isIntersecting){ playWriting(); setTimeout(playChime, 180); }
-    },{threshold:0.3}).observe(sec);
+    if(on){ buildAmbience(); fadeIn(); }
+    else  { fadeOut(); }
   });
 })(); 
 </script>
