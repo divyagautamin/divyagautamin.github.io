@@ -1265,6 +1265,201 @@ footer::before {
 }
 #audio-btn:hover .ab-tooltip { opacity:1; }
 @media (pointer:coarse){ #audio-btn { cursor:auto !important; } }
+/* ── DRAMATIC HERO TEXT ANIMATION ── */
+@keyframes letterFloat {
+  0%,100% { transform: translateY(0px) rotate(0deg); }
+  33%      { transform: translateY(-8px) rotate(-.4deg); }
+  66%      { transform: translateY(4px) rotate(.3deg); }
+}
+@keyframes glowPulse {
+  0%,100% { text-shadow: 0 0 40px rgba(212,175,55,.15), 0 0 80px rgba(212,175,55,.05); }
+  50%      { text-shadow: 0 0 80px rgba(212,175,55,.45), 0 0 160px rgba(212,175,55,.18), 0 0 240px rgba(212,175,55,.08); }
+}
+@keyframes shimmerSweep {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes runeReveal {
+  0%   { opacity:0; transform:scaleX(0) translateY(2px); }
+  100% { opacity:1; transform:scaleX(1) translateY(0); }
+}
+@keyframes eyebrowDrift {
+  0%,100% { letter-spacing:.55em; opacity:.85; }
+  50%      { letter-spacing:.68em; opacity:1; }
+}
+@keyframes manifestoPulse {
+  0%,100% { opacity:.65; }
+  50%      { opacity:.9; }
+}
+@keyframes badgeGlow {
+  0%,100% { box-shadow: 0 0 0 rgba(212,175,55,0); }
+  50%      { box-shadow: 0 0 22px rgba(212,175,55,.22); }
+}
+@keyframes orbSpin {
+  from { transform: rotate(0deg) translateX(180px) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(180px) rotate(-360deg); }
+}
+@keyframes scanLine {
+  0%   { transform: translateY(-100%); opacity:0; }
+  10%  { opacity:.35; }
+  90%  { opacity:.35; }
+  100% { transform: translateY(800%); opacity:0; }
+}
+
+/* Name: letter-by-letter shimmer + float */
+#hn {
+  animation: nameShimmer 6s ease-in-out infinite alternate,
+             letterFloat 9s ease-in-out infinite,
+             glowPulse 4.5s ease-in-out infinite !important;
+  background-size: 300% 100% !important;
+}
+
+/* Eyebrow breathing */
+.h-eyebrow {
+  animation: eyebrowDrift 6s ease-in-out infinite;
+}
+
+/* Manifesto pulse */
+.h-manifesto {
+  animation: manifestoPulse 5s ease-in-out infinite;
+}
+
+/* Badge row glow cycle */
+.h-badge {
+  animation: badgeGlow 3.5s ease-in-out infinite;
+}
+.h-badge:nth-child(3)  { animation-delay: .8s; }
+.h-badge:nth-child(5)  { animation-delay: 1.6s; }
+.h-badge:nth-child(7)  { animation-delay: 2.4s; }
+
+/* Golden rule animate */
+#hero-rule {
+  animation: shimmerSweep 3s linear infinite !important;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(212,175,55,.2) 20%,
+    #d4af37 50%,
+    rgba(212,175,55,.2) 80%,
+    transparent 100%) !important;
+  background-size: 300% 100% !important;
+}
+
+/* Floating orbiting dot around hero */
+.hero-orbit {
+  position:absolute; top:50%; left:50%;
+  width:4px; height:4px; border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 14px 4px rgba(212,175,55,.5);
+  pointer-events:none; z-index:1;
+  animation: orbSpin 18s linear infinite;
+  transform-origin: 0 0;
+}
+.hero-orbit:nth-child(2) {
+  animation-duration:28s;
+  animation-direction:reverse;
+  width:2px; height:2px;
+  box-shadow:0 0 8px 2px rgba(212,175,55,.3);
+  animation-name: orbSpin;
+}
+.hero-orbit:nth-child(3) {
+  animation-duration:22s;
+  animation-delay:-7s;
+  background:rgba(212,175,55,.4);
+  box-shadow:0 0 6px 2px rgba(212,175,55,.2);
+}
+
+/* Scan line sweep across hero */
+.hero-scan {
+  position:absolute; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,
+    transparent 0%,
+    rgba(212,175,55,.08) 20%,
+    rgba(212,175,55,.35) 50%,
+    rgba(212,175,55,.08) 80%,
+    transparent 100%);
+  pointer-events:none; z-index:3;
+  animation: scanLine 9s ease-in-out infinite;
+  animation-delay: 3s;
+}
+
+/* CTA button pulse ring */
+#hero-btn-main {
+  animation: btnShimmer 3.5s ease-in-out 2s infinite !important;
+}
+#hero-btn-main::before {
+  transition:transform .48s var(--expo) !important;
+}
+
+/* Title line decorations animate */
+.h-title-line::before {
+  animation: shimmerSweep 4s linear infinite;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(212,175,55,.3) 40%,
+    rgba(212,175,55,.7) 50%,
+    rgba(212,175,55,.3) 60%,
+    transparent) !important;
+  background-size: 200% 100% !important;
+}
+.h-title-line::after {
+  animation: shimmerSweep 4s linear infinite reverse;
+  background: linear-gradient(270deg,
+    transparent,
+    rgba(212,175,55,.3) 40%,
+    rgba(212,175,55,.7) 50%,
+    rgba(212,175,55,.3) 60%,
+    transparent) !important;
+  background-size: 200% 100% !important;
+}
+
+/* Eyebrow lines animate */
+.h-eyebrow::before {
+  animation: shimmerSweep 3s linear infinite;
+  background: linear-gradient(90deg,transparent,var(--gold)) !important;
+  background-size:200% 100% !important;
+}
+.h-eyebrow::after {
+  animation: shimmerSweep 3s linear infinite reverse;
+  background: linear-gradient(270deg,transparent,var(--gold)) !important;
+  background-size:200% 100% !important;
+}
+/* ── SECTION READING PROGRESS ── */
+#section-progress-wrap {
+  position:fixed; top:70px; left:0; right:0;
+  z-index:990; pointer-events:none;
+  height:2px;
+  background:rgba(212,175,55,.06);
+}
+#section-progress-fill {
+  height:100%; width:0%;
+  background:linear-gradient(90deg,
+    var(--gold-dk) 0%,
+    var(--gold) 45%,
+    var(--gold-lt) 80%,
+    var(--gold) 100%);
+  background-size:200% 100%;
+  animation:shimmer 2.5s linear infinite;
+  box-shadow:0 0 12px var(--gg), 0 0 28px rgba(212,175,55,.12);
+  transition:width .12s linear;
+  position:relative;
+}
+#section-progress-fill::after {
+  content:'';
+  position:absolute; right:0; top:50%;
+  transform:translateY(-50%);
+  width:6px; height:6px; border-radius:50%;
+  background:var(--gold-lt);
+  box-shadow:0 0 10px var(--gold), 0 0 20px rgba(212,175,55,.6);
+}
+#section-progress-label {
+  position:fixed; top:76px; right:22px;
+  font-size:.5rem; letter-spacing:.3em;
+  text-transform:uppercase;
+  color:rgba(212,175,55,.55);
+  font-family:var(--fb); font-weight:600;
+  z-index:991; pointer-events:none;
+  transition:opacity .4s;
+}
 </style>
 </head>
 <body>
@@ -1319,6 +1514,10 @@ footer::before {
 <!-- ══════════ HERO ══════════ -->
 <section id="home">
   <div class="hero-ambient"></div>
+   <div class="hero-orbit"></div>
+  <div class="hero-orbit"></div>
+  <div class="hero-orbit"></div>
+  <div class="hero-scan"></div>
   <div class="hero-orb hero-orb-1"></div>
   <div class="hero-orb hero-orb-2"></div>
   <!-- CINEMATIC 3D HERO INNER -->
@@ -2433,7 +2632,93 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     if(on){ buildAmbience(); fadeIn(); }
     else  { fadeOut(); }
   });
-})(); 
+})();
+   /* ── DRAMATIC HERO: LETTER SPLIT ── */
+(function heroLetterSplit(){
+  const hn = document.getElementById('hn');
+  if(!hn || IS_TOUCH) return;
+  // Stagger each letter's float delay on hover
+  hn.addEventListener('mouseenter', ()=>{
+    const letters = hn.textContent.split('');
+    if(hn.children.length) return; // already split
+    hn.innerHTML = letters.map((l,i)=>
+      l===' '
+        ? '<span style="display:inline-block;width:.25em"></span>'
+        : `<span style="display:inline-block;animation:letterFloat ${7+i*.3}s ease-in-out ${i*.06}s infinite;">${l}</span>`
+    ).join('');
+  });
+  hn.addEventListener('mouseleave',()=>{
+    // restore single text for cinematic-in re-use
+    // keep split — it animates nicely
+  });
+})();
+/* ── SECTION READING PROGRESS BAR ── */
+(function sectionReadingProgress(){
+  const wrap  = document.createElement('div');
+  wrap.id     = 'section-progress-wrap';
+  const fill  = document.createElement('div');
+  fill.id     = 'section-progress-fill';
+  wrap.appendChild(fill);
+  document.body.appendChild(wrap);
+
+  const label = document.createElement('div');
+  label.id    = 'section-progress-label';
+  document.body.appendChild(label);
+
+  const sections = [
+    { id:'home',       name:'Home'       },
+    { id:'genesis',    name:'Genesis'    },
+    { id:'masterwork', name:'Masterwork' },
+    { id:'philosophy', name:'Mindset'    },
+    { id:'timeline',   name:'Journey'    },
+    { id:'acclaim',    name:'Acclaim'    },
+    { id:'impact',     name:'Impact'     },
+    { id:'repository', name:'Repository' },
+    { id:'discourse',  name:'Discourse'  },
+  ];
+
+  let labelTimer = null;
+
+  function update(){
+    const scrollY  = window.scrollY;
+    const docH     = document.body.scrollHeight - window.innerHeight;
+    const globalPct = Math.min(scrollY / docH * 100, 100);
+
+    // Find current section and local progress within it
+    let currentSection = sections[0];
+    let localPct = 0;
+
+    for(let i = 0; i < sections.length; i++){
+      const el = document.getElementById(sections[i].id);
+      if(!el) continue;
+      const top  = el.getBoundingClientRect().top + scrollY - 70;
+      const bot  = top + el.offsetHeight;
+
+      if(scrollY >= top && scrollY < bot){
+        currentSection = sections[i];
+        localPct = ((scrollY - top) / el.offsetHeight) * 100;
+        break;
+      }
+      if(scrollY >= bot) currentSection = sections[i];
+    }
+
+    // Section index progress
+    const idx = sections.findIndex(s=>s.id === currentSection.id);
+    const sectionProgress = ((idx / (sections.length-1)) * 80) + (localPct * 0.8 / sections.length);
+    const displayPct = Math.min(Math.max(sectionProgress, globalPct * 0.3 + sectionProgress * 0.7), 100);
+
+    fill.style.width  = displayPct.toFixed(2) + '%';
+    label.textContent = currentSection.name;
+
+    // Show label briefly then fade
+    label.style.opacity = '1';
+    clearTimeout(labelTimer);
+    labelTimer = setTimeout(()=>{ label.style.opacity = '0'; }, 1800);
+  }
+
+  window.addEventListener('scroll', update, {passive:true});
+  update();
+})();
 </script>
 </body>
 </html>
