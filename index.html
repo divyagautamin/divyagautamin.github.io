@@ -2333,89 +2333,144 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     nav.classList.toggle('scrolled', window.scrollY > 140);
   },{passive:true});
 })();
-/* ── ENHANCEMENT 8: SUBTLE AUDIO ── */
+/* ── ENHANCEMENT 8: GLORIOUS AUDIO ── */
 (function subtleAudio(){
   const btn = document.createElement('button');
   btn.id = 'audio-btn';
   btn.className = 'mag';
   btn.setAttribute('aria-label','Toggle ambient sound');
-  btn.innerHTML = `
-    <i class="fas fa-volume-xmark"></i>
-    <span class="ab-tooltip">Ambient Sound</span>
-  `;
+  btn.innerHTML = `<i class="fas fa-volume-xmark"></i><span class="ab-tooltip">Ambient Sound</span>`;
   document.body.appendChild(btn);
 
-  let on = false;
-  let actx = null;
+  let on = false, actx = null;
+  let masterGain = null, humNode = null, humGain = null, filterNode = null;
 
   function getCtx(){
-    if(!actx) actx = new (window.AudioContext||window.webkitAudioContext)();
+    if(!actx){
+      actx = new (window.AudioContext||window.webkitAudioContext)();
+      masterGain = actx.createGain();
+      masterGain.gain.value = 0.7;
+      masterGain.connect(actx.destination);
+    }
     return actx;
   }
 
-  // Synthesise a soft page-turn / parchment rustle
-  function playRustle(vol=0.28){
+  // Deep cathedral resonance hum — 3 layered sine oscillators
+  function startHum(){
+    try {
+      const ac = getCtx();
+      const freqs = [36, 72, 108]; // root + octave + fifth
+      const gains = [0.022, 0.012, 0.007];
+      humNode = []; humGain = [];
+      freqs.forEach((f, i) => {
+        const osc = ac.createOscillator();
+        const g   = ac.createGain();
+        const rev = ac.createBiquadFilter();
+        osc.type = 'sine';
+        osc.frequency.value = f;
+        // slow frequency drift — breathing effect
+        const lfo = ac.createOscillator();
+        const lfg = ac.createGain();
+        lfo.frequency.value = 0.07 + i * 0.03;
+        lfg.gain.value = f * 0.004;
+        lfo.connect(lfg); lfg.connect(osc.frequency);
+        lfo.start();
+        rev.type = 'lowpass';
+        rev.frequency.value = 800;
+        rev.Q.value = 0.4;
+        g.gain.value = 0;
+        osc.connect(rev); rev.connect(g); g.connect(masterGain);
+        osc.start();
+        g.gain.linearRampToValueAtTime(gains[i], ac.currentTime + 3.5);
+        humNode.push(osc); humGain.push(g);
+      });
+    } catch(e){}
+  }
+
+  function stopHum(){
+    if(!humGain || !actx) return;
+    try {
+      humGain.forEach(g => g.gain.linearRampToValueAtTime(0, actx.currentTime + 2.2));
+      setTimeout(()=>{
+        humNode && humNode.forEach(n=>{ try{ n.stop(); }catch(e){} });
+        humNode=null; humGain=null;
+      }, 2400);
+    } catch(e){}
+  }
+
+  // Glorious quill-on-parchment writing sound
+  function playWriting(vol=0.35){
     if(!on) return;
     try {
       const ac = getCtx();
-      const len = ac.sampleRate * 0.22;
-      const buf = ac.createBuffer(1, len, ac.sampleRate);
-      const d = buf.getChannelData(0);
-      for(let i=0;i<len;i++){
-        const env = Math.pow(1 - i/len, 2.6);
-        d[i] = (Math.random()*2-1) * env * vol;
-      }
+      const dur = 0.28;
+      const len = ac.sampleRate * dur;
+      const buf = ac.createBuffer(2, len, ac.sampleRate); // stereo
+      [0,1].forEach(ch => {
+        const d = buf.getChannelData(ch);
+        for(let i=0; i<len; i++){
+          const t = i/len;
+          const env = Math.pow(Math.sin(t * Math.PI), 0.6) * (1 - t*0.4);
+          // layered texture: high scratch + low body
+          const scratch = (Math.random()*2-1) * 0.6;
+          const body    = Math.sin(i * 0.18 + Math.random()*0.4) * 0.3;
+          d[i] = (scratch + body) * env * vol + (Math.random()-0.5)*0.015;
+        }
+      });
       const src = ac.createBufferSource();
       src.buffer = buf;
-      const f = ac.createBiquadFilter();
-      f.type='bandpass'; f.frequency.value=2200; f.Q.value=0.7;
-      const g = ac.createGain();
-      g.gain.value = 0.4;
-      src.connect(f); f.connect(g); g.connect(ac.destination);
+      // Two bandpass filters for warmth + presence
+      const bp1 = ac.createBiquadFilter();
+      bp1.type='bandpass'; bp1.frequency.value=1400; bp1.Q.value=0.6;
+      const bp2 = ac.createBiquadFilter();
+      bp2.type='bandpass'; bp2.frequency.value=3200; bp2.Q.value=1.2;
+      const merge = ac.createGain(); merge.gain.value=0.55;
+      const g = ac.createGain(); g.gain.value=1;
+      // parallel filter mix
+      src.connect(bp1); src.connect(bp2);
+      bp1.connect(merge); bp2.connect(merge);
+      merge.connect(g); g.connect(masterGain);
       src.start();
     } catch(e){}
   }
 
-  // Soft low hum for ambience
-  let humNode = null, humGain = null;
-  function startHum(){
+  // Gold bell chime — pure tone bell-like strike
+  function playChime(){
+    if(!on) return;
     try {
       const ac = getCtx();
-      humNode = ac.createOscillator();
-      humGain = ac.createGain();
-      humNode.type = 'sine';
-      humNode.frequency.value = 48;
-      humGain.gain.value = 0;
-      humNode.connect(humGain);
-      humGain.connect(ac.destination);
-      humNode.start();
-      humGain.gain.linearRampToValueAtTime(0.018, ac.currentTime + 2);
-    } catch(e){}
-  }
-  function stopHum(){
-    if(!humGain || !humNode) return;
-    try {
-      const ac = getCtx();
-      humGain.gain.linearRampToValueAtTime(0, ac.currentTime + 1.5);
-      setTimeout(()=>{ try{ humNode.stop(); }catch(e){} humNode=null; humGain=null; }, 1600);
+      const freqs = [528, 1056, 1584, 2112]; // harmonic series
+      freqs.forEach((f, i) => {
+        const osc = ac.createOscillator();
+        const g   = ac.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = f;
+        g.gain.value = 0;
+        osc.connect(g); g.connect(masterGain);
+        osc.start(ac.currentTime + i * 0.018);
+        const peak = 0.08 / (i+1);
+        g.gain.setTargetAtTime(peak, ac.currentTime + i*0.018, 0.005);
+        g.gain.setTargetAtTime(0, ac.currentTime + i*0.018 + 0.04, 0.18);
+        setTimeout(()=>{ try{ osc.stop(); }catch(e){} }, 2400);
+      });
     } catch(e){}
   }
 
-  btn.addEventListener('click',()=>{
+  btn.addEventListener('click', ()=>{
     on = !on;
     btn.classList.toggle('ab-on', on);
     btn.querySelector('i').className = on ? 'fas fa-volume-low' : 'fas fa-volume-xmark';
-    if(on){ startHum(); playRustle(0.22); }
-    else   { stopHum(); }
+    if(on){ startHum(); setTimeout(playChime, 300); }
+    else  { stopHum(); }
   });
 
-  // Play rustle on section entry when audio is on
+  // Writing sound on section entry
   document.querySelectorAll('section').forEach(sec=>{
     new IntersectionObserver(([e])=>{
-      if(e.isIntersecting) playRustle();
-    },{threshold:0.35}).observe(sec);
+      if(e.isIntersecting){ playWriting(); setTimeout(playChime, 180); }
+    },{threshold:0.3}).observe(sec);
   });
-})();
+})(); 
 </script>
 </body>
 </html>
