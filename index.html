@@ -1227,44 +1227,6 @@ footer::before {
   transition:opacity .5s .2s;
 }
 #nav.scrolled .n-logo-sep { opacity:1; }
-/* ── AUDIO TOGGLE BUTTON ── */
-#audio-btn {
-  position:fixed; bottom:30px; right:30px;
-  z-index:9000; width:46px; height:46px;
-  border:1px solid rgba(212,175,55,.22);
-  background:rgba(4,4,4,.88);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-  display:flex; align-items:center; justify-content:center;
-  border-radius:50%; color:rgba(212,175,55,.45);
-  font-size:.82rem;
-  transition:all .38s cubic-bezier(.16,1,.3,1);
-  cursor:none !important;
-  box-shadow:0 4px 24px rgba(0,0,0,.4);
-}
-#audio-btn:hover {
-  border-color:rgba(212,175,55,.6);
-  color:var(--gold);
-  box-shadow:0 0 24px rgba(212,175,55,.18), 0 4px 24px rgba(0,0,0,.4);
-  transform:scale(1.12);
-}
-#audio-btn.ab-on {
-  border-color:rgba(212,175,55,.5);
-  color:var(--gold);
-  box-shadow:0 0 18px rgba(212,175,55,.2);
-}
-#audio-btn .ab-tooltip {
-  position:absolute; bottom:54px; right:0;
-  font-size:.54rem; letter-spacing:.22em;
-  text-transform:uppercase; color:var(--g);
-  white-space:nowrap; background:rgba(4,4,4,.92);
-  padding:5px 10px; border:1px solid var(--bord);
-  opacity:0; pointer-events:none;
-  transition:opacity .25s;
-  font-family:var(--fb);
-}
-#audio-btn:hover .ab-tooltip { opacity:1; }
-@media (pointer:coarse){ #audio-btn { cursor:auto !important; } }
 /* ── DRAMATIC HERO TEXT ANIMATION ── */
 @keyframes letterFloat {
   0%,100% { transform: translateY(0px) rotate(0deg); }
@@ -1459,6 +1421,288 @@ footer::before {
   font-family:var(--fb); font-weight:600;
   z-index:991; pointer-events:none;
   transition:opacity .4s;
+}
+/* ══════════════════════════════════════
+   CINEMATIC DARKNESS LIFT
+══════════════════════════════════════ */
+
+/* Deeper background with subtle warm undertone */
+:root {
+  --bg: #010101;
+  --bg1: #050403;
+  --bg2: #080705;
+  --surf: rgba(255,255,255,.018);
+  --surf2: rgba(255,255,255,.032);
+  --bord: rgba(212,175,55,.08);
+  --bord2: rgba(212,175,55,.18);
+}
+
+/* Full page cinematic vignette — always on */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 0%,   rgba(0,0,0,.85) 0%, transparent 65%),
+    radial-gradient(ellipse 70% 60% at 50% 100%,  rgba(0,0,0,.9)  0%, transparent 65%),
+    radial-gradient(ellipse 35% 100% at 0% 50%,   rgba(0,0,0,.7)  0%, transparent 60%),
+    radial-gradient(ellipse 35% 100% at 100% 50%, rgba(0,0,0,.7)  0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 50% 50%,   transparent 30%, rgba(0,0,0,.45) 100%);
+}
+
+/* Noise texture — richer grain */
+.noise {
+  opacity:.032 !important;
+  background-size:128px !important;
+}
+
+/* ══════════════════════════════════════
+   HERO — CINEMATIC DEPTH
+══════════════════════════════════════ */
+#home {
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 35%, rgba(212,175,55,.055) 0%, transparent 65%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, rgba(0,0,0,.3) 0%, transparent 70%);
+}
+
+/* Name — deeper shadow stack */
+#hn {
+  filter: drop-shadow(0 4px 60px rgba(212,175,55,.22)) drop-shadow(0 0 120px rgba(212,175,55,.08));
+}
+
+/* Hero inner content max contrast */
+#home > div:nth-child(3) {
+  position:relative; z-index:4;
+}
+
+/* ══════════════════════════════════════
+   NAVIGATION — DARKER GLASS
+══════════════════════════════════════ */
+#nav {
+  background:rgba(1,1,1,.65) !important;
+  border-bottom:1px solid rgba(212,175,55,.07) !important;
+  box-shadow:0 1px 0 rgba(0,0,0,.8), 0 4px 40px rgba(0,0,0,.6);
+}
+#nav.dense {
+  background:rgba(1,1,1,.96) !important;
+  border-color:rgba(212,175,55,.12) !important;
+}
+
+/* ══════════════════════════════════════
+   SECTION DIVIDERS — CINEMATIC
+══════════════════════════════════════ */
+.odiv {
+  position:relative;
+  padding:0 5vw;
+  opacity:.5;
+}
+
+/* Section depth overlays */
+#genesis {
+  background:
+    radial-gradient(ellipse 90% 60% at 15% 50%, rgba(212,175,55,.028) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(0,0,0,.4) 0%, transparent 15%, transparent 85%, rgba(0,0,0,.4) 100%) !important;
+}
+#masterwork {
+  background:
+    radial-gradient(ellipse 80% 60% at 85% 50%, rgba(212,175,55,.022) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(0,0,0,.45) 0%, transparent 18%, transparent 82%, rgba(0,0,0,.45) 100%) !important;
+}
+#philosophy {
+  background:
+    radial-gradient(ellipse 100% 50% at 50% 100%, rgba(212,175,55,.025) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(0,0,0,.5) 0%, transparent 20%, transparent 80%, rgba(0,0,0,.5) 100%) !important;
+}
+#timeline {
+  background:
+    radial-gradient(ellipse 60% 80% at 50% 50%, rgba(212,175,55,.018) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(0,0,0,.45) 0%, transparent 15%, transparent 85%, rgba(0,0,0,.45) 100%);
+}
+#acclaim {
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,175,55,.035) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(0,0,0,.5) 0%, transparent 20%, transparent 80%, rgba(0,0,0,.5) 100%) !important;
+}
+#impact {
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.55) 0%, transparent 20%, transparent 80%, rgba(0,0,0,.55) 100%);
+}
+#repository {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(212,175,55,.02) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(0,0,0,.5) 0%, transparent 18%, transparent 82%, rgba(0,0,0,.5) 100%);
+}
+#discourse {
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 50%, rgba(212,175,55,.035) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(0,0,0,.5) 0%, transparent 20%, transparent 80%, rgba(0,0,0,.5) 100%) !important;
+}
+
+/* ══════════════════════════════════════
+   CARDS — CINEMATIC DEPTH
+══════════════════════════════════════ */
+
+/* Philosophy cards */
+.phil-card {
+  background:
+    linear-gradient(135deg, rgba(212,175,55,.028) 0%, rgba(1,1,1,.95) 60%) !important;
+  border-color:rgba(212,175,55,.07) !important;
+  box-shadow:
+    0 1px 0 rgba(212,175,55,.06) inset,
+    0 -1px 0 rgba(0,0,0,.8) inset,
+    0 20px 60px rgba(0,0,0,.7),
+    0 4px 20px rgba(0,0,0,.5);
+}
+.phil-card:hover {
+  box-shadow:
+    0 1px 0 rgba(212,175,55,.12) inset,
+    0 20px 80px rgba(0,0,0,.8),
+    0 0 60px rgba(212,175,55,.06) !important;
+}
+
+/* Paper / working paper cards */
+.paper {
+  background:
+    linear-gradient(160deg, rgba(212,175,55,.022) 0%, rgba(2,2,2,.98) 55%) !important;
+  box-shadow:
+    0 1px 0 rgba(212,175,55,.05) inset,
+    0 25px 50px rgba(0,0,0,.75),
+    0 4px 15px rgba(0,0,0,.5);
+  border-color:rgba(212,175,55,.06) !important;
+}
+.paper:hover {
+  box-shadow:
+    0 1px 0 rgba(212,175,55,.1) inset,
+    0 30px 70px rgba(0,0,0,.85),
+    0 0 50px rgba(212,175,55,.05) !important;
+}
+
+/* Acclaim cards */
+.acc-card {
+  background:
+    linear-gradient(145deg, rgba(212,175,55,.025) 0%, rgba(2,2,2,.97) 60%) !important;
+  box-shadow:
+    0 1px 0 rgba(212,175,55,.05) inset,
+    0 20px 50px rgba(0,0,0,.7) !important;
+}
+
+/* Impact cells */
+.imp-cell {
+  background:
+    linear-gradient(160deg, rgba(212,175,55,.03) 0%, rgba(1,1,1,.98) 70%) !important;
+  box-shadow:
+    0 1px 0 rgba(212,175,55,.06) inset,
+    0 20px 50px rgba(0,0,0,.75);
+  border-color:rgba(212,175,55,.06) !important;
+}
+.imp-cell:hover {
+  box-shadow:
+    0 0 40px rgba(212,175,55,.07),
+    0 25px 60px rgba(0,0,0,.85) !important;
+}
+
+/* Genesis stats */
+.gstat {
+  background:
+    linear-gradient(135deg, rgba(212,175,55,.025) 0%, rgba(2,2,2,.96) 70%) !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,.65);
+}
+
+/* Currently Working card */
+.cw-card {
+  background:
+    linear-gradient(135deg, rgba(212,175,55,.04) 0%, rgba(1,1,1,.97) 70%) !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,.7);
+}
+
+/* Press card */
+.press-card {
+  background:
+    linear-gradient(135deg, rgba(212,175,55,.045) 0%, rgba(2,2,2,.98) 70%) !important;
+  box-shadow:
+    0 1px 0 rgba(212,175,55,.08) inset,
+    0 20px 60px rgba(0,0,0,.75);
+}
+
+/* ══════════════════════════════════════
+   TIMELINE — DARKER
+══════════════════════════════════════ */
+.tl-body::before {
+  background:linear-gradient(180deg,
+    transparent 0%,
+    rgba(212,175,55,.15) 15%,
+    rgba(212,175,55,.15) 85%,
+    transparent 100%) !important;
+}
+.tl-dot {
+  box-shadow:
+    0 0 0 4px rgba(1,1,1,1),
+    0 0 0 5px rgba(212,175,55,.3),
+    0 0 20px rgba(212,175,55,.5) !important;
+}
+
+/* ══════════════════════════════════════
+   FOOTER — DEEP BLACK
+══════════════════════════════════════ */
+footer {
+  background:rgba(0,0,0,.85);
+  box-shadow: 0 -1px 0 rgba(212,175,55,.07), 0 -40px 80px rgba(0,0,0,.6);
+  border-color:rgba(212,175,55,.06) !important;
+}
+
+/* ══════════════════════════════════════
+   BUTTONS — RICHER CONTRAST
+══════════════════════════════════════ */
+.btn {
+  box-shadow: 0 4px 24px rgba(0,0,0,.5), inset 0 1px 0 rgba(212,175,55,.08);
+}
+.btn:hover {
+  box-shadow: 0 8px 40px rgba(0,0,0,.7), 0 0 30px rgba(212,175,55,.15) !important;
+}
+
+/* ══════════════════════════════════════
+   DISCOURSE FORM
+══════════════════════════════════════ */
+.disc-field-wrap {
+  background:rgba(255,255,255,.012) !important;
+  box-shadow: 0 1px 0 rgba(212,175,55,.04) inset, 0 20px 50px rgba(0,0,0,.6);
+}
+
+/* ══════════════════════════════════════
+   SCROLL PROGRESS BAR — RICHER
+══════════════════════════════════════ */
+#pbar {
+  box-shadow: 0 0 20px var(--gg), 0 0 50px rgba(212,175,55,.2) !important;
+}
+
+/* ══════════════════════════════════════
+   CANVAS — SLIGHTLY MORE VISIBLE
+══════════════════════════════════════ */
+#cvs { opacity:.72 !important; }
+
+/* ══════════════════════════════════════
+   SECTION HEADINGS — GOLD DEPTH
+══════════════════════════════════════ */
+.h2 em {
+  filter: drop-shadow(0 0 20px rgba(212,175,55,.35));
+}
+.eyebrow {
+  filter: drop-shadow(0 0 8px rgba(212,175,55,.3));
+}
+.ruled {
+  box-shadow: 0 0 20px var(--gg), 0 0 40px rgba(212,175,55,.12) !important;
+}
+
+/* ══════════════════════════════════════
+   GEN IMAGE AURA — DEEPER
+══════════════════════════════════════ */
+.gen-frame::after {
+  background:radial-gradient(ellipse 80% 60% at 55% 35%,
+    rgba(212,175,55,.22) 0%, transparent 65%) !important;
+}
+.gen-frame::before {
+  border-color:rgba(212,175,55,.08) !important;
+  box-shadow: inset 0 0 40px rgba(0,0,0,.8), 0 0 60px rgba(0,0,0,.9);
 }
 </style>
 </head>
@@ -2531,107 +2775,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
   window.addEventListener('scroll',()=>{
     nav.classList.toggle('scrolled', window.scrollY > 140);
   },{passive:true});
-})();
-/* ── ENHANCEMENT 8: CONTINUOUS AMBIENT LOOP ── */
-(function subtleAudio(){
-  const btn = document.createElement('button');
-  btn.id = 'audio-btn';
-  btn.className = 'mag';
-  btn.setAttribute('aria-label','Toggle ambient sound');
-  btn.innerHTML = `<i class="fas fa-volume-xmark"></i><span class="ab-tooltip">Ambient Sound</span>`;
-  document.body.appendChild(btn);
-
-  let on = false, actx = null, masterGain = null, started = false;
-
-  function buildAmbience(){
-    if(started) return;
-    started = true;
-    actx = new (window.AudioContext||window.webkitAudioContext)();
-    masterGain = actx.createGain();
-    masterGain.gain.value = 0;
-    masterGain.connect(actx.destination);
-
-    // Layer 1: Deep root drone — 36Hz sine
-    const osc1 = actx.createOscillator();
-    const g1   = actx.createGain();
-    osc1.type = 'sine'; osc1.frequency.value = 36;
-    g1.gain.value = 0.014;
-    osc1.connect(g1); g1.connect(masterGain); osc1.start();
-
-    // Layer 2: Octave — 72Hz with slow LFO breath
-    const osc2 = actx.createOscillator();
-    const g2   = actx.createGain();
-    const lfo2 = actx.createOscillator();
-    const lfg2 = actx.createGain();
-    osc2.type = 'sine'; osc2.frequency.value = 72;
-    lfo2.frequency.value = 0.055; lfg2.gain.value = 0.28;
-    lfo2.connect(lfg2); lfg2.connect(g2.gain);
-    g2.gain.value = 0.016;
-    osc2.connect(g2); g2.connect(masterGain);
-    osc2.start(); lfo2.start();
-
-    // Layer 3: 5th harmonic — 108Hz very soft
-    const osc3 = actx.createOscillator();
-    const g3   = actx.createGain();
-    osc3.type = 'sine'; osc3.frequency.value = 108;
-    g3.gain.value = 0.009;
-    osc3.connect(g3); g3.connect(masterGain); osc3.start();
-
-    // Layer 4: High shimmer — filtered white noise loop
-    const bufLen = actx.sampleRate * 3.5;
-    const buf = actx.createBuffer(1, bufLen, actx.sampleRate);
-    const d = buf.getChannelData(0);
-    for(let i=0; i<bufLen; i++) d[i] = (Math.random()*2-1);
-    const noise = actx.createBufferSource();
-    noise.buffer = buf; noise.loop = true;
-    const noiseFilter = actx.createBiquadFilter();
-    noiseFilter.type = 'bandpass';
-    noiseFilter.frequency.value = 280;
-    noiseFilter.Q.value = 0.15;
-    const noiseLfo = actx.createOscillator();
-    const noiseLfg = actx.createGain();
-    noiseLfo.frequency.value = 0.03;
-    noiseLfg.gain.value = 600;
-    noiseLfo.connect(noiseLfg); noiseLfg.connect(noiseFilter.frequency);
-    const noiseGain = actx.createGain();
-    noiseGain.gain.value = 0.0008;
-    noise.connect(noiseFilter);
-    noiseFilter.connect(noiseGain);
-    noiseGain.connect(masterGain);
-    noise.start(); noiseLfo.start();
-
-    // Layer 5: Reverb-like tail — convolver
-    const convBuf = actx.createBuffer(2, actx.sampleRate*2, actx.sampleRate);
-    for(let c=0; c<2; c++){
-      const cd = convBuf.getChannelData(c);
-      for(let i=0; i<cd.length; i++) cd[i]=(Math.random()*2-1)*Math.pow(1-i/cd.length,2);
-    }
-    const conv = actx.createConvolver();
-    conv.buffer = convBuf;
-    const convGain = actx.createGain();
-    convGain.gain.value = 0.006;
-    g1.connect(conv); conv.connect(convGain); convGain.connect(masterGain);
-  }
-
-  function fadeIn(){
-    if(!actx) return;
-    masterGain.gain.cancelScheduledValues(actx.currentTime);
-    masterGain.gain.setTargetAtTime(1, actx.currentTime, 1.8);
-  }
-
-  function fadeOut(){
-    if(!actx) return;
-    masterGain.gain.cancelScheduledValues(actx.currentTime);
-    masterGain.gain.setTargetAtTime(0, actx.currentTime, 1.2);
-  }
-
-  btn.addEventListener('click', ()=>{
-    on = !on;
-    btn.classList.toggle('ab-on', on);
-    btn.querySelector('i').className = on ? 'fas fa-volume-low' : 'fas fa-volume-xmark';
-    if(on){ buildAmbience(); fadeIn(); }
-    else  { fadeOut(); }
-  });
 })();
    /* ── DRAMATIC HERO: LETTER SPLIT ── */
 (function heroLetterSplit(){
