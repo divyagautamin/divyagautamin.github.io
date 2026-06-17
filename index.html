@@ -1704,6 +1704,723 @@ footer {
   border-color:rgba(212,175,55,.08) !important;
   box-shadow: inset 0 0 40px rgba(0,0,0,.8), 0 0 60px rgba(0,0,0,.9);
 }
+/* ══════════════════════════════════════
+   PART 2 — HERO CINEMATIC SPOTLIGHT
+══════════════════════════════════════ */
+
+/* Cinematic spotlight beam from top */
+#home::before {
+  content:'';
+  position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:
+    /* Top spotlight cone */
+    radial-gradient(ellipse 35% 70% at 50% -5%,
+      rgba(212,175,55,.09) 0%,
+      rgba(212,175,55,.04) 35%,
+      transparent 70%),
+    /* Left rim light */
+    radial-gradient(ellipse 20% 60% at -2% 45%,
+      rgba(212,175,55,.06) 0%,
+      transparent 60%),
+    /* Right rim light */
+    radial-gradient(ellipse 20% 60% at 102% 45%,
+      rgba(212,175,55,.06) 0%,
+      transparent 60%),
+    /* Floor shadow */
+    linear-gradient(0deg,
+      rgba(0,0,0,.95) 0%,
+      rgba(0,0,0,.6) 12%,
+      transparent 35%),
+    /* Ceiling dark */
+    linear-gradient(180deg,
+      rgba(0,0,0,.9) 0%,
+      rgba(0,0,0,.4) 18%,
+      transparent 40%);
+  animation: spotlightBreath 8s ease-in-out infinite;
+}
+@keyframes spotlightBreath {
+  0%,100% {
+    opacity:1;
+    filter:brightness(1);
+  }
+  50% {
+    opacity:.85;
+    filter:brightness(1.12);
+  }
+}
+
+/* Second hero layer — depth fog */
+#home::after {
+  background:
+    radial-gradient(ellipse 55% 55% at 50% 40%,
+      transparent 20%,
+      rgba(2,2,2,.75) 100%),
+    radial-gradient(ellipse 28% 40% at 12% 50%,
+      rgba(212,175,55,.035) 0%,
+      transparent 70%),
+    radial-gradient(ellipse 28% 40% at 88% 50%,
+      rgba(212,175,55,.035) 0%,
+      transparent 70%),
+    /* Corner darkening */
+    radial-gradient(ellipse 40% 40% at 0% 0%,
+      rgba(0,0,0,.7) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 100% 0%,
+      rgba(0,0,0,.7) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 0% 100%,
+      rgba(0,0,0,.8) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 100% 100%,
+      rgba(0,0,0,.8) 0%, transparent 60%) !important;
+  z-index:1;
+}
+
+/* Scan line — slower, more cinematic */
+.hero-scan {
+  animation: scanLine 14s ease-in-out infinite !important;
+  animation-delay: 5s !important;
+  background:linear-gradient(90deg,
+    transparent 0%,
+    rgba(212,175,55,.04) 15%,
+    rgba(212,175,55,.18) 50%,
+    rgba(212,175,55,.04) 85%,
+    transparent 100%) !important;
+}
+
+/* Orbit dots — more subtle */
+.hero-orbit {
+  box-shadow:0 0 10px 3px rgba(212,175,55,.35) !important;
+  opacity:.6;
+}
+
+/* Hero ambient orbs — deeper glow */
+.hero-orb-1 {
+  background:radial-gradient(circle,
+    rgba(212,175,55,.06) 0%, transparent 70%) !important;
+  width:700px !important;
+  height:700px !important;
+}
+.hero-orb-2 {
+  background:radial-gradient(circle,
+    rgba(212,175,55,.04) 0%, transparent 70%) !important;
+  width:500px !important;
+  height:500px !important;
+}
+
+/* ══════════════════════════════════════
+   SECTION TRANSITION GLOWS
+══════════════════════════════════════ */
+
+/* Every section gets a top-edge light bleed */
+section::before {
+  content:'';
+  position:absolute; top:0; left:10%; right:10%; height:1px;
+  background:linear-gradient(90deg,
+    transparent,
+    rgba(212,175,55,.08) 25%,
+    rgba(212,175,55,.22) 50%,
+    rgba(212,175,55,.08) 75%,
+    transparent);
+  pointer-events:none; z-index:5;
+}
+
+/* Ornament dividers — more dramatic */
+.odiv {
+  opacity:1 !important;
+  padding:8px 5vw !important;
+  position:relative;
+}
+.odiv::before {
+  background:linear-gradient(90deg,
+    transparent,
+    rgba(212,175,55,.06) 20%,
+    rgba(212,175,55,.18) 50%,
+    rgba(212,175,55,.06) 80%,
+    transparent) !important;
+  height:1px !important;
+}
+.odiv::after {
+  background:linear-gradient(90deg,
+    transparent,
+    rgba(212,175,55,.06) 20%,
+    rgba(212,175,55,.18) 50%,
+    rgba(212,175,55,.06) 80%,
+    transparent) !important;
+  height:1px !important;
+}
+.odia {
+  box-shadow:
+    0 0 16px 4px rgba(212,175,55,.5),
+    0 0 40px 8px rgba(212,175,55,.2) !important;
+}
+
+/* ══════════════════════════════════════
+   GENESIS SECTION — PORTRAIT DRAMA
+══════════════════════════════════════ */
+
+/* Deep shadow under portrait */
+.gen-frame {
+  filter: drop-shadow(0 40px 80px rgba(0,0,0,.95))
+          drop-shadow(0 0 60px rgba(0,0,0,.8));
+}
+
+/* Portrait image deeper contrast */
+.gen-img {
+  filter: contrast(1.06) brightness(.96) saturate(.92);
+}
+
+/* Bracket corners glow */
+.gen-bracket-tl,
+.gen-bracket-tr,
+.gen-bracket-bl,
+.gen-bracket-br {
+  border-color:rgba(212,175,55,.5) !important;
+  filter: drop-shadow(0 0 6px rgba(212,175,55,.4));
+}
+
+/* Quote deeper */
+.gen-quote {
+  border-left-color:rgba(212,175,55,.5) !important;
+  filter: drop-shadow(0 0 20px rgba(212,175,55,.08));
+}
+
+/* ══════════════════════════════════════
+   MASTERWORK — BOOK SHADOW DRAMA
+══════════════════════════════════════ */
+
+/* Book stage floor glow */
+.book-stage::after {
+  background:radial-gradient(ellipse,
+    rgba(212,175,55,.35) 0%,
+    transparent 65%) !important;
+  filter:blur(18px) !important;
+  width:260px !important;
+  height:40px !important;
+}
+
+/* Book cover deeper shadow */
+.book-cover {
+  box-shadow:
+    -40px 40px 100px rgba(0,0,0,.99),
+    -10px 10px 40px rgba(0,0,0,.9),
+    0 0 100px rgba(212,175,55,.08),
+    inset 0 0 0 1px rgba(212,175,55,.06) !important;
+}
+
+/* ══════════════════════════════════════
+   IMPACT SECTION — NUMBER DRAMA
+══════════════════════════════════════ */
+.imp-n {
+  filter: drop-shadow(0 0 20px rgba(212,175,55,.3));
+  background:linear-gradient(135deg,
+    var(--gold-dk) 0%,
+    var(--gold) 35%,
+    var(--gold-lt) 60%,
+    var(--gold) 100%) !important;
+  -webkit-background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  background-clip:text !important;
+}
+
+/* ══════════════════════════════════════
+   FOOTER — CINEMATIC EDGE
+══════════════════════════════════════ */
+footer::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0;
+  height:200px; pointer-events:none;
+  background:linear-gradient(180deg,
+    rgba(0,0,0,.7) 0%, transparent 100%);
+}
+
+/* Footer logo deeper */
+.ft-logo {
+  filter: drop-shadow(0 0 20px rgba(212,175,55,.25));
+  letter-spacing:.14em !important;
+}
+
+/* Social icons deeper hover */
+.soc-a {
+  background:rgba(255,255,255,.01) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,.6);
+}
+.soc-a:hover {
+  box-shadow:
+    0 0 30px rgba(212,175,55,.3),
+    0 8px 30px rgba(0,0,0,.7) !important;
+}
+
+/* ══════════════════════════════════════
+   PRELOADER — DARKER CINEMATIC
+══════════════════════════════════════ */
+#loader {
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 55%,
+      rgba(212,175,55,.04) 0%, transparent 65%),
+    #010101 !important;
+}
+#loader::before {
+  background:
+    radial-gradient(ellipse 50% 60% at 50% 60%,
+      rgba(212,175,55,.07) 0%, transparent 65%) !important;
+}
+
+/* ══════════════════════════════════════
+   MOBILE — PRESERVE ON SMALL SCREENS
+══════════════════════════════════════ */
+@media (max-width:768px) {
+  body::before {
+    background:
+      radial-gradient(ellipse 100% 40% at 50% 0%,   rgba(0,0,0,.9) 0%, transparent 60%),
+      radial-gradient(ellipse 100% 40% at 50% 100%,  rgba(0,0,0,.9) 0%, transparent 60%);
+  }
+  #home::before { display:none; }
+  .hero-orbit   { display:none; }
+  .hero-scan    { display:none; }
+}
+/* ══════════════════════════════════════
+   PART 3 — TYPOGRAPHY & MICRO POLISH
+══════════════════════════════════════ */
+
+/* ── HERO NAME — MAX DRAMA ── */
+.h-name {
+  font-size:clamp(3.4rem,14vw,13rem) !important;
+  letter-spacing:-.03em !important;
+  line-height:.88 !important;
+  background:linear-gradient(135deg,
+    #ffffff    0%,
+    #f0d878   12%,
+    #d4af37   28%,
+    #f0d060   45%,
+    #d4af37   58%,
+    #aa8c2c   74%,
+    #e8d380   88%,
+    #ffffff   100%) !important;
+  background-size:300% 100% !important;
+  -webkit-background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  background-clip:text !important;
+  filter:
+    drop-shadow(0 2px 40px rgba(212,175,55,.28))
+    drop-shadow(0 0 120px rgba(212,175,55,.1)) !important;
+}
+
+/* ── EYEBROW — REFINED SPACING ── */
+.h-eyebrow {
+  font-size:.58rem !important;
+  letter-spacing:.72em !important;
+  color:rgba(212,175,55,.75) !important;
+  margin-bottom:2.4rem !important;
+}
+
+/* ── MANIFESTO — EDITORIAL WEIGHT ── */
+.h-manifesto {
+  font-size:clamp(1.05rem,2vw,1.42rem) !important;
+  letter-spacing:.025em !important;
+  line-height:1.65 !important;
+  color:rgba(255,255,255,.6) !important;
+  max-width:600px !important;
+  font-weight:300 !important;
+}
+.h-manifesto em {
+  color:var(--gold-lt) !important;
+  font-style:normal !important;
+  font-weight:500 !important;
+  letter-spacing:.04em !important;
+}
+
+/* ── BADGE ROW — REFINED ── */
+.h-badge-num {
+  font-size:1.5rem !important;
+  font-weight:900 !important;
+  letter-spacing:-.02em !important;
+}
+.h-badge-lbl {
+  font-size:.52rem !important;
+  letter-spacing:.28em !important;
+  color:rgba(255,255,255,.38) !important;
+}
+.h-badge-sep {
+  background:linear-gradient(180deg,
+    transparent,
+    rgba(212,175,55,.4),
+    transparent) !important;
+  height:36px !important;
+}
+
+/* ── SECTION HEADINGS — CINEMATIC ── */
+.h2 {
+  font-size:clamp(2.2rem,5vw,4.2rem) !important;
+  letter-spacing:-.028em !important;
+  line-height:1.02 !important;
+  font-weight:800 !important;
+  color:rgba(255,255,255,.95) !important;
+}
+.h2 em {
+  background:linear-gradient(135deg,
+    var(--gold-lt) 0%,
+    var(--gold)    45%,
+    var(--gold-dk) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  font-style:italic !important;
+  font-weight:800 !important;
+}
+
+/* ── EYEBROW LABELS ── */
+.eyebrow {
+  font-size:.56rem !important;
+  letter-spacing:.58em !important;
+  color:rgba(212,175,55,.7) !important;
+  margin-bottom:1.2rem !important;
+}
+.eyebrow::before {
+  width:36px !important;
+  box-shadow:0 0 12px var(--gg) !important;
+}
+
+/* ── RULED LINES ── */
+.ruled {
+  width:52px !important;
+  height:1px !important;
+  background:linear-gradient(90deg,
+    var(--gold),
+    rgba(212,175,55,.3)) !important;
+  margin-bottom:2.8rem !important;
+}
+
+/* ── GENESIS QUOTE — EDITORIAL ── */
+.gen-quote {
+  font-size:clamp(1.45rem,2.8vw,2.1rem) !important;
+  line-height:1.42 !important;
+  color:rgba(212,175,55,.92) !important;
+  font-weight:300 !important;
+  padding-left:24px !important;
+  border-left-width:1px !important;
+}
+
+/* ── BODY TEXT — BETTER LEGIBILITY ── */
+.gen-body {
+  font-size:.96rem !important;
+  line-height:2.02 !important;
+  color:rgba(255,255,255,.62) !important;
+  letter-spacing:.008em !important;
+}
+.gen-body strong {
+  color:rgba(255,255,255,.92) !important;
+  font-weight:600 !important;
+  letter-spacing:.01em !important;
+}
+
+/* ── TAGS — SHARPER ── */
+.tag {
+  font-size:.56rem !important;
+  letter-spacing:.18em !important;
+  padding:7px 16px !important;
+  border-color:rgba(212,175,55,.18) !important;
+  color:rgba(212,175,55,.8) !important;
+  transition:all .35s var(--expo) !important;
+}
+.tag:hover {
+  background:rgba(212,175,55,.08) !important;
+  border-color:rgba(212,175,55,.35) !important;
+  color:var(--gold-lt) !important;
+  letter-spacing:.22em !important;
+}
+
+/* ── STAT NUMBERS — DEEPER GOLD ── */
+.gstat-n {
+  font-size:1.9rem !important;
+  background:linear-gradient(135deg,
+    var(--gold-lt) 0%,
+    var(--gold)    50%,
+    var(--gold-dk) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  letter-spacing:-.02em !important;
+}
+.gstat-l {
+  font-size:.6rem !important;
+  letter-spacing:.18em !important;
+  color:rgba(255,255,255,.32) !important;
+  margin-top:4px !important;
+}
+
+/* ── MASTERWORK TITLE — EDITORIAL ── */
+.mw-title {
+  letter-spacing:.1em !important;
+  background:linear-gradient(135deg,
+    var(--gold-lt) 0%,
+    var(--gold)    40%,
+    var(--gold-dk) 75%,
+    var(--gold-lt) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter:drop-shadow(0 0 30px rgba(212,175,55,.2)) !important;
+  font-size:clamp(2.1rem,4.5vw,3.6rem) !important;
+}
+.mw-sub {
+  letter-spacing:.32em !important;
+  color:rgba(255,255,255,.28) !important;
+  font-size:.65rem !important;
+}
+.mw-desc {
+  color:rgba(255,255,255,.6) !important;
+  line-height:2 !important;
+  font-size:.94rem !important;
+}
+
+/* ── PHILOSOPHY CARDS — EDITORIAL ── */
+.phil-t {
+  font-size:1.22rem !important;
+  letter-spacing:.02em !important;
+  margin-bottom:1rem !important;
+  color:rgba(255,255,255,.95) !important;
+}
+.phil-b {
+  font-size:.84rem !important;
+  line-height:1.92 !important;
+  color:rgba(255,255,255,.48) !important;
+}
+.phil-ico {
+  border-color:rgba(212,175,55,.18) !important;
+  background:rgba(212,175,55,.03) !important;
+  box-shadow:0 0 20px rgba(212,175,55,.06) !important;
+}
+.phil-ico i {
+  filter:drop-shadow(0 0 8px rgba(212,175,55,.4)) !important;
+}
+
+/* ── TIMELINE — REFINED ── */
+.tl-year {
+  letter-spacing:.22em !important;
+  color:rgba(212,175,55,.6) !important;
+  font-size:.58rem !important;
+}
+.tl-t {
+  font-size:1.15rem !important;
+  letter-spacing:.01em !important;
+  color:rgba(255,255,255,.9) !important;
+  margin-bottom:.6rem !important;
+}
+.tl-d {
+  font-size:.85rem !important;
+  line-height:1.88 !important;
+  color:rgba(255,255,255,.42) !important;
+}
+
+/* ── ACCLAIM CARDS — EDITORIAL ── */
+.acc-text {
+  font-size:.9rem !important;
+  line-height:1.85 !important;
+  color:rgba(255,255,255,.65) !important;
+  letter-spacing:.008em !important;
+}
+.acc-who {
+  letter-spacing:.15em !important;
+  color:rgba(255,255,255,.3) !important;
+  font-size:.6rem !important;
+}
+.acc-who span {
+  color:rgba(212,175,55,.55) !important;
+}
+.acc-stars i {
+  filter:drop-shadow(0 0 4px rgba(212,175,55,.5)) !important;
+}
+
+/* ── IMPACT NUMBERS ── */
+.imp-l {
+  letter-spacing:.26em !important;
+  color:rgba(255,255,255,.28) !important;
+  font-size:.6rem !important;
+}
+
+/* ── PAPER CARDS — EDITORIAL ── */
+.p-title {
+  font-size:1.04rem !important;
+  line-height:1.48 !important;
+  color:rgba(255,255,255,.88) !important;
+  letter-spacing:.008em !important;
+}
+.p-abs {
+  font-size:.82rem !important;
+  line-height:1.88 !important;
+  color:rgba(255,255,255,.4) !important;
+}
+.p-ser {
+  letter-spacing:.36em !important;
+  color:rgba(212,175,55,.55) !important;
+  font-size:.56rem !important;
+}
+
+/* ── CURRENTLY WORKING ── */
+.cw-heading {
+  letter-spacing:.42em !important;
+  color:rgba(212,175,55,.55) !important;
+}
+.cw-txt {
+  color:rgba(255,255,255,.58) !important;
+  line-height:1.65 !important;
+  font-size:.82rem !important;
+}
+.cw-txt strong {
+  color:rgba(255,255,255,.85) !important;
+}
+.cw-ico {
+  color:rgba(212,175,55,.5) !important;
+}
+
+/* ── DISCOURSE SECTION ── */
+.disc-body {
+  color:rgba(255,255,255,.5) !important;
+  line-height:2.05 !important;
+  font-size:.94rem !important;
+  letter-spacing:.008em !important;
+}
+.disc-classic-label {
+  letter-spacing:.5em !important;
+  color:rgba(212,175,55,.45) !important;
+  font-size:.56rem !important;
+}
+.disc-field-wrap input {
+  font-size:1rem !important;
+  color:rgba(255,255,255,.75) !important;
+  letter-spacing:.02em !important;
+}
+.disc-note {
+  color:rgba(255,255,255,.22) !important;
+  letter-spacing:.06em !important;
+  font-size:.64rem !important;
+}
+
+/* ── NAV LINKS — REFINED ── */
+.n-links a {
+  font-size:.65rem !important;
+  letter-spacing:.2em !important;
+  color:rgba(255,255,255,.5) !important;
+}
+.n-links a:hover {
+  color:rgba(212,175,55,.9) !important;
+}
+.n-logo-t {
+  font-size:1.05rem !important;
+  letter-spacing:.14em !important;
+}
+
+/* ── FOOTER — EDITORIAL ── */
+.ft-logo {
+  font-size:1.4rem !important;
+  letter-spacing:.16em !important;
+}
+.ft-tagline {
+  letter-spacing:.28em !important;
+  color:rgba(255,255,255,.22) !important;
+  font-size:.58rem !important;
+}
+.ft-copy {
+  letter-spacing:.14em !important;
+  color:rgba(255,255,255,.1) !important;
+  font-size:.6rem !important;
+}
+.ft-links a {
+  letter-spacing:.18em !important;
+  color:rgba(255,255,255,.22) !important;
+  font-size:.6rem !important;
+}
+.ft-links a:hover {
+  color:rgba(212,175,55,.65) !important;
+}
+
+/* ── BUTTON — EDITORIAL ── */
+.btn {
+  letter-spacing:.24em !important;
+  font-size:.66rem !important;
+  font-weight:700 !important;
+}
+.btn-ghost {
+  letter-spacing:.2em !important;
+  font-size:.66rem !important;
+  color:rgba(255,255,255,.32) !important;
+}
+.btn-ghost:hover {
+  color:rgba(255,255,255,.75) !important;
+}
+
+/* ── CHAPTER OVERLAY ── */
+.ch-title {
+  letter-spacing:.48em !important;
+  color:rgba(212,175,55,.8) !important;
+}
+.ch-item {
+  color:rgba(255,255,255,.48) !important;
+  font-size:.7rem !important;
+}
+.ch-num {
+  color:rgba(212,175,55,.4) !important;
+}
+.ch-hint {
+  color:rgba(255,255,255,.22) !important;
+  letter-spacing:.28em !important;
+}
+
+/* ── SECTION PROGRESS DOTS ── */
+.sp-dot .sp-lbl {
+  font-size:.5rem !important;
+  letter-spacing:.28em !important;
+  color:rgba(212,175,55,.7) !important;
+}
+
+/* ── FLOATING QUOTE ── */
+.float-quote {
+  font-size:clamp(.95rem,1.7vw,1.38rem) !important;
+  letter-spacing:.04em !important;
+  color:rgba(212,175,55,.88) !important;
+}
+.fq-attr {
+  letter-spacing:.42em !important;
+  color:rgba(212,175,55,.4) !important;
+  font-size:.55rem !important;
+}
+
+/* ── SCROLL INDICATOR ── */
+.h-scroll-label {
+  letter-spacing:.6em !important;
+  color:rgba(255,255,255,.25) !important;
+  font-size:.52rem !important;
+}
+
+/* ── PRESS CARD ── */
+.press-lbl {
+  letter-spacing:.42em !important;
+  color:rgba(212,175,55,.6) !important;
+}
+.press-t {
+  font-size:1.4rem !important;
+  letter-spacing:.06em !important;
+}
+.press-d {
+  color:rgba(255,255,255,.4) !important;
+  line-height:1.88 !important;
+}
+
+/* ── STAT GRID ── */
+.stat-n {
+  font-size:2rem !important;
+  background:linear-gradient(135deg,
+    var(--gold-lt) 0%,
+    var(--gold)    50%,
+    var(--gold-dk) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  letter-spacing:-.02em !important;
+}
+.stat-l {
+  color:rgba(255,255,255,.28) !important;
+  letter-spacing:.18em !important;
+  font-size:.6rem !important;
+}
 </style>
 </head>
 <body>
